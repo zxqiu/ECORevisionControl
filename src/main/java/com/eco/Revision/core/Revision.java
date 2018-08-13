@@ -12,6 +12,12 @@ public class Revision {
     private String id;
 
     @JsonProperty
+    private String branchName;
+
+    @JsonProperty
+    private String revisionId;
+
+    @JsonProperty
     private Date time;
 
     @JsonProperty
@@ -32,8 +38,10 @@ public class Revision {
     @JsonProperty
     private RevisionData data;
 
-    public Revision(String id, Date time, String author, String comment, boolean isCommitted, String committer, int commitId, RevisionData data) {
+    public Revision(String id, String branchName, String revisionId, Date time, String author, String comment, boolean isCommitted, String committer, int commitId, RevisionData data) {
         this.id = id;
+        this.branchName = branchName;
+        this.revisionId = revisionId;
         this.time = time;
         this.author = author;
         this.comment = comment;
@@ -105,5 +113,21 @@ public class Revision {
 
     public void setData(RevisionData data) {
         this.data = data;
+    }
+
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
+
+    public String getRevisionId() {
+        return revisionId;
+    }
+
+    public void setRevisionId(String revisionId) {
+        this.revisionId = revisionId;
     }
 }

@@ -6,3 +6,14 @@ server:
   connector:
     type: http
     port: 8080
+
+database:
+  # the name of your JDBC driver
+  driverClass: org.sqlite.JDBC
+
+  # the JDBC URL
+  url: jdbc:sqlite:db/eco.db
+
+  # the JDBC user
+  user:
+
