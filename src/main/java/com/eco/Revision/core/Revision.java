@@ -24,9 +24,6 @@ public class Revision {
     private String author;
 
     @JsonProperty
-    private String comment;
-
-    @JsonProperty
     private boolean isCommitted;
 
     @JsonProperty
@@ -36,19 +33,25 @@ public class Revision {
     private int commitId;
 
     @JsonProperty
+    private Date editTime;
+
+    @JsonProperty
     private RevisionData data;
 
-    public Revision(String id, String branchName, String revisionId, Date time, String author, String comment, boolean isCommitted, String committer, int commitId, RevisionData data) {
+    public Revision(String id, String branchName, String revisionId, Date time, String author, boolean isCommitted, String committer, int commitId, Date editTime, RevisionData data) {
         this.id = id;
         this.branchName = branchName;
         this.revisionId = revisionId;
         this.time = time;
         this.author = author;
-        this.comment = comment;
         this.isCommitted = isCommitted;
         this.committer = committer;
         this.commitId = commitId;
+        this.editTime = editTime;
         this.data = data;
+    }
+
+    public Revision() {
     }
 
     public String getId() {
@@ -73,14 +76,6 @@ public class Revision {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     public boolean isCommitted() {
@@ -129,5 +124,13 @@ public class Revision {
 
     public void setRevisionId(String revisionId) {
         this.revisionId = revisionId;
+    }
+
+    public Date getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(Date editTime) {
+        this.editTime = editTime;
     }
 }

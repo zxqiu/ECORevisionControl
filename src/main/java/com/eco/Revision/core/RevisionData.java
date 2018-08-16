@@ -13,11 +13,36 @@ import java.io.Serializable;
 public class RevisionData implements Serializable, Serializer<RevisionData> {
     static final long serialVersionUID = 529269941459L;
 
-    public void serialize(RevisionData revisionData, ObjectOutputStream oos) throws IOException {
+    private String comment;
 
+    @Override
+    public String toString() {
+        return "[";
+                + Dict.COMMENT + ":" + comment
+                + "]";
     }
 
+    public RevisionData(String comment) {
+        this.comment = comment;
+    }
+
+    public byte[] toByteArray() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        this.serialize(this, oos);
+        return baos.toByteArray();
+    }
+
+    @Override
+    public void serialize(RevisionData revisionData, ObjectOutputStream oos) throws IOException {
+        oos.writeObject(revisionData);
+        oos.close();
+    }
+
+    @Override
     public RevisionData deserialize(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        return null;
+        RevisionData revisionData = (RevisionData) ois.readObject();
+        ois.close();
+        return revisionData;
     }
 }
