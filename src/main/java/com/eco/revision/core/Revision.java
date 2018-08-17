@@ -1,4 +1,4 @@
-package com.eco.Revision.core;
+package com.eco.revision.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -30,7 +30,7 @@ public class Revision {
     private String committer;
 
     @JsonProperty
-    private int commitId;
+    private String commitId;
 
     @JsonProperty
     private Date editTime;
@@ -38,7 +38,7 @@ public class Revision {
     @JsonProperty
     private RevisionData data;
 
-    public Revision(String id, String branchName, String revisionId, Date time, String author, boolean isCommitted, String committer, int commitId, Date editTime, RevisionData data) {
+    public Revision(String id, String branchName, String revisionId, Date time, String author, boolean isCommitted, String committer, String commitId, Date editTime, RevisionData data) {
         this.id = id;
         this.branchName = branchName;
         this.revisionId = revisionId;
@@ -52,6 +52,10 @@ public class Revision {
     }
 
     public Revision() {
+    }
+
+    public static String generateID(String branchName, String revisionId) {
+        return branchName + revisionId;
     }
 
     public String getId() {
@@ -94,11 +98,11 @@ public class Revision {
         this.committer = committer;
     }
 
-    public int getCommitId() {
+    public String getCommitId() {
         return commitId;
     }
 
-    public void setCommitId(int commitId) {
+    public void setCommitId(String commitId) {
         this.commitId = commitId;
     }
 

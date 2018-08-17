@@ -1,14 +1,12 @@
-package com.eco.Services;
+package com.eco.services;
 
-import com.eco.ECOConfiguration;
+import com.eco.revision.dao.RevisionConnector;
+import com.eco.revision.dao.RevisionDAO;
 import io.dropwizard.Application;
+import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
-
-import com.eco.Revision.dao.RevisionDAO;
-
-import io.dropwizard.jdbi.DBIFactory;
 
 /**
  * Created by neo on 8/12/18.
@@ -20,7 +18,7 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 
     @Override
     public String getName() {
-        return "ECO Revision Control Application";
+        return "ECO revision Control Application";
     }
 
     @Override
@@ -32,10 +30,9 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
     public void run(ECOConfiguration configuration,
                     Environment environment) {
 		final DBIFactory factory = new DBIFactory();
-	    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "mysql");
+	    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
 
 	    final RevisionDAO revisionDAO = jdbi.onDemand(RevisionDAO.class);
-
-        revisionDAO.createTable();
+        RevisionConnector.init(revisionDAO);
     }
 }
