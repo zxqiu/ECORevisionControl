@@ -1,12 +1,16 @@
 package com.eco.services;
 
-import com.eco.revision.dao.RevisionConnector;
-import com.eco.revision.dao.RevisionDAO;
 import io.dropwizard.Application;
-import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+
+import io.dropwizard.jdbi.DBIFactory;
+
 import org.skife.jdbi.v2.DBI;
+
+import com.eco.revision.dao.RevisionConnector;
+import com.eco.revision.dao.RevisionDAO;
+import com.eco.revision.resources.RevisionResource;
 
 /**
  * Created by neo on 8/12/18.
@@ -34,5 +38,8 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 
 	    final RevisionDAO revisionDAO = jdbi.onDemand(RevisionDAO.class);
         RevisionConnector.init(revisionDAO);
+
+        /* register resources */
+        environment.jersey().register(new RevisionResource());
     }
 }

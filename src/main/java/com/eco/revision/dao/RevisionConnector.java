@@ -21,6 +21,7 @@ public class RevisionConnector implements RevisionDAI {
 
     public static void init(RevisionDAO revisionDAO) throws Exception {
         RevisionConnector.revisionDAO = revisionDAO;
+        revisionDAO.createTable();
 
         _createLock.lock();
         try {

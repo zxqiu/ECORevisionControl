@@ -1,4 +1,5 @@
 projectName: ECORevisionControl
+
 server:
   type: simple
   rootPath: /

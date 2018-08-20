@@ -1,0 +1,4313 @@
+cscope 15 /home/source/Zcode/code/ECORevisionControl -q 0000000264 0000021260
+	@src/main/java/com/eco/Revision/dao/RevisionDAI.java
+
+2 
+public
+ 
+š‹rçû
+ 
+	gRevisiÚDAI
+ {
+
+3 
+public
+ 
+ab¡¿ù
+ 
+ü—‹TabË
+();
+
+4 
+public
+ 
+ab¡¿ù
+ 
+drİTabË
+();
+
+5 
+public
+ 
+ab¡¿ù
+ 
+š£¹
+(
+SŒšg
+ 
+b¿nchName
+, SŒšg 
+»visiÚID
+, 
+D©e
+ 
+time
+, SŒšg 
+authÜ
+, 
+boŞ—n
+ 
+isComm™‹d
+, SŒšg 
+comm™‹r
+, SŒšg 
+comm™ID
+, D©
+ed™Time
+, 
+RevisiÚD©a
+ 
+d©a
+);
+
+6 
+public
+ 
+ab¡¿ù
+ 
+upd©eComm™Info
+(
+SŒšg
+ 
+b¿nchName
+, SŒšg 
+»visiÚID
+, 
+boŞ—n
+ 
+isComm™‹d
+, SŒšg 
+comm™‹r
+, 
+¡ršg
+ 
+comm™ID
+);
+
+7 
+public
+ 
+ab¡¿ù
+ 
+	gLi¡
+<
+	gRevisiÚ
+> 
+fšdAÎ
+();
+
+	@src/main/java/com/eco/Revision/dao/RevisionDataConnector.java
+
+1 
+impÜt
+ 
+	gÜg
+.
+	g¦f4j
+.
+	gLogg”
+;
+
+2 
+impÜt
+ 
+	gÜg
+.
+	g¦f4j
+.
+	gLogg”FaùÜy
+;
+
+4 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gcÚcu¼’t
+.
+	glocks
+.
+	gLock
+;
+
+5 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gcÚcu¼’t
+.
+	glocks
+.
+	gR“Á¿ÁLock
+;
+
+7 
+public
+ cÏs 
+	cRevisiÚD©aCÚÃùÜ
+ 
+im¶em’ts
+ 
+	mRevisiÚDAI
+ {
+
+8 
+´iv©e
+ 
+fš®
+ 
+Lock
+ 
+	m_ü—‹Lock
+ = 
+Ãw
+ 
+R“Á¿ÁLock
+();
+
+9 
+´iv©e
+ 
+fš®
+ 
+Logg”
+ 
+	m_logg”
+ = 
+Logg”FaùÜy
+.
+g‘Logg”
+(
+RevisiÚD©aCÚÃùÜ
+.
+şass
+);
+
+11 
+RevisiÚDAO
+ 
+	m»visiÚDAO
+;
+
+12 
+RevisiÚD©aCÚÃùÜ
+ 
+	m_š¡ªû
+;
+
+14 
+´iv©e
+ 
+	$RevisiÚD©aCÚÃùÜ
+(
+RevisiÚDAO
+ 
+»visiÚDAO
+) {
+
+15 
+this
+.
+»visiÚDAO
+ =„evisionDAO;
+
+18 
+public
+ 
+	$g‘In¡ªû
+(è
+throws
+ 
+Exû±iÚ
+ {
+
+19 ià(
+__š¡ªû
+ =ğ
+nuÎ
+) {
+
+20 
+Œy
+ {
+
+21 
+_ü—‹Lock
+.
+	`lock
+();
+
+22 
+_š¡ªû
+ = 
+Ãw
+ 
+	`RevisiÚD©aCÚÃùÜ
+();
+
+23 } 
+fš®ly
+ {
+
+24 
+_ü—‹Lock
+.
+	`uÆock
+();
+
+28  
+_š¡ªû
+;
+
+29 
+	}
+}
+
+31 @
+Ov”ride
+
+
+32 
+public
+ 
+	$ü—‹TabË
+() {
+
+33 
+	}
+}
+
+35 @
+Ov”ride
+
+
+36 
+public
+ 
+	$drİTabË
+() {
+
+37 
+	}
+}
+
+39 @
+Ov”ride
+
+
+40 
+public
+ 
+	$š£¹
+(
+SŒšg
+ 
+b¿nchName
+, SŒšg 
+»visiÚID
+, 
+D©e
+ 
+time
+, SŒšg 
+authÜ
+, 
+boŞ—n
+ 
+isComm™‹d
+, SŒšg 
+comm™‹r
+, SŒšg 
+comm™ID
+, D©
+ed™Time
+, 
+RevisiÚD©a
+ 
+d©a
+) {
+
+41 
+	}
+}
+
+43 @
+Ov”ride
+
+
+44 
+public
+ 
+	$upd©eComm™Info
+(
+SŒšg
+ 
+b¿nchName
+, SŒšg 
+»visiÚID
+, 
+boŞ—n
+ 
+isComm™‹d
+, SŒšg 
+comm™‹r
+, 
+¡ršg
+ 
+comm™ID
+) {
+
+45 
+	}
+}
+
+47 @
+Ov”ride
+
+
+48 
+public
+ 
+	gLi¡
+<
+	gRevisiÚ
+> 
+	$fšdAÎ
+() {
+
+49 
+	}
+}
+
+	@src/main/java/com/eco/revision/core/Revision.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+;
+
+3 
+impÜt
+ 
+	gcom
+.
+	gç¡”xml
+.
+	gjacksÚ
+.
+	gªnÙ©iÚ
+.
+	gJsÚPrİ”ty
+;
+
+5 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gD©e
+;
+
+10 
+public
+ cÏs 
+	cRevisiÚ
+ {
+
+11 @
+JsÚPrİ”ty
+
+
+12 
+´iv©e
+ 
+SŒšg
+ 
+	mid
+;
+
+14 @
+JsÚPrİ”ty
+
+
+15 
+´iv©e
+ 
+SŒšg
+ 
+	mb¿nchName
+;
+
+17 @
+JsÚPrİ”ty
+
+
+18 
+´iv©e
+ 
+SŒšg
+ 
+	m»visiÚId
+;
+
+20 @
+JsÚPrİ”ty
+
+
+21 
+´iv©e
+ 
+D©e
+ 
+	mtime
+;
+
+23 @
+JsÚPrİ”ty
+
+
+24 
+´iv©e
+ 
+SŒšg
+ 
+	mauthÜ
+;
+
+26 @
+JsÚPrİ”ty
+
+
+27 
+´iv©e
+ 
+boŞ—n
+ 
+	misComm™‹d
+;
+
+29 @
+JsÚPrİ”ty
+
+
+30 
+´iv©e
+ 
+SŒšg
+ 
+	mcomm™‹r
+;
+
+32 @
+JsÚPrİ”ty
+
+
+33 
+´iv©e
+ 
+SŒšg
+ 
+	mcomm™Id
+;
+
+35 @
+JsÚPrİ”ty
+
+
+36 
+´iv©e
+ 
+D©e
+ 
+	med™Time
+;
+
+38 @
+JsÚPrİ”ty
+
+
+39 
+´iv©e
+ 
+RevisiÚD©a
+ 
+	md©a
+;
+
+41 
+public
+ 
+	$RevisiÚ
+(
+SŒšg
+ 
+id
+, SŒšg 
+b¿nchName
+, SŒšg 
+»visiÚId
+, 
+D©e
+ 
+time
+, SŒšg 
+authÜ
+, 
+boŞ—n
+ 
+isComm™‹d
+, SŒšg 
+comm™‹r
+, SŒšg 
+comm™Id
+, D©
+ed™Time
+, 
+RevisiÚD©a
+ 
+d©a
+) {
+
+42 
+this
+.
+id
+ = id;
+
+43 
+this
+.
+b¿nchName
+ = branchName;
+
+44 
+this
+.
+»visiÚId
+ =„evisionId;
+
+45 
+this
+.
+time
+ =ime;
+
+46 
+this
+.
+authÜ
+ =‡uthor;
+
+47 
+this
+.
+isComm™‹d
+ = isCommitted;
+
+48 
+this
+.
+comm™‹r
+ = committer;
+
+49 
+this
+.
+comm™Id
+ = commitId;
+
+50 
+this
+.
+ed™Time
+ =ƒditTime;
+
+51 
+this
+.
+d©a
+ = data;
+
+54 
+public
+ 
+	$RevisiÚ
+() {
+
+55 
+	}
+}
+
+57 
+public
+ 
+SŒšg
+ 
+	$g’”©eID
+(
+SŒšg
+ 
+b¿nchName
+, SŒšg 
+»visiÚId
+) {
+
+58  
+b¿nchName
+ + 
+»visiÚId
+;
+
+59 
+	}
+}
+
+61 
+public
+ 
+SŒšg
+ 
+	$g‘Id
+() {
+
+62  
+id
+;
+
+63 
+	}
+}
+
+65 
+public
+ 
+	$£tId
+(
+SŒšg
+ 
+id
+) {
+
+66 
+this
+.
+id
+ = id;
+
+67 
+	}
+}
+
+69 
+public
+ 
+D©e
+ 
+	$g‘Time
+() {
+
+70  
+time
+;
+
+71 
+	}
+}
+
+73 
+public
+ 
+	$£tTime
+(
+D©e
+ 
+time
+) {
+
+74 
+this
+.
+time
+ =ime;
+
+75 
+	}
+}
+
+77 
+public
+ 
+SŒšg
+ 
+	$g‘AuthÜ
+() {
+
+78  
+authÜ
+;
+
+79 
+	}
+}
+
+81 
+public
+ 
+	$£tAuthÜ
+(
+SŒšg
+ 
+authÜ
+) {
+
+82 
+this
+.
+authÜ
+ =‡uthor;
+
+83 
+	}
+}
+
+85 
+public
+ 
+boŞ—n
+ 
+	$isComm™‹d
+() {
+
+86  
+isComm™‹d
+;
+
+87 
+	}
+}
+
+89 
+public
+ 
+	$£tComm™‹d
+(
+boŞ—n
+ 
+comm™‹d
+) {
+
+90 
+isComm™‹d
+ = 
+comm™‹d
+;
+
+91 
+	}
+}
+
+93 
+public
+ 
+SŒšg
+ 
+	$g‘Comm™‹r
+() {
+
+94  
+comm™‹r
+;
+
+95 
+	}
+}
+
+97 
+public
+ 
+	$£tComm™‹r
+(
+SŒšg
+ 
+comm™‹r
+) {
+
+98 
+this
+.
+comm™‹r
+ = committer;
+
+99 
+	}
+}
+
+101 
+public
+ 
+SŒšg
+ 
+	$g‘Comm™Id
+() {
+
+102  
+comm™Id
+;
+
+103 
+	}
+}
+
+105 
+public
+ 
+	$£tComm™Id
+(
+SŒšg
+ 
+comm™Id
+) {
+
+106 
+this
+.
+comm™Id
+ = commitId;
+
+107 
+	}
+}
+
+109 
+public
+ 
+RevisiÚD©a
+ 
+	$g‘D©a
+() {
+
+110  
+d©a
+;
+
+111 
+	}
+}
+
+113 
+public
+ 
+	$£tD©a
+(
+RevisiÚD©a
+ 
+d©a
+) {
+
+114 
+this
+.
+d©a
+ = data;
+
+115 
+	}
+}
+
+117 
+public
+ 
+SŒšg
+ 
+	$g‘B¿nchName
+() {
+
+118  
+b¿nchName
+;
+
+119 
+	}
+}
+
+121 
+public
+ 
+	$£tB¿nchName
+(
+SŒšg
+ 
+b¿nchName
+) {
+
+122 
+this
+.
+b¿nchName
+ = branchName;
+
+123 
+	}
+}
+
+125 
+public
+ 
+SŒšg
+ 
+	$g‘RevisiÚId
+() {
+
+126  
+»visiÚId
+;
+
+127 
+	}
+}
+
+129 
+public
+ 
+	$£tRevisiÚId
+(
+SŒšg
+ 
+»visiÚId
+) {
+
+130 
+this
+.
+»visiÚId
+ =„evisionId;
+
+131 
+	}
+}
+
+133 
+public
+ 
+D©e
+ 
+	$g‘Ed™Time
+() {
+
+134  
+ed™Time
+;
+
+135 
+	}
+}
+
+137 
+public
+ 
+	$£tEd™Time
+(
+D©e
+ 
+ed™Time
+) {
+
+138 
+this
+.
+ed™Time
+ =ƒditTime;
+
+139 
+	}
+}
+
+	@src/main/java/com/eco/revision/core/RevisionData.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+;
+
+3 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	guts
+.
+	gmisc
+.
+	gDiù
+;
+
+4 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	guts
+.
+	gmisc
+.
+	gS”Ÿliz”
+;
+
+6 
+impÜt
+ 
+	gjava
+.
+	gio
+.*;
+
+11 
+public
+ 
+şass
+ 
+RevisiÚD©a
+ 
+im¶em’ts
+ 
+	gS”ŸlizabË
+, 
+	gS”Ÿliz”
+<
+	gRevisiÚD©a
+> {
+
+12 
+fš®
+ 
+	g£rŸlV”siÚUID
+ = 529269941459L;
+
+14 
+´iv©e
+ 
+SŒšg
+ 
+	gcomm’t
+;
+
+16 @
+Ov”ride
+
+
+17 
+public
+ 
+SŒšg
+ 
+toSŒšg
+() {
+
+19 + 
+	gDiù
+.
+	gCOMMENT
+ + ":" + 
+	gcomm’t
+
+
+23 
+public
+ 
+RevisiÚD©a
+(RevisiÚD©¨
+»visiÚD©a
+) {
+
+24 
+	gthis
+.
+	gcomm’t
+ = 
+»visiÚD©a
+.
+comm’t
+;
+
+27 
+public
+ 
+RevisiÚD©a
+(
+IÅutSŒ—m
+ 
+is
+è
+throws
+ 
+	gIOExû±iÚ
+, 
+	gCÏssNÙFoundExû±iÚ
+ {
+
+28 
+RevisiÚD©a
+ 
+	g»visiÚD©a
+ = 
+de£rŸlize
+((
+ObjeùIÅutSŒ—m
+è
+is
+);
+
+29 
+Ãw
+ 
+RevisiÚD©a
+(
+»visiÚD©a
+);
+
+32 
+public
+ 
+	gby‹
+[] 
+toBy‹A¼ay
+(è
+throws
+ 
+	gIOExû±iÚ
+ {
+
+33 
+By‹A¼ayOuutSŒ—m
+ 
+	gbaos
+ = 
+Ãw
+ ByteArrayOutputStream();
+
+34 
+ObjeùOuutSŒ—m
+ 
+	goos
+ = 
+Ãw
+ ObjeùOuutSŒ—m(
+baos
+);
+
+35 
+	gthis
+.
+£rŸlize
+(
+this
+, 
+oos
+);
+
+36  
+	gbaos
+.
+toBy‹A¼ay
+();
+
+39 
+public
+ 
+£rŸlize
+(
+RevisiÚD©a
+ 
+»visiÚD©a
+, 
+ObjeùOuutSŒ—m
+ 
+oos
+è
+throws
+ 
+	gIOExû±iÚ
+ {
+
+40 
+	goos
+.
+wr™eObjeù
+(
+»visiÚD©a
+);
+
+41 
+	goos
+.
+şo£
+();
+
+44 
+public
+ 
+RevisiÚD©a
+ 
+de£rŸlize
+(
+ObjeùIÅutSŒ—m
+ 
+ois
+è
+throws
+ 
+	gIOExû±iÚ
+, 
+	gCÏssNÙFoundExû±iÚ
+ {
+
+45 
+RevisiÚD©a
+ 
+	g»visiÚD©a
+ = (RevisiÚD©aè
+ois
+.
+»adObjeù
+();
+
+46 
+	gois
+.
+şo£
+();
+
+47  
+	g»visiÚD©a
+;
+
+	@src/main/java/com/eco/revision/dao/RevisionConnector.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gdao
+;
+
+3 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+.
+	gRevisiÚ
+;
+
+4 
+impÜt
+ 
+	gÜg
+.
+	g¦f4j
+.
+	gLogg”
+;
+
+5 
+impÜt
+ 
+	gÜg
+.
+	g¦f4j
+.
+	gLogg”FaùÜy
+;
+
+7 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gIOExû±iÚ
+;
+
+8 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gD©e
+;
+
+9 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gLi¡
+;
+
+10 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gcÚcu¼’t
+.
+	glocks
+.
+	gLock
+;
+
+11 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gcÚcu¼’t
+.
+	glocks
+.
+	gR“Á¿ÁLock
+;
+
+16 
+public
+ cÏs 
+	cRevisiÚCÚÃùÜ
+ 
+im¶em’ts
+ 
+	mRevisiÚDAI
+ {
+
+17 
+´iv©e
+ 
+fš®
+ 
+Lock
+ 
+	m_ü—‹Lock
+ = 
+Ãw
+ 
+R“Á¿ÁLock
+();
+
+18 
+´iv©e
+ 
+fš®
+ 
+Logg”
+ 
+	m_logg”
+ = 
+Logg”FaùÜy
+.
+g‘Logg”
+(
+RevisiÚCÚÃùÜ
+.
+şass
+);
+
+20 
+´iv©e
+ 
+RevisiÚDAO
+ 
+	m»visiÚDAO
+ = 
+nuÎ
+;
+
+21 
+´iv©e
+ 
+RevisiÚCÚÃùÜ
+ 
+	m_š¡ªû
+ = 
+nuÎ
+;
+
+23 
+public
+ 
+	$š™
+(
+RevisiÚDAO
+ 
+»visiÚDAO
+) {
+
+24 
+RevisiÚCÚÃùÜ
+.
+»visiÚDAO
+ =„evisionDAO;
+
+27 
+´iv©e
+ 
+	$RevisiÚCÚÃùÜ
+(è
+throws
+ 
+Exû±iÚ
+ {
+
+28 ià(
+»visiÚDAO
+ =ğ
+nuÎ
+) {
+
+29 
+throw
+ 
+Ãw
+ 
+	`Exû±iÚ
+("RevisionConnector is‚ot initialized");
+
+31 
+	}
+}
+
+33 
+public
+ 
+RevisiÚCÚÃùÜ
+ 
+	$g‘In¡ªû
+(è
+throws
+ 
+Exû±iÚ
+ {
+
+34 ià(
+_š¡ªû
+ =ğ
+nuÎ
+) {
+
+35 
+_ü—‹Lock
+.
+	`lock
+();
+
+36 
+Œy
+ {
+
+37 
+_š¡ªû
+ = 
+Ãw
+ 
+	`RevisiÚCÚÃùÜ
+();
+
+38 } 
+fš®ly
+ {
+
+39 
+_ü—‹Lock
+.
+	`uÆock
+();
+
+43  
+_š¡ªû
+;
+
+44 
+	}
+}
+
+46 
+public
+ 
+	$ü—‹TabË
+() {
+
+47 
+»visiÚDAO
+.
+	`ü—‹TabË
+();
+
+48 
+	}
+}
+
+50 
+public
+ 
+	$drİTabË
+() {
+
+51 
+»visiÚDAO
+.
+	`drİTabË
+();
+
+52 
+	}
+}
+
+54 
+public
+ 
+	$š£¹
+(
+RevisiÚ
+ 
+»visiÚ
+è
+throws
+ 
+IOExû±iÚ
+ {
+
+55 
+»visiÚDAO
+.
+	`š£¹
+(
+»visiÚ
+.
+	`g‘Id
+(),„evisiÚ.
+	`g‘B¿nchName
+(),„evisiÚ.
+	`g‘RevisiÚId
+(),„evisiÚ.
+	`g‘Time
+(),
+
+56 
+»visiÚ
+.
+	`g‘AuthÜ
+(),„evisiÚ.
+	`isComm™‹d
+(),„evisiÚ.
+	`g‘Comm™‹r
+(),„evisiÚ.
+	`g‘Comm™Id
+(),
+
+57 
+»visiÚ
+.
+	`g‘Ed™Time
+(),„evisiÚ.
+	`g‘D©a
+().
+	`toBy‹A¼ay
+());
+
+58 
+	}
+}
+
+60 
+public
+ 
+	$upd©eComm™Info
+(
+RevisiÚ
+ 
+»visiÚ
+) {
+
+61 
+»visiÚDAO
+.
+	`upd©eComm™InfoByID
+(
+»visiÚ
+.
+	`g‘Id
+(),„evisiÚ.
+	`isComm™‹d
+(),„evisiÚ.
+	`g‘Comm™‹r
+(),
+
+62 
+»visiÚ
+.
+	`g‘Comm™Id
+(),„evisiÚ.
+	`g‘Ed™Time
+());
+
+63 
+	}
+}
+
+65 
+public
+ 
+	gLi¡
+<
+	gRevisiÚ
+> 
+	$fšdAÎ
+() {
+
+66  
+»visiÚDAO
+.
+	`fšdAÎ
+();
+
+67 
+	}
+}
+
+69 
+public
+ 
+	gLi¡
+<
+	gRevisiÚ
+> 
+	$fšdByID
+(
+SŒšg
+ 
+id
+) {
+
+70  
+»visiÚDAO
+.
+	`fšdByID
+(
+id
+);
+
+71 
+	}
+}
+
+73 
+public
+ 
+	$d–‘e
+(
+SŒšg
+ 
+id
+) {
+
+74 
+»visiÚDAO
+.
+	`d–‘eByID
+(
+id
+);
+
+75 
+	}
+}
+
+	@src/main/java/com/eco/revision/dao/RevisionDAI.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gdao
+;
+
+3 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+.
+	gRevisiÚ
+;
+
+4 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+.
+	gRevisiÚD©a
+;
+
+6 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gIOExû±iÚ
+;
+
+7 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gD©e
+;
+
+8 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gLi¡
+;
+
+14 
+public
+ 
+š‹rçû
+ 
+	gRevisiÚDAI
+ {
+
+15 
+public
+ 
+ab¡¿ù
+ 
+ü—‹TabË
+();
+
+16 
+public
+ 
+ab¡¿ù
+ 
+drİTabË
+();
+
+17 
+public
+ 
+ab¡¿ù
+ 
+š£¹
+(
+RevisiÚ
+ 
+»visiÚ
+è
+throws
+ 
+	gIOExû±iÚ
+;
+
+18 
+public
+ 
+ab¡¿ù
+ 
+	gLi¡
+<
+	gRevisiÚ
+> 
+fšdAÎ
+();
+
+19 
+public
+ 
+ab¡¿ù
+ 
+	gLi¡
+<
+	gRevisiÚ
+> 
+fšdByID
+(
+SŒšg
+ 
+id
+);
+
+20 
+public
+ 
+ab¡¿ù
+ 
+d–‘e
+(
+SŒšg
+ 
+id
+);
+
+21 
+public
+ 
+ab¡¿ù
+ 
+upd©eComm™Info
+(
+RevisiÚ
+ 
+»visiÚ
+);
+
+	@src/main/java/com/eco/revision/dao/RevisionDAO.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gdao
+;
+
+3 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+.
+	gRevisiÚ
+;
+
+4 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	guts
+.
+	gmisc
+.
+	gDiù
+;
+
+5 
+impÜt
+ 
+	gÜg
+.
+	gskiã
+.
+	gjdbi
+.
+	gv2
+.
+	gsqlobjeù
+.
+	gBšd
+;
+
+6 
+impÜt
+ 
+	gÜg
+.
+	gskiã
+.
+	gjdbi
+.
+	gv2
+.
+	gsqlobjeù
+.
+	gSqlQu”y
+;
+
+7 
+impÜt
+ 
+	gÜg
+.
+	gskiã
+.
+	gjdbi
+.
+	gv2
+.
+	gsqlobjeù
+.
+	gSqlUpd©e
+;
+
+8 
+impÜt
+ 
+	gÜg
+.
+	gskiã
+.
+	gjdbi
+.
+	gv2
+.
+	gsqlobjeù
+.
+	gcu¡omiz”s
+.
+	gM­³r
+;
+
+10 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gD©e
+;
+
+11 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gLi¡
+;
+
+16 
+public
+ 
+š‹rçû
+ 
+	gRevisiÚDAO
+ {
+
+17 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	gTABLE_NAME
+ = "revision";
+
+19 @
+SqlUpd©e
+("ü—‹abË iànÙƒxi¡ " + 
+TABLE_NAME
+ + " ("
+
+20 + "`" + 
+Diù
+.
+ID
+ + "` varchar(128)‚ot‚ull unique,"
+
+21 + "`" + 
+Diù
+.
+BRANCH_NAME
+ + "` varchar(64)‚ot‚ull,"
+
+22 + "`" + 
+Diù
+.
+REVISION_ID
+ + "` varchar(32)‚ot‚ull,"
+
+23 + "`" + 
+Diù
+.
+TIME
+ + "` date‚ot‚ull,"
+
+24 + "`" + 
+Diù
+.
+AUTHOR
+ + "` varchar(32)‚ot‚ull,"
+
+25 + "`" + 
+Diù
+.
+IS_COMMITTED
+ + "` boolean‚ot‚ull,"
+
+26 + "`" + 
+Diù
+.
+COMMITTER
+ + "` varchar(32),"
+
+27 + "`" + 
+Diù
+.
+COMMIT_ID
+ + "` varchar(32),"
+
+28 + "`" + 
+Diù
+.
+EDIT_TIME
+ + "` date,"
+
+29 + "`" + 
+Diù
+.
+DATA
+ + "` blob,"
+
+30 + "´im¬y key (`" + 
+Diù
+.
+ID
+ + "`)"
+
+33 
+ü—‹TabË
+();
+
+35 @
+SqlUpd©e
+("drİabË iàexi¡ " + 
+TABLE_NAME
+)
+
+36 
+drİTabË
+();
+
+38 @
+SqlUpd©e
+("š£¹ iÁØ" + 
+TABLE_NAME
+ + " ("
+
+39 + 
+Diù
+.
+ID
+
+
+40 + ", " + 
+Diù
+.
+BRANCH_NAME
+
+
+41 + ", " + 
+Diù
+.
+REVISION_ID
+
+
+42 + ", " + 
+Diù
+.
+TIME
+
+
+43 + ", " + 
+Diù
+.
+AUTHOR
+
+
+44 + ", " + 
+Diù
+.
+IS_COMMITTED
+
+
+45 + ", " + 
+Diù
+.
+COMMITTER
+
+
+46 + ", " + 
+Diù
+.
+COMMIT_ID
+
+
+47 + ", " + 
+Diù
+.
+EDIT_TIME
+
+
+48 + ", " + 
+Diù
+.
+DATA
+
+
+50 + ":" + 
+Diù
+.
+ID
+
+
+51 + ", :" + 
+Diù
+.
+BRANCH_NAME
+
+
+52 + ", :" + 
+Diù
+.
+REVISION_ID
+
+
+53 + ", :" + 
+Diù
+.
+TIME
+
+
+54 + ", :" + 
+Diù
+.
+AUTHOR
+
+
+55 + ", :" + 
+Diù
+.
+IS_COMMITTED
+
+
+56 + ", :" + 
+Diù
+.
+COMMITTER
+
+
+57 + ", :" + 
+Diù
+.
+COMMIT_ID
+
+
+58 + ", :" + 
+Diù
+.
+EDIT_TIME
+
+
+59 + ", :" + 
+Diù
+.
+DATA
+
+
+62 
+š£¹
+(
+
+63 @
+Bšd
+(
+Diù
+.
+ID
+è
+SŒšg
+ 
+id
+
+
+64 ,@
+Bšd
+(
+Diù
+.
+BRANCH_NAME
+è
+SŒšg
+ 
+b¿nchName
+
+
+65 ,@
+Bšd
+(
+Diù
+.
+REVISION_ID
+è
+SŒšg
+ 
+»visiÚID
+
+
+66 ,@
+Bšd
+(
+Diù
+.
+TIME
+è
+D©e
+ 
+time
+
+
+67 ,@
+Bšd
+(
+Diù
+.
+AUTHOR
+è
+SŒšg
+ 
+authÜ
+
+
+68 ,@
+Bšd
+(
+Diù
+.
+IS_COMMITTED
+è
+boŞ—n
+ 
+isComm™‹d
+
+
+69 ,@
+Bšd
+(
+Diù
+.
+COMMITTER
+è
+SŒšg
+ 
+comm™‹r
+
+
+70 ,@
+Bšd
+(
+Diù
+.
+COMMIT_ID
+è
+SŒšg
+ 
+comm™ID
+
+
+71 ,@
+Bšd
+(
+Diù
+.
+EDIT_TIME
+è
+D©e
+ 
+ed™Time
+
+
+72 ,@
+Bšd
+(
+Diù
+.
+DATA
+è
+by‹
+[] 
+d©a
+
+
+75 @
+SqlUpd©e
+("upd©" + 
+TABLE_NAME
+ + " set "
+
+76 + 
+Diù
+.
+IS_COMMITTED
+ + "= :" + Dict.IS_COMMITTED
+
+77 + ", " + 
+Diù
+.
+COMMITTER
+ + "= :" + Dict.COMMITTER
+
+78 + ", " + 
+Diù
+.
+COMMIT_ID
+ + "= :" + Dict.COMMIT_ID
+
+79 + ", " + 
+Diù
+.
+EDIT_TIME
+ + "= :" + Dict.EDIT_TIME
+
+80 + " wh”" + 
+Diù
+.
+ID
+ + "= :" + Dict.ID
+
+82 
+upd©eComm™InfoByID
+(@
+Bšd
+(
+Diù
+.
+ID
+è
+SŒšg
+ 
+id
+
+
+83 , @
+Bšd
+(
+Diù
+.
+IS_COMMITTED
+è
+boŞ—n
+ 
+isComm™‹d
+
+
+84 , @
+Bšd
+(
+Diù
+.
+COMMITTER
+è
+SŒšg
+ 
+comm™‹r
+
+
+85 , @
+Bšd
+(
+Diù
+.
+COMMIT_ID
+è
+SŒšg
+ 
+comm™ID
+
+
+86 , @
+Bšd
+(
+Diù
+.
+EDIT_TIME
+è
+D©e
+ 
+ed™Time
+
+
+89 @
+SqlQu”y
+("£Ëù * from " + 
+TABLE_NAME
+)
+
+90 @
+M­³r
+(
+RevisiÚM­³r
+.
+şass
+)
+
+91 
+	gLi¡
+<
+	gRevisiÚ
+> 
+fšdAÎ
+();
+
+93 @
+SqlQu”y
+("£Ëù * from " + 
+TABLE_NAME
+ + " wh”" + 
+Diù
+.
+ID
+ + " = :" + Dict.ID)
+
+94 @
+M­³r
+(
+RevisiÚM­³r
+.
+şass
+)
+
+95 
+	gLi¡
+<
+	gRevisiÚ
+> 
+fšdByID
+(@
+Bšd
+(
+Diù
+.
+ID
+è
+SŒšg
+ 
+id
+);
+
+97 @
+SqlUpd©e
+("d–‘äom " + 
+TABLE_NAME
+ + " wh”" + 
+Diù
+.
+ID
+ + " = :" + Dict.ID)
+
+98 
+d–‘eByID
+(
+
+99 @
+Bšd
+(
+Diù
+.
+ID
+è
+SŒšg
+ 
+id
+
+
+	@src/main/java/com/eco/revision/dao/RevisionMapper.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gdao
+;
+
+3 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+.
+	gRevisiÚ
+;
+
+4 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+.
+	gRevisiÚD©a
+;
+
+5 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	guts
+.
+	gmisc
+.
+	gDiù
+;
+
+6 
+impÜt
+ 
+	gÜg
+.
+	gskiã
+.
+	gjdbi
+.
+	gv2
+.
+	gS‹m’tCÚ‹xt
+;
+
+7 
+impÜt
+ 
+	gÜg
+.
+	gskiã
+.
+	gjdbi
+.
+	gv2
+.
+	gtw—k
+.
+	gResuÉS‘M­³r
+;
+
+9 
+impÜt
+ 
+	gjava
+.
+	gsql
+.
+	gResuÉS‘
+;
+
+10 
+impÜt
+ 
+	gjava
+.
+	gsql
+.
+	gSQLExû±iÚ
+;
+
+12 
+public
+ 
+şass
+ 
+RevisiÚM­³r
+ 
+im¶em’ts
+ 
+	gResuÉS‘M­³r
+<
+	gRevisiÚ
+> {
+
+13 
+public
+ 
+RevisiÚ
+ 
+m­
+(
+i
+, 
+ResuÉS‘
+ 
+»suÉS‘
+, 
+S‹m’tCÚ‹xt
+ 
+cÚ‹xt
+è
+throws
+ 
+	gSQLExû±iÚ
+ {
+
+14 
+RevisiÚ
+ 
+	g»visiÚ
+ = 
+Ãw
+ Revision();
+
+16 
+	g»visiÚ
+.
+£tId
+(
+»suÉS‘
+.
+g‘SŒšg
+(
+Diù
+.
+ID
+));
+
+17 
+	g»visiÚ
+.
+£tB¿nchName
+(
+»suÉS‘
+.
+g‘SŒšg
+(
+Diù
+.
+BRANCH_NAME
+));
+
+18 
+	g»visiÚ
+.
+£tRevisiÚId
+(
+»suÉS‘
+.
+g‘SŒšg
+(
+Diù
+.
+REVISION_ID
+));
+
+19 
+	g»visiÚ
+.
+£tTime
+(
+»suÉS‘
+.
+g‘D©e
+(
+Diù
+.
+TIME
+));
+
+20 
+	g»visiÚ
+.
+£tAuthÜ
+(
+»suÉS‘
+.
+g‘SŒšg
+(
+Diù
+.
+AUTHOR
+));
+
+21 
+	g»visiÚ
+.
+£tComm™‹d
+(
+»suÉS‘
+.
+g‘BoŞ—n
+(
+Diù
+.
+IS_COMMITTED
+));
+
+22 
+	g»visiÚ
+.
+£tComm™‹r
+(
+»suÉS‘
+.
+g‘SŒšg
+(
+Diù
+.
+COMMITTER
+));
+
+23 
+	g»visiÚ
+.
+£tComm™Id
+(
+»suÉS‘
+.
+g‘SŒšg
+(
+Diù
+.
+COMMIT_ID
+));
+
+24 
+	g»visiÚ
+.
+£tEd™Time
+(
+»suÉS‘
+.
+g‘D©e
+(
+Diù
+.
+EDIT_TIME
+));
+
+26 
+	gŒy
+ {
+
+27 
+	g»visiÚ
+.
+£tD©a
+(
+Ãw
+ 
+RevisiÚD©a
+(
+»suÉS‘
+.
+g‘Bš¬ySŒ—m
+(
+Diù
+.
+DATA
+)));
+
+28 } 
+ÿtch
+ (
+Exû±iÚ
+ 
+e
+) {
+
+29 
+throw
+ 
+Ãw
+ 
+SQLExû±iÚ
+("CªnÙ m­„evisiÚ from„esuÉS‘ : " + 
+e
+.
+g‘Mes§ge
+());
+
+32  
+	g»visiÚ
+;
+
+	@src/main/java/com/eco/revision/resources/RevisionResource.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	g»sourûs
+;
+
+6 
+public
+ cÏs 
+	cRevisiÚResourû
+ {
+
+	@src/main/java/com/eco/services/ECOConfiguration.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g£rviûs
+;
+
+4 
+impÜt
+ 
+	gcom
+.
+	gç¡”xml
+.
+	gjacksÚ
+.
+	gªnÙ©iÚ
+.
+	gJsÚPrİ”ty
+;
+
+5 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gCÚfigu¿tiÚ
+;
+
+6 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gdb
+.
+	gD©aSourûFaùÜy
+;
+
+7 
+impÜt
+ 
+	gÜg
+.
+	ghib”Ç‹
+.
+	gv®id©Ü
+.
+	gcÚ¡¿šts
+.
+	gNÙEm±y
+;
+
+9 
+impÜt
+ 
+	gjavax
+.
+	gv®id©iÚ
+.
+	gV®id
+;
+
+10 
+impÜt
+ 
+	gjavax
+.
+	gv®id©iÚ
+.
+	gcÚ¡¿šts
+.
+	gNÙNuÎ
+;
+
+15 
+public
+ cÏs 
+	cECOCÚfigu¿tiÚ
+ 
+ex‹nds
+ 
+	mCÚfigu¿tiÚ
+ {
+
+16 @
+NÙEm±y
+
+
+17 
+´iv©e
+ 
+SŒšg
+ 
+	m´ojeùName
+;
+
+19 @
+JsÚPrİ”ty
+
+
+20 
+public
+ 
+SŒšg
+ 
+	$g‘ProjeùName
+() {
+
+21  
+´ojeùName
+;
+
+24 @
+JsÚPrİ”ty
+
+
+25 
+public
+ 
+	$£tProjeùName
+(
+SŒšg
+ 
+Çme
+) {
+
+26 
+this
+.
+´ojeùName
+ = 
+Çme
+;
+
+27 
+	}
+}
+
+30 @
+	gV®id
+
+
+31 @
+NÙNuÎ
+
+
+32 
+´iv©e
+ 
+D©aSourûFaùÜy
+ 
+	gd©aba£
+ = 
+Ãw
+ DataSourceFactory();
+
+34 @
+JsÚPrİ”ty
+("database")
+
+35 
+public
+ 
+	$£tD©aSourûFaùÜy
+(
+D©aSourûFaùÜy
+ 
+çùÜy
+) {
+
+36 
+this
+.
+d©aba£
+ = 
+çùÜy
+;
+
+37 
+	}
+}
+
+39 @
+JsÚPrİ”ty
+("database")
+
+40 
+public
+ 
+D©aSourûFaùÜy
+ 
+	$g‘D©aSourûFaùÜy
+() {
+
+41  
+d©aba£
+;
+
+42 
+	}
+}
+
+	@src/main/java/com/eco/services/ECORevisionControlService.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g£rviûs
+;
+
+3 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gdao
+.
+	gRevisiÚCÚÃùÜ
+;
+
+4 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gdao
+.
+	gRevisiÚDAO
+;
+
+5 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gAµliÿtiÚ
+;
+
+6 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gjdbi
+.
+	gDBIFaùÜy
+;
+
+7 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	g£tup
+.
+	gBoÙ¡¿p
+;
+
+8 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	g£tup
+.
+	gEnvœÚm’t
+;
+
+9 
+impÜt
+ 
+	gÜg
+.
+	gskiã
+.
+	gjdbi
+.
+	gv2
+.
+	gDBI
+;
+
+14 
+public
+ 
+şass
+ 
+ECORevisiÚCÚŒŞS”viû
+ 
+ex‹nds
+ 
+	gAµliÿtiÚ
+<
+	gECOCÚfigu¿tiÚ
+> {
+
+15 
+public
+ 
+maš
+(
+SŒšg
+[] 
+¬gs
+è
+throws
+ 
+	gExû±iÚ
+ {
+
+16 
+Ãw
+ 
+ECORevisiÚCÚŒŞS”viû
+().
+run
+(
+¬gs
+);
+
+19 @
+Ov”ride
+
+
+20 
+public
+ 
+SŒšg
+ 
+g‘Name
+() {
+
+24 @
+Ov”ride
+
+
+25 
+public
+ 
+š™Ÿlize
+(
+BoÙ¡¿p
+<
+ECOCÚfigu¿tiÚ
+> 
+boÙ¡¿p
+) {
+
+29 @
+Ov”ride
+
+
+30 
+public
+ 
+run
+(
+ECOCÚfigu¿tiÚ
+ 
+cÚfigu¿tiÚ
+,
+
+31 
+EnvœÚm’t
+ 
+’vœÚm’t
+) {
+
+32 
+fš®
+ 
+DBIFaùÜy
+ 
+	gçùÜy
+ = 
+Ãw
+ DBIFactory();
+
+33 
+fš®
+ 
+DBI
+ 
+	gjdbi
+ = 
+çùÜy
+.
+bud
+(
+’vœÚm’t
+, 
+cÚfigu¿tiÚ
+.
+g‘D©aSourûFaùÜy
+(), "sqlite");
+
+35 
+fš®
+ 
+RevisiÚDAO
+ 
+	g»visiÚDAO
+ = 
+jdbi
+.
+ÚDemªd
+(RevisiÚDAO.
+şass
+);
+
+36 
+	gRevisiÚCÚÃùÜ
+.
+š™
+(
+»visiÚDAO
+);
+
+	@src/main/java/com/eco/tests/HelloWorld.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	g‹¡s
+;
+
+6 
+public
+ cÏs 
+	cH–loWÜld
+ {
+
+7 
+public
+ 
+	$maš
+(
+SŒšg
+[] 
+¬gs
+) {
+
+8 
+Sy¡em
+.
+out
+.
+	`´šn
+("Hello World!");
+
+10 
+	}
+}
+
+	@src/main/java/com/eco/utils/misc/Dict.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	guts
+.
+	gmisc
+;
+
+6 
+public
+ cÏs 
+	cDiù
+ {
+
+7 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mID
+ = "ID";
+
+8 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mBRANCH_NAME
+ = "BranchName";
+
+9 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mREVISION_ID
+ = "RevisionID";
+
+10 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mTIME
+ = "Time";
+
+11 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mAUTHOR
+ = "Author";
+
+12 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mCOMMENT
+ = "Comment";
+
+13 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mIS_COMMITTED
+ = "IsCommitted";
+
+14 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mCOMMITTER
+ = "Committer";
+
+15 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mCOMMIT_ID
+ = "CommitID";
+
+16 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mEDIT_TIME
+ = "EditTime";
+
+17 
+public
+ 
+fš®
+ 
+SŒšg
+ 
+	mDATA
+ = "Data";
+
+	@src/main/java/com/eco/utils/misc/Serializer.java
+
+1 
+·ckage
+ 
+	gcom
+.
+	geco
+.
+	guts
+.
+	gmisc
+;
+
+2 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gIOExû±iÚ
+;
+
+3 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gObjeùIÅutSŒ—m
+;
+
+4 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gObjeùOuutSŒ—m
+;
+
+6 
+public
+ 
+š‹rçû
+ 
+	gS”Ÿliz”
+<
+	gT
+>
+
+14 
+public
+ 
+£rŸlize
+(
+T
+ 
+t
+, 
+ObjeùOuutSŒ—m
+ 
+oos
+è
+throws
+ 
+	gIOExû±iÚ
+;
+
+23 
+public
+ 
+T
+ 
+de£rŸlize
+(
+ObjeùIÅutSŒ—m
+ 
+ois
+è
+throws
+ 
+	gIOExû±iÚ
+, 
+	gCÏssNÙFoundExû±iÚ
+;
+
+	@src/test/java/revision/RevisionConnectorTest.java
+
+1 
+·ckage
+ 
+	g»visiÚ
+;
+
+4 
+impÜt
+ 
+	gcom
+.
+	gcodah®e
+.
+	gm‘rics
+.
+	gM‘ricRegi¡ry
+;
+
+5 
+impÜt
+ 
+	gcom
+.
+	gcodah®e
+.
+	gm‘rics
+.
+	gh—Éh
+.
+	gH—ÉhCheckRegi¡ry
+;
+
+6 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gcÜe
+.
+	gRevisiÚ
+;
+
+7 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gdao
+.
+	gRevisiÚCÚÃùÜ
+;
+
+8 
+impÜt
+ 
+	gcom
+.
+	geco
+.
+	g»visiÚ
+.
+	gdao
+.
+	gRevisiÚDAO
+;
+
+9 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gdb
+.
+	gD©aSourûFaùÜy
+;
+
+10 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gjdbi
+.
+	gDBIFaùÜy
+;
+
+11 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gliãcyşe
+.
+	gMªaged
+;
+
+12 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gliãcyşe
+.
+	g£tup
+.
+	gLiãcyşeEnvœÚm’t
+;
+
+13 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	gloggšg
+.
+	gBoÙ¡¿pLoggšg
+;
+
+14 
+impÜt
+ 
+	gio
+.
+	gdrİwiz¬d
+.
+	g£tup
+.
+	gEnvœÚm’t
+;
+
+15 
+impÜt
+ 
+	gÜg
+.
+	gjun™
+.
+	gAá”
+;
+
+16 
+impÜt
+ 
+	gÜg
+.
+	gjun™
+.
+	gBefÜe
+;
+
+17 
+impÜt
+ 
+	gÜg
+.
+	gjun™
+.
+	gTe¡
+;
+
+18 
+impÜt
+ 
+	gÜg
+.
+	gmock™o
+.
+	gArgum’tC­tÜ
+;
+
+19 
+impÜt
+ 
+	gÜg
+.
+	gskiã
+.
+	gjdbi
+.
+	gv2
+.
+	gDBI
+;
+
+20 
+impÜt
+ 
+	gÜg
+.
+	g¦f4j
+.
+	gLogg”
+;
+
+21 
+impÜt
+ 
+	gÜg
+.
+	g¦f4j
+.
+	gLogg”FaùÜy
+;
+
+23 
+impÜt
+ 
+	gjava
+.
+	gio
+.
+	gIOExû±iÚ
+;
+
+24 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gA¼ayLi¡
+;
+
+25 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gD©e
+;
+
+26 
+impÜt
+ 
+	gjava
+.
+	gut
+.
+	gLi¡
+;
+
+28 
+impÜt
+ 
+	gÜg
+.
+	gjun™
+.
+	gAs£¹
+.
+	gas£¹Equ®s
+;
+
+29 
+impÜt
+ 
+	gÜg
+.
+	gmock™o
+.
+	gMock™o
+.
+	gmock
+;
+
+30 
+impÜt
+ 
+	gÜg
+.
+	gmock™o
+.
+	gMock™o
+.
+	gv”ify
+;
+
+31 
+impÜt
+ 
+	gÜg
+.
+	gmock™o
+.
+	gMock™o
+.
+	gwh’
+;
+
+36 
+public
+ cÏs 
+	cRevisiÚCÚÃùÜTe¡
+ {
+
+37 
+´iv©e
+ 
+fš®
+ 
+Logg”
+ 
+	m_logg”
+ = 
+Logg”FaùÜy
+.
+g‘Logg”
+(
+RevisiÚCÚÃùÜTe¡
+.
+şass
+);
+
+38 
+´iv©e
+ 
+fš®
+ 
+D©aSourûFaùÜy
+ 
+	mcÚf
+ = 
+Ãw
+ DataSourceFactory();
+
+41 
+	mBoÙ¡¿pLoggšg
+.
+boÙ¡¿p
+();
+
+42 
+	mcÚf
+.
+£tU¾
+("jdbc:sqlite:db/eco.db");
+
+43 
+	mcÚf
+.
+£tDriv”CÏss
+("org.sqlite.JDBC");
+
+44 
+	mcÚf
+.
+£tV®id©iÚQu”y
+("SELECT 1");
+
+47 
+´iv©e
+ 
+RevisiÚCÚÃùÜ
+ 
+	g»visiÚCÚÃùÜ
+;
+
+49 
+´iv©e
+ 
+fš®
+ 
+H—ÉhCheckRegi¡ry
+ 
+	gh—ÉhChecks
+ = 
+mock
+(H—ÉhCheckRegi¡ry.
+şass
+);
+
+50 
+´iv©e
+ 
+fš®
+ 
+LiãcyşeEnvœÚm’t
+ 
+	gliãcyşeEnvœÚm’t
+ = 
+mock
+(LiãcyşeEnvœÚm’t.
+şass
+);
+
+51 
+´iv©e
+ 
+fš®
+ 
+EnvœÚm’t
+ 
+	g’vœÚm’t
+ = 
+mock
+(EnvœÚm’t.
+şass
+);
+
+52 
+´iv©e
+ 
+fš®
+ 
+DBIFaùÜy
+ 
+	gçùÜy
+ = 
+Ãw
+ DBIFactory();
+
+53 
+´iv©e
+ 
+fš®
+ 
+	gLi¡
+<
+	gMªaged
+> 
+	gmªaged
+ = 
+Ãw
+ 
+A¼ayLi¡
+<>();
+
+54 
+´iv©e
+ 
+fš®
+ 
+M‘ricRegi¡ry
+ 
+	gm‘ricRegi¡ry
+ = 
+Ãw
+ MetricRegistry();
+
+55 
+´iv©e
+ 
+DBI
+ 
+	gdbi
+ = 
+mock
+(DBI.
+şass
+);
+
+57 @
+BefÜe
+
+
+58 
+public
+ 
+	$£tUp
+(è
+throws
+ 
+Exû±iÚ
+ {
+
+59 
+	`wh’
+(
+’vœÚm’t
+.
+	`h—ÉhChecks
+()).
+	`th’R‘uº
+(
+h—ÉhChecks
+);
+
+60 
+	`wh’
+(
+’vœÚm’t
+.
+	`liãcyşe
+()).
+	`th’R‘uº
+(
+liãcyşeEnvœÚm’t
+);
+
+61 
+	`wh’
+(
+’vœÚm’t
+.
+	`m‘rics
+()).
+	`th’R‘uº
+(
+m‘ricRegi¡ry
+);
+
+62 
+	`wh’
+(
+’vœÚm’t
+.
+	`g‘H—ÉhCheckExecutÜS”viû
+()).
+	`th’R‘uº
+(
+ExecutÜs
+.
+	`ÃwSšgËTh»adExecutÜ
+());
+
+64 
+this
+.
+dbi
+ = 
+çùÜy
+.
+	`bud
+(
+’vœÚm’t
+, 
+cÚf
+, "sqlite");
+
+65 
+fš®
+ 
+Argum’tC­tÜ
+<
+Mªaged
+> 
+mªagedC­tÜ
+ = Argum’tC­tÜ.
+	`fÜCÏss
+(Mªaged.
+şass
+);
+
+66 
+	`v”ify
+(
+liãcyşeEnvœÚm’t
+).
+	`mªage
+(
+mªagedC­tÜ
+.
+	`ÿ±u»
+());
+
+67 
+mªaged
+.
+	`addAÎ
+(
+mªagedC­tÜ
+.
+	`g‘AÎV®ues
+());
+
+68 
+Mªaged
+ 
+obj
+ : 
+mªaged
+) {
+
+69 
+obj
+.
+	`¡¬t
+();
+
+113 
+	}
+}
+
+115 @
+Aá”
+
+
+116 
+public
+ 
+	$‹¬Down
+(è
+throws
+ 
+Exû±iÚ
+ {
+
+117 
+Mªaged
+ 
+obj
+ : 
+mªaged
+) {
+
+118 
+obj
+.
+	`¡İ
+();
+
+120 
+	}
+}
+
+122 @
+Te¡
+
+
+123 
+public
+ 
+	gLi¡
+
+
+	@
+1
+.
+1
+/usr/include
+15
+799
+src/main/java/com/eco/Revision/dao/RevisionDAI.java
+src/main/java/com/eco/Revision/dao/RevisionDataConnector.java
+src/main/java/com/eco/revision/core/Revision.java
+src/main/java/com/eco/revision/core/RevisionData.java
+src/main/java/com/eco/revision/dao/RevisionConnector.java
+src/main/java/com/eco/revision/dao/RevisionDAI.java
+src/main/java/com/eco/revision/dao/RevisionDAO.java
+src/main/java/com/eco/revision/dao/RevisionMapper.java
+src/main/java/com/eco/revision/resources/RevisionResource.java
+src/main/java/com/eco/services/ECOConfiguration.java
+src/main/java/com/eco/services/ECORevisionControlService.java
+src/main/java/com/eco/tests/HelloWorld.java
+src/main/java/com/eco/utils/misc/Dict.java
+src/main/java/com/eco/utils/misc/Serializer.java
+src/test/java/revision/RevisionConnectorTest.java

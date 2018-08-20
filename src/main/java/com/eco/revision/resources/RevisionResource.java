@@ -17,7 +17,7 @@ import java.util.List;
  * Created by neo on 8/16/18.
  */
 
-@Path("/v1/revisions")
+@Path("/revisions")
 public class RevisionResource {
     public static final Logger _logger = LoggerFactory.getLogger(RevisionResource.class);
 

@@ -1,0 +1,157 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AUTHOR	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String AUTHOR = "Author";$/;"	f	class:Dict
+BRANCH_NAME	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String BRANCH_NAME = "BranchName";$/;"	f	class:Dict
+COMMENT	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String COMMENT = "Comment";$/;"	f	class:Dict
+COMMITTER	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String COMMITTER = "Committer";$/;"	f	class:Dict
+COMMIT_ID	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String COMMIT_ID = "CommitID";$/;"	f	class:Dict
+DATA	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String DATA = "Data";$/;"	f	class:Dict
+Dict	src/main/java/com/eco/utils/misc/Dict.java	/^public class Dict {$/;"	c
+ECOConfiguration	src/main/java/com/eco/services/ECOConfiguration.java	/^public class ECOConfiguration extends Configuration {$/;"	c
+ECORevisionControlService	src/main/java/com/eco/services/ECORevisionControlService.java	/^public class ECORevisionControlService extends Application<ECOConfiguration> {$/;"	c
+EDIT_TIME	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String EDIT_TIME = "EditTime";$/;"	f	class:Dict
+HelloWorld	src/main/java/com/eco/tests/HelloWorld.java	/^public class HelloWorld {$/;"	c
+ID	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String ID = "ID";$/;"	f	class:Dict
+IS_COMMITTED	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String IS_COMMITTED = "IsCommitted";$/;"	f	class:Dict
+REVISION_ID	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String REVISION_ID = "RevisionID";$/;"	f	class:Dict
+Revision	src/main/java/com/eco/revision/core/Revision.java	/^    public Revision() {$/;"	m	class:Revision
+Revision	src/main/java/com/eco/revision/core/Revision.java	/^    public Revision(String id, String branchName, String revisionId, Date time, String author, boolean isCommitted, String committer, String commitId, Date editTime, RevisionData data) {$/;"	m	class:Revision
+Revision	src/main/java/com/eco/revision/core/Revision.java	/^public class Revision {$/;"	c
+RevisionConnector	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    private RevisionConnector() throws Exception {$/;"	m	class:RevisionConnector	file:
+RevisionConnector	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^public class RevisionConnector implements RevisionDAI {$/;"	c
+RevisionConnectorTest	src/test/java/revision/RevisionConnectorTest.java	/^public class RevisionConnectorTest {$/;"	c
+RevisionDAI	src/main/java/com/eco/Revision/dao/RevisionDAI.java	/^public interface RevisionDAI {$/;"	i
+RevisionDAI	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^public interface RevisionDAI {$/;"	i
+RevisionDAO	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^public interface RevisionDAO {$/;"	i
+RevisionData	src/main/java/com/eco/revision/core/RevisionData.java	/^    public RevisionData(InputStream is) throws IOException, ClassNotFoundException {$/;"	m	class:RevisionData
+RevisionData	src/main/java/com/eco/revision/core/RevisionData.java	/^    public RevisionData(RevisionData revisionData) {$/;"	m	class:RevisionData
+RevisionData	src/main/java/com/eco/revision/core/RevisionData.java	/^public class RevisionData implements Serializable, Serializer<RevisionData> {$/;"	c
+RevisionDataConnector	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    private RevisionDataConnector(RevisionDAO revisionDAO) {$/;"	m	class:RevisionDataConnector	file:
+RevisionDataConnector	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^public class RevisionDataConnector implements RevisionDAI {$/;"	c
+RevisionMapper	src/main/java/com/eco/revision/dao/RevisionMapper.java	/^public class RevisionMapper implements ResultSetMapper<Revision> {$/;"	c
+RevisionResource	src/main/java/com/eco/revision/resources/RevisionResource.java	/^public class RevisionResource {$/;"	c
+Serializer	src/main/java/com/eco/utils/misc/Serializer.java	/^public interface Serializer<T> $/;"	i
+TABLE_NAME	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^    public static final String TABLE_NAME = "revision";$/;"	f	interface:RevisionDAO
+TIME	src/main/java/com/eco/utils/misc/Dict.java	/^    public static final String TIME = "Time";$/;"	f	class:Dict
+_createLock	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    private static final Lock _createLock = new ReentrantLock();$/;"	f	class:RevisionDataConnector	file:
+_createLock	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    private static final Lock _createLock = new ReentrantLock();$/;"	f	class:RevisionConnector	file:
+_instance	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    RevisionDataConnector _instance;$/;"	f	class:RevisionDataConnector
+_instance	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    private static RevisionConnector _instance = null;$/;"	f	class:RevisionConnector	file:
+_logger	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^	private static final Logger _logger = LoggerFactory.getLogger(RevisionDataConnector.class);$/;"	f	class:RevisionDataConnector	file:
+_logger	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    private static final Logger _logger = LoggerFactory.getLogger(RevisionConnector.class);$/;"	f	class:RevisionConnector	file:
+_logger	src/test/java/revision/RevisionConnectorTest.java	/^    private static final Logger _logger = LoggerFactory.getLogger(RevisionConnectorTest.class);$/;"	f	class:RevisionConnectorTest	file:
+author	src/main/java/com/eco/revision/core/Revision.java	/^    private String author;$/;"	f	class:Revision	file:
+branchName	src/main/java/com/eco/revision/core/Revision.java	/^    private String branchName;$/;"	f	class:Revision	file:
+com.eco.revision.core	src/main/java/com/eco/revision/core/Revision.java	/^package com.eco.revision.core;$/;"	p
+com.eco.revision.core	src/main/java/com/eco/revision/core/RevisionData.java	/^package com.eco.revision.core;$/;"	p
+com.eco.revision.dao	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^package com.eco.revision.dao;$/;"	p
+com.eco.revision.dao	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^package com.eco.revision.dao;$/;"	p
+com.eco.revision.dao	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^package com.eco.revision.dao;$/;"	p
+com.eco.revision.dao	src/main/java/com/eco/revision/dao/RevisionMapper.java	/^package com.eco.revision.dao;$/;"	p
+com.eco.revision.resources	src/main/java/com/eco/revision/resources/RevisionResource.java	/^package com.eco.revision.resources;$/;"	p
+com.eco.services	src/main/java/com/eco/services/ECOConfiguration.java	/^package com.eco.services;$/;"	p
+com.eco.services	src/main/java/com/eco/services/ECORevisionControlService.java	/^package com.eco.services;$/;"	p
+com.eco.tests	src/main/java/com/eco/tests/HelloWorld.java	/^package com.eco.tests;$/;"	p
+com.eco.utils.misc	src/main/java/com/eco/utils/misc/Dict.java	/^package com.eco.utils.misc;$/;"	p
+com.eco.utils.misc	src/main/java/com/eco/utils/misc/Serializer.java	/^package com.eco.utils.misc;$/;"	p
+comment	src/main/java/com/eco/revision/core/RevisionData.java	/^    private String comment;$/;"	f	class:RevisionData	file:
+commitId	src/main/java/com/eco/revision/core/Revision.java	/^    private String commitId;$/;"	f	class:Revision	file:
+committer	src/main/java/com/eco/revision/core/Revision.java	/^    private String committer;$/;"	f	class:Revision	file:
+conf	src/test/java/revision/RevisionConnectorTest.java	/^    private final DataSourceFactory conf = new DataSourceFactory();$/;"	f	class:RevisionConnectorTest	file:
+createTable	src/main/java/com/eco/Revision/dao/RevisionDAI.java	/^    public abstract void createTable();$/;"	m	interface:RevisionDAI
+createTable	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    public void createTable() {$/;"	m	class:RevisionDataConnector
+createTable	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public void createTable() {$/;"	m	class:RevisionConnector
+createTable	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^    public abstract void createTable();$/;"	m	interface:RevisionDAI
+createTable	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^    void createTable();$/;"	m	interface:RevisionDAO
+data	src/main/java/com/eco/revision/core/Revision.java	/^    private RevisionData data;$/;"	f	class:Revision	file:
+database	src/main/java/com/eco/services/ECOConfiguration.java	/^    private DataSourceFactory database = new DataSourceFactory();$/;"	f	class:ECOConfiguration	file:
+dbi	src/test/java/revision/RevisionConnectorTest.java	/^    private DBI dbi = mock(DBI.class);$/;"	f	class:RevisionConnectorTest	file:
+delete	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public void delete(String id) {$/;"	m	class:RevisionConnector
+delete	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^    public abstract void delete(String id);$/;"	m	interface:RevisionDAI
+deleteByID	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^    void deleteByID($/;"	m	interface:RevisionDAO
+deserialize	src/main/java/com/eco/revision/core/RevisionData.java	/^    public RevisionData deserialize(ObjectInputStream ois) throws IOException, ClassNotFoundException {$/;"	m	class:RevisionData
+deserialize	src/main/java/com/eco/utils/misc/Serializer.java	/^    public T deserialize(ObjectInputStream ois) throws IOException, ClassNotFoundException;$/;"	m	interface:Serializer
+dropTable	src/main/java/com/eco/Revision/dao/RevisionDAI.java	/^    public abstract void dropTable();$/;"	m	interface:RevisionDAI
+dropTable	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    public void dropTable() {$/;"	m	class:RevisionDataConnector
+dropTable	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public void dropTable() {$/;"	m	class:RevisionConnector
+dropTable	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^    public abstract void dropTable();$/;"	m	interface:RevisionDAI
+dropTable	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^    void dropTable();$/;"	m	interface:RevisionDAO
+editTime	src/main/java/com/eco/revision/core/Revision.java	/^    private Date editTime;$/;"	f	class:Revision	file:
+environment	src/test/java/revision/RevisionConnectorTest.java	/^    private final Environment environment = mock(Environment.class);$/;"	f	class:RevisionConnectorTest	file:
+factory	src/test/java/revision/RevisionConnectorTest.java	/^    private final DBIFactory factory = new DBIFactory();$/;"	f	class:RevisionConnectorTest	file:
+findAll	src/main/java/com/eco/Revision/dao/RevisionDAI.java	/^    public abstract List<Revision> findAll();$/;"	m	interface:RevisionDAI
+findAll	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    public List<Revision> findAll() {$/;"	m	class:RevisionDataConnector
+findAll	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public List<Revision> findAll() {$/;"	m	class:RevisionConnector
+findAll	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^    public abstract List<Revision> findAll();$/;"	m	interface:RevisionDAI
+findAll	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^    List<Revision> findAll();$/;"	m	interface:RevisionDAO
+findByID	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public List<Revision> findByID(String id) {$/;"	m	class:RevisionConnector
+findByID	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^    public abstract List<Revision> findByID(String id);$/;"	m	interface:RevisionDAI
+findByID	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^    List<Revision> findByID(@Bind(Dict.ID) String id);$/;"	m	interface:RevisionDAO
+generateID	src/main/java/com/eco/revision/core/Revision.java	/^    public static String generateID(String branchName, String revisionId) {$/;"	m	class:Revision
+getAuthor	src/main/java/com/eco/revision/core/Revision.java	/^    public String getAuthor() {$/;"	m	class:Revision
+getBranchName	src/main/java/com/eco/revision/core/Revision.java	/^    public String getBranchName() {$/;"	m	class:Revision
+getCommitId	src/main/java/com/eco/revision/core/Revision.java	/^    public String getCommitId() {$/;"	m	class:Revision
+getCommitter	src/main/java/com/eco/revision/core/Revision.java	/^    public String getCommitter() {$/;"	m	class:Revision
+getData	src/main/java/com/eco/revision/core/Revision.java	/^    public RevisionData getData() {$/;"	m	class:Revision
+getDataSourceFactory	src/main/java/com/eco/services/ECOConfiguration.java	/^    public DataSourceFactory getDataSourceFactory() {$/;"	m	class:ECOConfiguration
+getEditTime	src/main/java/com/eco/revision/core/Revision.java	/^    public Date getEditTime() {$/;"	m	class:Revision
+getId	src/main/java/com/eco/revision/core/Revision.java	/^    public String getId() {$/;"	m	class:Revision
+getInstance	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    public getInstance() throws Exception {$/;"	m	class:RevisionDataConnector
+getInstance	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public static RevisionConnector getInstance() throws Exception {$/;"	m	class:RevisionConnector
+getName	src/main/java/com/eco/services/ECORevisionControlService.java	/^    public String getName() {$/;"	m	class:ECORevisionControlService
+getProjectName	src/main/java/com/eco/services/ECOConfiguration.java	/^    public String getProjectName() {$/;"	m	class:ECOConfiguration
+getRevisionId	src/main/java/com/eco/revision/core/Revision.java	/^    public String getRevisionId() {$/;"	m	class:Revision
+getTime	src/main/java/com/eco/revision/core/Revision.java	/^    public Date getTime() {$/;"	m	class:Revision
+healthChecks	src/test/java/revision/RevisionConnectorTest.java	/^    private final HealthCheckRegistry healthChecks = mock(HealthCheckRegistry.class);$/;"	f	class:RevisionConnectorTest	file:
+id	src/main/java/com/eco/revision/core/Revision.java	/^    private String id;$/;"	f	class:Revision	file:
+init	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public static void init(RevisionDAO revisionDAO) {$/;"	m	class:RevisionConnector
+initialize	src/main/java/com/eco/services/ECORevisionControlService.java	/^    public void initialize(Bootstrap<ECOConfiguration> bootstrap) {$/;"	m	class:ECORevisionControlService
+insert	src/main/java/com/eco/Revision/dao/RevisionDAI.java	/^    public abstract void insert(String branchName, String revisionID, Date time, String author, boolean isCommitted, String committer, String commitID, Date editTime, RevisionData data);$/;"	m	interface:RevisionDAI
+insert	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    public void insert(String branchName, String revisionID, Date time, String author, boolean isCommitted, String committer, String commitID, Date editTime, RevisionData data) {$/;"	m	class:RevisionDataConnector
+insert	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public void insert(Revision revision) throws IOException {$/;"	m	class:RevisionConnector
+insert	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^    public abstract void insert(Revision revision) throws IOException;$/;"	m	interface:RevisionDAI
+insert	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^    void insert($/;"	m	interface:RevisionDAO
+isCommitted	src/main/java/com/eco/revision/core/Revision.java	/^    private boolean isCommitted;$/;"	f	class:Revision	file:
+isCommitted	src/main/java/com/eco/revision/core/Revision.java	/^    public boolean isCommitted() {$/;"	m	class:Revision
+lifecycleEnvironment	src/test/java/revision/RevisionConnectorTest.java	/^    private final LifecycleEnvironment lifecycleEnvironment = mock(LifecycleEnvironment.class);$/;"	f	class:RevisionConnectorTest	file:
+main	src/main/java/com/eco/services/ECORevisionControlService.java	/^    public static void main(String[] args) throws Exception {$/;"	m	class:ECORevisionControlService
+main	src/main/java/com/eco/tests/HelloWorld.java	/^    public static void main(String[] args) {$/;"	m	class:HelloWorld
+managed	src/test/java/revision/RevisionConnectorTest.java	/^    private final List<Managed> managed = new ArrayList<>();$/;"	f	class:RevisionConnectorTest	file:
+map	src/main/java/com/eco/revision/dao/RevisionMapper.java	/^    public Revision map(int i, ResultSet resultSet, StatementContext context) throws SQLException {$/;"	m	class:RevisionMapper
+metricRegistry	src/test/java/revision/RevisionConnectorTest.java	/^    private final MetricRegistry metricRegistry = new MetricRegistry();$/;"	f	class:RevisionConnectorTest	file:
+projectName	src/main/java/com/eco/services/ECOConfiguration.java	/^    private String projectName;$/;"	f	class:ECOConfiguration	file:
+revision	src/test/java/revision/RevisionConnectorTest.java	/^package revision;$/;"	p
+revisionConnector	src/test/java/revision/RevisionConnectorTest.java	/^    private RevisionConnector revisionConnector;$/;"	f	class:RevisionConnectorTest	file:
+revisionDAO	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    RevisionDAO revisionDAO;$/;"	f	class:RevisionDataConnector
+revisionDAO	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    private static RevisionDAO revisionDAO = null;$/;"	f	class:RevisionConnector	file:
+revisionId	src/main/java/com/eco/revision/core/Revision.java	/^    private String revisionId;$/;"	f	class:Revision	file:
+run	src/main/java/com/eco/services/ECORevisionControlService.java	/^    public void run(ECOConfiguration configuration,$/;"	m	class:ECORevisionControlService
+serialVersionUID	src/main/java/com/eco/revision/core/RevisionData.java	/^    static final long serialVersionUID = 529269941459L;$/;"	f	class:RevisionData
+serialize	src/main/java/com/eco/revision/core/RevisionData.java	/^    public void serialize(RevisionData revisionData, ObjectOutputStream oos) throws IOException {$/;"	m	class:RevisionData
+serialize	src/main/java/com/eco/utils/misc/Serializer.java	/^    public void serialize(T t, ObjectOutputStream oos) throws IOException;$/;"	m	interface:Serializer
+setAuthor	src/main/java/com/eco/revision/core/Revision.java	/^    public void setAuthor(String author) {$/;"	m	class:Revision
+setBranchName	src/main/java/com/eco/revision/core/Revision.java	/^    public void setBranchName(String branchName) {$/;"	m	class:Revision
+setCommitId	src/main/java/com/eco/revision/core/Revision.java	/^    public void setCommitId(String commitId) {$/;"	m	class:Revision
+setCommitted	src/main/java/com/eco/revision/core/Revision.java	/^    public void setCommitted(boolean committed) {$/;"	m	class:Revision
+setCommitter	src/main/java/com/eco/revision/core/Revision.java	/^    public void setCommitter(String committer) {$/;"	m	class:Revision
+setData	src/main/java/com/eco/revision/core/Revision.java	/^    public void setData(RevisionData data) {$/;"	m	class:Revision
+setDataSourceFactory	src/main/java/com/eco/services/ECOConfiguration.java	/^    public void setDataSourceFactory(DataSourceFactory factory) {$/;"	m	class:ECOConfiguration
+setEditTime	src/main/java/com/eco/revision/core/Revision.java	/^    public void setEditTime(Date editTime) {$/;"	m	class:Revision
+setId	src/main/java/com/eco/revision/core/Revision.java	/^    public void setId(String id) {$/;"	m	class:Revision
+setProjectName	src/main/java/com/eco/services/ECOConfiguration.java	/^    public void setProjectName(String name) {$/;"	m	class:ECOConfiguration
+setRevisionId	src/main/java/com/eco/revision/core/Revision.java	/^    public void setRevisionId(String revisionId) {$/;"	m	class:Revision
+setTime	src/main/java/com/eco/revision/core/Revision.java	/^    public void setTime(Date time) {$/;"	m	class:Revision
+setUp	src/test/java/revision/RevisionConnectorTest.java	/^    public void setUp() throws Exception {$/;"	m	class:RevisionConnectorTest
+tearDown	src/test/java/revision/RevisionConnectorTest.java	/^    public void tearDown() throws Exception {$/;"	m	class:RevisionConnectorTest
+time	src/main/java/com/eco/revision/core/Revision.java	/^    private Date time;$/;"	f	class:Revision	file:
+toByteArray	src/main/java/com/eco/revision/core/RevisionData.java	/^    public byte[] toByteArray() throws IOException {$/;"	m	class:RevisionData
+toString	src/main/java/com/eco/revision/core/RevisionData.java	/^    public String toString() {$/;"	m	class:RevisionData
+updateCommitInfo	src/main/java/com/eco/Revision/dao/RevisionDAI.java	/^    public abstract void updateCommitInfo(String branchName, String revisionID, boolean isCommitted, String committer, string commitID);$/;"	m	interface:RevisionDAI
+updateCommitInfo	src/main/java/com/eco/Revision/dao/RevisionDataConnector.java	/^    public void updateCommitInfo(String branchName, String revisionID, boolean isCommitted, String committer, string commitID) {$/;"	m	class:RevisionDataConnector
+updateCommitInfo	src/main/java/com/eco/revision/dao/RevisionConnector.java	/^    public void updateCommitInfo(Revision revision) {$/;"	m	class:RevisionConnector
+updateCommitInfo	src/main/java/com/eco/revision/dao/RevisionDAI.java	/^    public abstract void updateCommitInfo(Revision revision);$/;"	m	interface:RevisionDAI
+updateCommitInfoByID	src/main/java/com/eco/revision/dao/RevisionDAO.java	/^    void updateCommitInfoByID(@Bind(Dict.ID) String id$/;"	m	interface:RevisionDAO
