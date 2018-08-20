@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -20,8 +19,19 @@ public class RevisionConnector implements RevisionDAI {
     private static RevisionDAO revisionDAO = null;
     private static RevisionConnector _instance = null;
 
-    public static void init(RevisionDAO revisionDAO) {
+    public static void init(RevisionDAO revisionDAO) throws Exception {
         RevisionConnector.revisionDAO = revisionDAO;
+
+        _createLock.lock();
+        try {
+            _instance = new RevisionConnector();
+        } catch (Exception e) {
+            _logger.error("Cannot create RevisionConnector instance");
+            e.printStackTrace();
+            throw e;
+        } finally {
+            _createLock.unlock();
+        }
     }
 
     private RevisionConnector() throws Exception {
@@ -30,11 +40,14 @@ public class RevisionConnector implements RevisionDAI {
         }
     }
 
-    public static RevisionConnector getInstance() throws Exception {
+    public static RevisionConnector getInstance() {
        if (_instance == null) {
            _createLock.lock();
            try {
                _instance = new RevisionConnector();
+           } catch (Exception e) {
+               _logger.error("Cannot create RevisionConnector instance");
+               e.printStackTrace();
            } finally {
                _createLock.unlock();
            }

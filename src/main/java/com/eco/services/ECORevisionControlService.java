@@ -28,7 +28,7 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 
     @Override
     public void run(ECOConfiguration configuration,
-                    Environment environment) {
+                    Environment environment) throws Exception {
 		final DBIFactory factory = new DBIFactory();
 	    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
 

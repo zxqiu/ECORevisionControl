@@ -1,4 +1,4 @@
-package com.eco;
+package com.eco.DBI;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
