@@ -1,8 +1,9 @@
 package com.eco.revision.core;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.eco.utils.misc.Dict;
 import com.eco.utils.misc.Serializer;
-
 import java.io.*;
 
 /**
@@ -11,6 +12,7 @@ import java.io.*;
 public class RevisionData implements Serializable, Serializer<RevisionData> {
     static final long serialVersionUID = 529269941459L;
 
+    @JsonProperty
     private String comment;
 
     @Override
@@ -18,6 +20,10 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         return "["
                 + Dict.COMMENT + ":" + comment
                 + "]";
+    }
+
+    public RevisionData(String comment) {
+        this.comment = comment;
     }
 
     public RevisionData(RevisionData revisionData) {

@@ -2,3 +2,5 @@ target
 dependency-reduced-pom.xml
 *.swp
 db/*
+*.log
+cscope*

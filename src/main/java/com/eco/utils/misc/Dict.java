@@ -4,6 +4,8 @@ package com.eco.utils.misc;
  * Created by neo on 8/12/18.
  */
 public class Dict {
+    public static final String API_V1_PATH = "/api/v1";
+    public static final String TIME_FORMAT = "MM-dd-yyyy HH:mm:ss";
     public static final String ID = "ID";
     public static final String BRANCH_NAME = "BranchName";
     public static final String REVISION_ID = "RevisionID";

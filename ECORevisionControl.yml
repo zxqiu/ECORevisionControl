@@ -7,6 +7,19 @@ server:
   connector:
     type: http
     port: 8080
+  requestLog:
+    appenders:
+      - type: console
+        threshold: ALL
+        timeZone: UTC
+        target: stdout
+      - type: file
+        currentLogFilename: ./eco-revision-request.log
+        threshold: ALL
+        archive: true
+        archivedLogFilenamePattern: ./eco-revision-request-%d.log
+        archivedFileCount: 5
+        timeZone: UTC
 
 database:
   # the name of your JDBC driver
@@ -18,3 +31,17 @@ database:
   # the JDBC user
   user:
 
+logging:
+  level: INFO
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+    - type: file
+      currentLogFilename: ./eco-revision-server.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: ./eco-revision-server-%d.log
+      archivedFileCount: 5
+      timeZone: UTC
