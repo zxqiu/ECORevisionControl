@@ -3,6 +3,7 @@ package com.eco.revision.resources;
 
 import com.codahale.metrics.annotation.Timed;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,9 +61,9 @@ public class RevisionResource {
     @Timed
     @Path(PATH_GET)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Revision> get(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
+    public Revision get(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
                               @PathParam(Dict.REVISION_ID) @NotNull String revisionID) {
-        return revisionConnector.findByID(Revision.generateID(branchName, revisionID));
+        return revisionConnector.findByID(Revision.generateID(branchName, revisionID)).get(0);
     }
 
     @POST
@@ -78,7 +79,7 @@ public class RevisionResource {
                                    @FormParam(Dict.COMMITTER) String committer,
                                    @FormParam(Dict.COMMIT_ID) String commitID,
                                    @FormParam(Dict.EDIT_TIME) String editTime
-                                   ) {
+                                   ) throws IOException {
 
         SimpleDateFormat sdf = new SimpleDateFormat(Dict.TIME_FORMAT);
         Date timeParsed = null;
@@ -104,6 +105,14 @@ public class RevisionResource {
                                          commitID,
                                          editTimeParsed,
                                          new RevisionData(comment));
+        try {
+            revisionConnector.insert(revision);
+        } catch (IOException e) {
+            _logger.error("Error : failed to insert new revision : " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+
         return Response.ok().build();
     }
 
@@ -112,12 +121,13 @@ public class RevisionResource {
     @Path(PATH_INSERT_OBJ)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response testAPI(Revision revision) {
+    public Response insertRevisionObject(Revision revision) throws IOException {
         try {
             revisionConnector.insert(revision);
         } catch (Exception e) {
             _logger.error("Error : failed to insert new revision : " + e.getMessage());
             e.printStackTrace();
+            throw e;
         }
 
         return Response.ok().build();

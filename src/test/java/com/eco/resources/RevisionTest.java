@@ -10,6 +10,7 @@ import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import io.dropwizard.client.JerseyClientBuilder;
 import java.util.Date;
+import java.util.List;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -62,14 +63,18 @@ public class RevisionTest {
             client = new JerseyClientBuilder(RULE.getEnvironment()).build("Revision test client");
         }
 
-        /*
-        Response response = client
-                .target(String.format("http://localhost:%d/"
-                        + Dict.API_V1_PATH + RevisionResource.PATH
-                        + RevisionResource.PATH_GET_ALL, RULE.getLocalPort()))
+        Revision revision = RULE.client()
+                .target(String.format("http://localhost:%d/%s%s%s/%s/%s",
+                        RULE.getLocalPort(),
+                        Dict.API_V1_PATH,
+                        RevisionResource.PATH,
+                        RevisionResource.PATH_GET,
+                        testRevision.getBranchName(),
+                        testRevision.getRevisionId()))
                 .request()
-                .post(Entity.entity(testRevision, MediaType.APPLICATION_JSON));
-                */
+                .get(Revision.class);
+
+        assertThat(revision).isEqualTo(testRevision);
     }
 
     /*
