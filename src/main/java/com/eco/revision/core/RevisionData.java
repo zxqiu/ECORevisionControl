@@ -22,6 +22,8 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
                 + "]";
     }
 
+    public RevisionData() {}
+
     public RevisionData(String comment) {
         this.comment = comment;
     }
@@ -30,8 +32,14 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         this.comment = revisionData.comment;
     }
 
-    public RevisionData(InputStream is) throws IOException, ClassNotFoundException {
-        RevisionData revisionData = deserialize((ObjectInputStream) is);
+    public RevisionData(InputStream is) throws NullPointerException, IOException, ClassNotFoundException {
+        if (is == null) {
+            throw new NullPointerException("InputStream is null when build RevisionData");
+        }
+
+        ObjectInputStream ois = new ObjectInputStream(is);
+        RevisionData revisionData = deserialize(ois);
+
         new RevisionData(revisionData);
     }
 

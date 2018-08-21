@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -34,6 +35,7 @@ import com.eco.utils.misc.Dict;
 @Path(Dict.API_V1_PATH + RevisionResource.PATH)
 public class RevisionResource {
     public static final String PATH = "/revisions";
+    public static final String PATH_GET = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
     public static final String PATH_GET_ALL = "/";
     public static final String PATH_INSERT_FORM = "/";
     public static final String PATH_INSERT_OBJ = "/obj";
@@ -52,6 +54,15 @@ public class RevisionResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Revision> getAll() {
         return revisionConnector.findAll();
+    }
+
+    @GET
+    @Timed
+    @Path(PATH_GET)
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Revision> get(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
+                              @PathParam(Dict.REVISION_ID) @NotNull String revisionID) {
+        return revisionConnector.findByID(Revision.generateID(branchName, revisionID));
     }
 
     @POST
@@ -102,10 +113,6 @@ public class RevisionResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response testAPI(Revision revision) {
-        _logger.error("Error : failed to insert new revision");
-        if (true) {
-            return Response.ok().build();
-        }
         try {
             revisionConnector.insert(revision);
         } catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.eco.services;
 
 import io.dropwizard.Application;
+import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -11,7 +12,6 @@ import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eco.revision.dao.RevisionConnector;
 import com.eco.revision.dao.RevisionDAO;
 import com.eco.revision.resources.RevisionResource;
 
@@ -46,5 +46,7 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
         _logger.info("Register all resources");
         /* register resources */
         environment.jersey().register(new RevisionResource(revisionDAO));
+
+        environment.jersey().register(new JsonProcessingExceptionMapper(true));
     }
 }
