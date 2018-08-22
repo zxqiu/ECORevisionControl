@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.eco.utils.misc.Dict;
 import com.eco.utils.misc.Serializer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
+import java.util.Date;
 
 /**
  * Created by neo on 8/12/18.
@@ -17,19 +21,19 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
 
     @Override
     public String toString() {
-        return "["
-                + Dict.COMMENT + ":" + comment
-                + "]";
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
     public RevisionData() {}
 
     public RevisionData(String comment) {
         this.comment = comment;
-    }
-
-    public RevisionData(RevisionData revisionData) {
-        this.comment = revisionData.comment;
     }
 
     public RevisionData(InputStream is) throws NullPointerException, IOException, ClassNotFoundException {
@@ -40,7 +44,9 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         ObjectInputStream ois = new ObjectInputStream(is);
         RevisionData revisionData = deserialize(ois);
 
-        new RevisionData(revisionData);
+        is.close();
+
+        this.comment = revisionData.comment;
     }
 
     public byte[] toByteArray() throws IOException {
@@ -50,14 +56,25 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         return baos.toByteArray();
     }
 
+    @Override
     public void serialize(RevisionData revisionData, ObjectOutputStream oos) throws IOException {
         oos.writeObject(revisionData);
         oos.close();
     }
 
+    @Override
     public RevisionData deserialize(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         RevisionData revisionData = (RevisionData) ois.readObject();
         ois.close();
         return revisionData;
+    }
+
+    public static void main(String[] arg) throws IOException, ClassNotFoundException {
+        RevisionData testRevisionData = new RevisionData("testComment");
+
+        byte[] bytes = testRevisionData.toByteArray();
+        RevisionData revisionData = new RevisionData(new ByteArrayInputStream(bytes));
+
+        System.out.println(revisionData.toString());
     }
 }

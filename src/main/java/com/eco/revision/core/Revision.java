@@ -1,6 +1,8 @@
 package com.eco.revision.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
 
@@ -52,6 +54,17 @@ public class Revision {
     }
 
     public Revision() {
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
     public static String generateID(String branchName, String revisionId) {
