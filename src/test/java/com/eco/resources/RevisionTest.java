@@ -33,7 +33,7 @@ public class RevisionTest {
                                                  "testRevision",
                                                  new Date(123),
                                                  "testAuthor",
-                                                 true,
+                                                 1,
                                                  "testCommitter",
                                                  "testCommitID",
                                                  new Date(456),

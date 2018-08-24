@@ -70,7 +70,7 @@ public class RevisionResource {
                                    @FormParam(Dict.TIME) String time,
                                    @FormParam(Dict.AUTHOR) String author,
                                    @FormParam(Dict.COMMENT) String comment,
-                                   @FormParam(Dict.IS_COMMITTED) boolean isCommitted,
+                                   @FormParam(Dict.STATUS) int status,
                                    @FormParam(Dict.COMMITTER) String committer,
                                    @FormParam(Dict.COMMIT_ID) String commitID,
                                    @FormParam(Dict.EDIT_TIME) String editTime
@@ -95,7 +95,7 @@ public class RevisionResource {
                                          revisionId,
                                          timeParsed,
                                          author,
-                                         isCommitted,
+                                         status,
                                          committer,
                                          commitID,
                                          editTimeParsed,

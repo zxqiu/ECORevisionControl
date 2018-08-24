@@ -12,7 +12,7 @@ public class Dict {
     public static final String TIME = "Time";
     public static final String AUTHOR = "Author";
     public static final String COMMENT = "Comment";
-    public static final String IS_COMMITTED = "IsCommitted";
+    public static final String STATUS = "Status";
     public static final String COMMITTER = "Committer";
     public static final String COMMIT_ID = "CommitID";
     public static final String EDIT_TIME = "EditTime";

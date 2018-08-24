@@ -22,7 +22,7 @@ public interface RevisionDAO {
             + "`" + Dict.REVISION_ID + "` varchar(32) not null,"
             + "`" + Dict.TIME + "` date not null,"
             + "`" + Dict.AUTHOR + "` varchar(32) not null,"
-            + "`" + Dict.IS_COMMITTED + "` boolean not null,"
+            + "`" + Dict.STATUS + "` int not null,"
             + "`" + Dict.COMMITTER + "` varchar(32),"
             + "`" + Dict.COMMIT_ID + "` varchar(32),"
             + "`" + Dict.EDIT_TIME + "` date,"
@@ -41,7 +41,7 @@ public interface RevisionDAO {
             + ", " + Dict.REVISION_ID
             + ", " + Dict.TIME
             + ", " + Dict.AUTHOR
-            + ", " + Dict.IS_COMMITTED
+            + ", " + Dict.STATUS
             + ", " + Dict.COMMITTER
             + ", " + Dict.COMMIT_ID
             + ", " + Dict.EDIT_TIME
@@ -52,7 +52,7 @@ public interface RevisionDAO {
             + ", :" + Dict.REVISION_ID
             + ", :" + Dict.TIME
             + ", :" + Dict.AUTHOR
-            + ", :" + Dict.IS_COMMITTED
+            + ", :" + Dict.STATUS
             + ", :" + Dict.COMMITTER
             + ", :" + Dict.COMMIT_ID
             + ", :" + Dict.EDIT_TIME
@@ -65,7 +65,7 @@ public interface RevisionDAO {
             ,@Bind(Dict.REVISION_ID) String revisionID
             ,@Bind(Dict.TIME) Date time
             ,@Bind(Dict.AUTHOR) String author
-            ,@Bind(Dict.IS_COMMITTED) boolean isCommitted
+            ,@Bind(Dict.STATUS) int status
             ,@Bind(Dict.COMMITTER) String committer
             ,@Bind(Dict.COMMIT_ID) String commitID
             ,@Bind(Dict.EDIT_TIME) Date editTime
@@ -73,14 +73,14 @@ public interface RevisionDAO {
     );
 
     @SqlUpdate("update " + TABLE_NAME + " set "
-            + Dict.IS_COMMITTED + "= :" + Dict.IS_COMMITTED
+            + Dict.STATUS + "= :" + Dict.STATUS
             + ", " + Dict.COMMITTER + "= :" + Dict.COMMITTER
             + ", " + Dict.COMMIT_ID + "= :" + Dict.COMMIT_ID
             + ", " + Dict.EDIT_TIME + "= :" + Dict.EDIT_TIME
             + " where " + Dict.ID + "= :" + Dict.ID
     )
     void updateCommitInfoByID(@Bind(Dict.ID) String id
-            , @Bind(Dict.IS_COMMITTED) boolean isCommitted
+            , @Bind(Dict.STATUS) int status
             , @Bind(Dict.COMMITTER) String committer
             , @Bind(Dict.COMMIT_ID) String commitID
             , @Bind(Dict.EDIT_TIME) Date editTime
