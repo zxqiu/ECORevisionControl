@@ -71,7 +71,7 @@ public class RevisionResource {
                                    @FormParam(Dict.AUTHOR) String author,
                                    @FormParam(Dict.COMMENT) String comment,
                                    @FormParam(Dict.STATUS) int status,
-                                   @FormParam(Dict.COMMITTER) String committer,
+                                   @FormParam(Dict.EDITOR) String editor,
                                    @FormParam(Dict.COMMIT_ID) String commitID,
                                    @FormParam(Dict.EDIT_TIME) String editTime
                                    ) throws IOException {
@@ -96,7 +96,7 @@ public class RevisionResource {
                                          timeParsed,
                                          author,
                                          status,
-                                         committer,
+                                         editor,
                                          commitID,
                                          editTimeParsed,
                                          new RevisionData(comment));

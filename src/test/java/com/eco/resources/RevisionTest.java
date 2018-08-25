@@ -34,7 +34,7 @@ public class RevisionTest {
                                                  new Date(123),
                                                  "testAuthor",
                                                  1,
-                                                 "testCommitter",
+                                                 "testEditor",
                                                  "testCommitID",
                                                  new Date(456),
                                                  new RevisionData("testComment"));
@@ -98,62 +98,4 @@ public class RevisionTest {
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
-    /*
-    private final DataSourceFactory conf = new DataSourceFactory();
-    private MetricRegistry metricRegistry = new MetricRegistry();
-    private Environment environment;
-    private RevisionConnector revisionConnector;
-    private DBI dbi;
-
-    private Revision testRevision;
-
-    {
-        BootstrapLogging.bootstrap();
-        conf.setUrl("jdbc:sqlite:db/test.db");
-        conf.setDriverClass("org.sqlite.JDBC");
-        conf.setUser("");
-        conf.asSingleConnectionPool();
     }
-
-    @ClassRule
-    public static ResourceTestRule resources;
-
-    @Before
-    public void setUp() throws Exception {
-        environment = new Environment("test", new ObjectMapper(), Validators.newValidator(),
-                metricRegistry, ClassLoader.getSystemClassLoader());
-        dbi = new DBIFactory().build(environment, conf, "sqlite");
-
-        resources = ResourceTestRule.builder()
-                    .addResource(new RevisionResource(dbi.onDemand(RevisionDAO.class)))
-                    .build();
-
-        revisionConnector = RevisionConnector.getInstance();
-
-        testRevision = new Revision("testID",
-                                    "testBranch",
-                                    "testRevision",
-                                    new Date(),
-                                    "testAuthor",
-                                    true,
-                                    "testCommitter",
-                                    "testCommitID",
-                                    new Date(),
-                                    new RevisionData("testComment"));
-
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    @Test
-    public void createRevision() throws Exception {
-        final Response response = resources.target(Dict.API_V1_PATH + "/revisions/test")
-                                           .request(MediaType.APPLICATION_JSON)
-                                           .post(Entity.entity(testRevision, MediaType.APPLICATION_JSON_TYPE));
-        //assertThat(response.getStatusInfo()).isEqualTo(Response.Status.OK);
-        //assertThat(revisionConnector.findByID(testRevision.getId())).isEqualTo(testRevision);
-    }
-    */
-}

@@ -23,7 +23,7 @@ public interface RevisionDAO {
             + "`" + Dict.TIME + "` date not null,"
             + "`" + Dict.AUTHOR + "` varchar(32) not null,"
             + "`" + Dict.STATUS + "` int not null,"
-            + "`" + Dict.COMMITTER + "` varchar(32),"
+            + "`" + Dict.EDITOR + "` varchar(32),"
             + "`" + Dict.COMMIT_ID + "` varchar(32),"
             + "`" + Dict.EDIT_TIME + "` date,"
             + "`" + Dict.DATA + "` blob,"
@@ -42,7 +42,7 @@ public interface RevisionDAO {
             + ", " + Dict.TIME
             + ", " + Dict.AUTHOR
             + ", " + Dict.STATUS
-            + ", " + Dict.COMMITTER
+            + ", " + Dict.EDITOR
             + ", " + Dict.COMMIT_ID
             + ", " + Dict.EDIT_TIME
             + ", " + Dict.DATA
@@ -53,7 +53,7 @@ public interface RevisionDAO {
             + ", :" + Dict.TIME
             + ", :" + Dict.AUTHOR
             + ", :" + Dict.STATUS
-            + ", :" + Dict.COMMITTER
+            + ", :" + Dict.EDITOR
             + ", :" + Dict.COMMIT_ID
             + ", :" + Dict.EDIT_TIME
             + ", :" + Dict.DATA
@@ -66,7 +66,7 @@ public interface RevisionDAO {
             ,@Bind(Dict.TIME) Date time
             ,@Bind(Dict.AUTHOR) String author
             ,@Bind(Dict.STATUS) int status
-            ,@Bind(Dict.COMMITTER) String committer
+            ,@Bind(Dict.EDITOR) String editor
             ,@Bind(Dict.COMMIT_ID) String commitID
             ,@Bind(Dict.EDIT_TIME) Date editTime
             ,@Bind(Dict.DATA) byte[] data
@@ -74,14 +74,14 @@ public interface RevisionDAO {
 
     @SqlUpdate("update " + TABLE_NAME + " set "
             + Dict.STATUS + "= :" + Dict.STATUS
-            + ", " + Dict.COMMITTER + "= :" + Dict.COMMITTER
+            + ", " + Dict.EDITOR + "= :" + Dict.EDITOR
             + ", " + Dict.COMMIT_ID + "= :" + Dict.COMMIT_ID
             + ", " + Dict.EDIT_TIME + "= :" + Dict.EDIT_TIME
             + " where " + Dict.ID + "= :" + Dict.ID
     )
     void updateCommitInfoByID(@Bind(Dict.ID) String id
             , @Bind(Dict.STATUS) int status
-            , @Bind(Dict.COMMITTER) String committer
+            , @Bind(Dict.EDITOR) String editor
             , @Bind(Dict.COMMIT_ID) String commitID
             , @Bind(Dict.EDIT_TIME) Date editTime
     );

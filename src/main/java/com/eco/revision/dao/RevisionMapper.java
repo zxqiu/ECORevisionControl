@@ -19,7 +19,7 @@ public class RevisionMapper implements ResultSetMapper<Revision> {
         revision.setTime(resultSet.getDate(Dict.TIME));
         revision.setAuthor(resultSet.getString(Dict.AUTHOR));
         revision.setStatus(resultSet.getInt(Dict.STATUS));
-        revision.setCommitter(resultSet.getString(Dict.COMMITTER));
+        revision.setEditor(resultSet.getString(Dict.EDITOR));
         revision.setCommitId(resultSet.getString(Dict.COMMIT_ID));
         revision.setEditTime(resultSet.getDate(Dict.EDIT_TIME));
 

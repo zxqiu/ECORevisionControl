@@ -29,7 +29,7 @@ public class Revision {
     private int status;
 
     @JsonProperty
-    private String committer;
+    private String editor;
 
     @JsonProperty
     private String commitId;
@@ -40,14 +40,14 @@ public class Revision {
     @JsonProperty
     private RevisionData data;
 
-    public Revision(String id, String branchName, String revisionId, Date time, String author, int status, String committer, String commitId, Date editTime, RevisionData data) {
+    public Revision(String id, String branchName, String revisionId, Date time, String author, int status, String editor, String commitId, Date editTime, RevisionData data) {
         this.id = id;
         this.branchName = branchName;
         this.revisionId = revisionId;
         this.time = time;
         this.author = author;
         this.status = status;
-        this.committer = committer;
+        this.editor = editor;
         this.commitId = commitId;
         this.editTime = editTime;
         this.data = data;
@@ -103,12 +103,12 @@ public class Revision {
         this.status = status;
     }
 
-    public String getCommitter() {
-        return committer;
+    public String getEditor() {
+        return editor;
     }
 
-    public void setCommitter(String committer) {
-        this.committer = committer;
+    public void setEditor(String editor) {
+        this.editor = editor;
     }
 
     public String getCommitId() {

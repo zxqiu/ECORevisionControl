@@ -67,12 +67,12 @@ public class RevisionConnector implements RevisionDAI {
 
     public void insert(Revision revision) throws IOException {
         revisionDAO.insert(revision.getId(), revision.getBranchName(), revision.getRevisionId(), revision.getTime(),
-                revision.getAuthor(), revision.getStatus(), revision.getCommitter(), revision.getCommitId(),
+                revision.getAuthor(), revision.getStatus(), revision.getEditor(), revision.getCommitId(),
                 revision.getEditTime(), revision.getData().toByteArray());
     }
 
     public void updateCommitInfo(Revision revision) {
-        revisionDAO.updateCommitInfoByID(revision.getId(), revision.getStatus(), revision.getCommitter(),
+        revisionDAO.updateCommitInfoByID(revision.getId(), revision.getStatus(), revision.getEditor(),
                 revision.getCommitId(), revision.getEditTime());
     }
 
