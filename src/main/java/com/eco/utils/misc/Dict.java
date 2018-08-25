@@ -5,7 +5,6 @@ package com.eco.utils.misc;
  */
 public class Dict {
     public static final String API_V1_PATH = "/api/v1";
-    public static final String TIME_FORMAT = "MM-dd-yyyy HH:mm:ss";
     public static final String ID = "id";
     public static final String BRANCH_NAME = "branchName";
     public static final String REVISION_ID = "revisionID";

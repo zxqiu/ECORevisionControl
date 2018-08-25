@@ -150,4 +150,19 @@ public class Revision {
     public void setEditTime(Date editTime) {
         this.editTime = editTime;
     }
+
+    public static void main(String[] arg) {
+        Revision testRevision = new Revision("testBranchtestRevision",
+                "testBranch",
+                "testRevision",
+                new Date(123),
+                "testAuthor",
+                1,
+                "testEditor",
+                "testCommitID",
+                new Date(456),
+                new RevisionData("testComment"));
+
+        System.out.println(testRevision.toString());
+    }
 }

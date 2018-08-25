@@ -4,8 +4,6 @@ package com.eco.revision.resources;
 import com.codahale.metrics.annotation.Timed;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +56,13 @@ public class RevisionResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Revision get(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
                               @PathParam(Dict.REVISION_ID) @NotNull String revisionID) {
-        return revisionConnector.findByID(Revision.generateID(branchName, revisionID)).get(0);
+        List<Revision> ret = revisionConnector.findByID(Revision.generateID(branchName, revisionID));
+
+        if (ret.size() == 0 ) {
+            return null;
+        }
+
+        return ret.get(0);
     }
 
     @POST
@@ -68,27 +72,24 @@ public class RevisionResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response insertRevision(@FormParam(Dict.BRANCH_NAME) String branchName,
                                    @FormParam(Dict.REVISION_ID) String revisionId,
-                                   @FormParam(Dict.TIME) String time,
+                                   @FormParam(Dict.TIME) long time,
                                    @FormParam(Dict.AUTHOR) String author,
                                    @FormParam(Dict.COMMENT) String comment,
                                    @FormParam(Dict.STATUS) int status,
                                    @FormParam(Dict.EDITOR) String editor,
                                    @FormParam(Dict.COMMIT_ID) String commitID,
-                                   @FormParam(Dict.EDIT_TIME) String editTime
+                                   @FormParam(Dict.EDIT_TIME) long editTime
                                    ) throws IOException {
 
-        SimpleDateFormat sdf = new SimpleDateFormat(Dict.TIME_FORMAT);
         Date timeParsed = null;
         Date editTimeParsed = null;
 
         try {
-            timeParsed = sdf.parse(time);
-            if (editTime != null && editTime.trim().length() == Dict.TIME_FORMAT.length()) {
-                editTimeParsed = sdf.parse(editTime);
-            }
-        } catch (ParseException pe) {
-            _logger.error("Error : failed to parse event date : " + pe.getMessage());
-            pe.printStackTrace();
+            timeParsed = new Date(time);
+            editTimeParsed = new Date(editTime);
+        } catch (Exception e) {
+            _logger.error("Error : failed to parse event date : " + e.getMessage());
+            e.printStackTrace();
             return Response.serverError().build();
         }
         Revision revision = new Revision(Revision.generateID(branchName, revisionId),

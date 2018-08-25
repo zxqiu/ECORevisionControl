@@ -6,20 +6,16 @@ import com.eco.revision.resources.RevisionResource;
 import com.eco.services.ECOConfiguration;
 import com.eco.services.ECORevisionControlService;
 import com.eco.utils.misc.Dict;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+
+import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -31,16 +27,27 @@ public class RevisionTest {
     private static final Logger _logger = LoggerFactory.getLogger(RevisionTest.class);
     private static Client client;
 
-    private Revision testRevision = new Revision("testBranchtestRevision",
-                                                 "testBranch",
-                                                 "testRevision",
+    private Revision testRevision0 = new Revision("testBranch0testRevision0",
+                                                 "testBranch0",
+                                                 "testRevision0",
                                                  new Date(123),
-                                                 "testAuthor",
+                                                 "testAuthor0",
                                                  1,
-                                                 "testEditor",
-                                                 "testCommitID",
+                                                 "testEditor0",
+                                                 "testCommitID0",
                                                  new Date(456),
-                                                 new RevisionData("testComment"));
+                                                 new RevisionData("testComment0"));
+
+    private Revision testRevision1 = new Revision("testBranch1testRevision1",
+            "testBranch1",
+            "testRevision1",
+            new Date(123),
+            "testAuthor1",
+            1,
+            "testEditor1",
+            "testCommitID1",
+            new Date(456),
+            new RevisionData("testComment1"));
 
     @ClassRule
     public static final DropwizardAppRule<ECOConfiguration> RULE =
@@ -48,44 +55,35 @@ public class RevisionTest {
                 ResourceHelpers.resourceFilePath("ECORevisionControl.yml"));
 
     @Test
-    public void createRevision() {
+    public void createRevision() throws IOException {
         if (client == null) {
             client = new JerseyClientBuilder(RULE.getEnvironment()).build("Revision test client");
         }
 
-        /*
         Response response = client
                 .target(String.format("http://localhost:%d%s%s%s/"
+                        , RULE.getLocalPort()
                         , Dict.API_V1_PATH
                         , RevisionResource.PATH
-                        , RevisionResource.PATH_INSERT_OBJ
-                        , RULE.getLocalPort())
+                        , RevisionResource.PATH_INSERT_OBJ)
                         )
                 .request()
-                .post(Entity.entity(testRevision, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(testRevision0, MediaType.APPLICATION_JSON));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         Form form = new Form();
-        form.param(Dict.BRANCH_NAME, testRevision.getBranchName());
-        form.param(Dict.REVISION_ID, testRevision.getRevisionId());
-        form.param(Dict.TIME, testRevision.getTime().toString());
-        form.param(Dict.AUTHOR, testRevision.getAuthor());
-        form.param(Dict.COMMENT, testRevision.getData().getComment());
-        form.param(Dict.STATUS, String.valueOf(testRevision.getStatus()));
-        form.param(Dict.EDITOR, testRevision.getEditor());
-        form.param(Dict.COMMIT_ID, testRevision.getCommitId());
-        form.param(Dict.EDIT_TIME, testRevision.getEditTime().toString());
+        form.param(Dict.BRANCH_NAME, testRevision1.getBranchName());
+        form.param(Dict.REVISION_ID, testRevision1.getRevisionId());
+        form.param(Dict.TIME, String.valueOf(testRevision1.getTime().getTime()));
+        form.param(Dict.AUTHOR, testRevision1.getAuthor());
+        form.param(Dict.COMMENT, testRevision1.getData().getComment());
+        form.param(Dict.STATUS, String.valueOf(testRevision1.getStatus()));
+        form.param(Dict.EDITOR, testRevision1.getEditor());
+        form.param(Dict.COMMIT_ID, testRevision1.getCommitId());
+        form.param(Dict.EDIT_TIME, String.valueOf(testRevision1.getEditTime().getTime()));
 
-        */
-
-        ObjectMapper mapper = new ObjectMapper();
-        MultivaluedMap<String, Object> map;// = new MultivaluedHashMap<String, Object>();
-
-        Form form = new Form(map);
-        map = mapper.readValue(testRevision.toString(), new TypeReference<Map<String, String>>(){});
-
-        Response response = client
+        response = client
                 .target(String.format("http://localhost:%d%s%s%s"
                         , RULE.getLocalPort()
                         , Dict.API_V1_PATH
@@ -93,12 +91,11 @@ public class RevisionTest {
                         , RevisionResource.PATH_INSERT_FORM)
                         )
                 .request()
-                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+                .post(Entity.form(form));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
-    /*
     @Test
     public void getRevision() {
         if (client == null) {
@@ -110,12 +107,12 @@ public class RevisionTest {
                         RULE.getLocalPort(),
                         Dict.API_V1_PATH,
                         RevisionResource.PATH,
-                        testRevision.getBranchName(),
-                        testRevision.getRevisionId()))
+                        testRevision0.getBranchName(),
+                        testRevision0.getRevisionId()))
                 .request()
                 .get(Revision.class);
 
-        assertThat(revision.toString()).isEqualTo(testRevision.toString());
+        assertThat(revision.toString()).isEqualTo(testRevision0.toString());
     }
 
     @Test
@@ -129,13 +126,24 @@ public class RevisionTest {
                         RULE.getLocalPort(),
                         Dict.API_V1_PATH,
                         RevisionResource.PATH,
-                        testRevision.getBranchName(),
-                        testRevision.getRevisionId()))
+                        testRevision0.getBranchName(),
+                        testRevision0.getRevisionId()))
+                .request()
+                .delete();
+
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+
+        response = client
+                .target(String.format("http://localhost:%d%s%s/%s/%s",
+                        RULE.getLocalPort(),
+                        Dict.API_V1_PATH,
+                        RevisionResource.PATH,
+                        testRevision1.getBranchName(),
+                        testRevision1.getRevisionId()))
                 .request()
                 .delete();
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
-    */
 
-    }
+}
