@@ -6,15 +6,15 @@ package com.eco.utils.misc;
 public class Dict {
     public static final String API_V1_PATH = "/api/v1";
     public static final String TIME_FORMAT = "MM-dd-yyyy HH:mm:ss";
-    public static final String ID = "ID";
-    public static final String BRANCH_NAME = "BranchName";
-    public static final String REVISION_ID = "RevisionID";
-    public static final String TIME = "Time";
-    public static final String AUTHOR = "Author";
-    public static final String COMMENT = "Comment";
-    public static final String STATUS = "Status";
+    public static final String ID = "id";
+    public static final String BRANCH_NAME = "branchName";
+    public static final String REVISION_ID = "revisionID";
+    public static final String TIME = "time";
+    public static final String AUTHOR = "author";
+    public static final String COMMENT = "comment";
+    public static final String STATUS = "status";
     public static final String EDITOR = "editor";
-    public static final String COMMIT_ID = "CommitID";
-    public static final String EDIT_TIME = "EditTime";
-    public static final String DATA = "Data";
+    public static final String COMMIT_ID = "commitID";
+    public static final String EDIT_TIME = "editTime";
+    public static final String DATA = "data";
 }

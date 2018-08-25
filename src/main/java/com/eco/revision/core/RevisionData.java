@@ -69,6 +69,14 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         return revisionData;
     }
 
+    public String getComment() {
+        return this.comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public static void main(String[] arg) throws IOException, ClassNotFoundException {
         RevisionData testRevisionData = new RevisionData("testComment");
 

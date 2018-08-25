@@ -65,6 +65,7 @@ public class RevisionResource {
     @Timed
     @Path(PATH_INSERT_FORM)
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response insertRevision(@FormParam(Dict.BRANCH_NAME) String branchName,
                                    @FormParam(Dict.REVISION_ID) String revisionId,
                                    @FormParam(Dict.TIME) String time,
@@ -134,7 +135,14 @@ public class RevisionResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteRevision(@PathParam(Dict.BRANCH_NAME) String branchName,
                                    @PathParam(Dict.REVISION_ID) String revisionID) {
-        revisionConnector.delete(Revision.generateID(branchName, revisionID));
+        try {
+            revisionConnector.delete(Revision.generateID(branchName, revisionID));
+        } catch (Exception e) {
+            _logger.error("Error : failed to delete revision "
+                    + Revision.generateID(branchName, revisionID) + " : " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
 
         return Response.ok().build();
     }
