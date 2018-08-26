@@ -26,6 +26,19 @@ import static com.eco.revision.resources.RevisionResource.revisionConnector;
 public class SVNUtils {
     public static final Logger _logger = LoggerFactory.getLogger(SVNUtils.class);
 
+    /**
+     * @param revisionConnector
+     * @param repo
+     * @param branchName
+     * @param user
+     * @param password
+     * @param startRevision exclusive
+     * @param endRevision   inclusive
+     * @param doPrint
+     * @return
+     * @throws SVNException
+     * @throws IOException
+     */
     public static Collection updateLog(RevisionConnector revisionConnector, String repo, String branchName,
                                        String user,String password, long startRevision, long endRevision,
                                        boolean doPrint) throws SVNException, IOException {
@@ -68,7 +81,10 @@ public class SVNUtils {
                 }
             }
 
-            saveLog(revisionConnector, branchName, logEntry);
+            if (startRevision != logEntry.getRevision()) {
+                saveLog(revisionConnector, branchName, logEntry);
+            }
+
         }
 
         return logEntries;

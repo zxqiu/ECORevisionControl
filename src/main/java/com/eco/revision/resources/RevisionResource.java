@@ -189,10 +189,10 @@ public class RevisionResource {
                         try {
                             SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
                                     svnBranch.getBranchName(), svnConf.getUser(), svnConf.getPassword(),
-                                    Long.valueOf(revisions.get(0).getRevisionId()) + 1, -1, false);
+                                    Long.valueOf(revisions.get(0).getRevisionId()), -1, false);
                         } catch (SVNException e) {
                             _logger.warn("Failed to update SVN revision from " +
-                                    (Long.valueOf(revisions.get(0).getRevisionId()) + 1) + " to " + -1);
+                                    (Long.valueOf(revisions.get(0).getRevisionId())) + " to " + -1);
                             e.printStackTrace();
                         }
                     }
