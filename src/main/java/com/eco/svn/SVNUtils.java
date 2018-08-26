@@ -1,4 +1,4 @@
-package com.eco.utils.svn;
+package com.eco.svn;
 
 import com.eco.revision.core.Revision;
 import com.eco.revision.core.RevisionData;
@@ -18,13 +18,17 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import java.io.IOException;
 import java.util.*;
 
+import static com.eco.revision.resources.RevisionResource.revisionConnector;
+
 /**
  * Created by neo on 8/25/18.
  */
 public class SVNUtils {
     public static final Logger _logger = LoggerFactory.getLogger(SVNUtils.class);
 
-    public static Collection updateLog(RevisionConnector revisionConnector, String repo, String branchName, String user, String password, long startRevision, long endRevision, boolean doPrint) throws SVNException, IOException {
+    public static Collection updateLog(RevisionConnector revisionConnector, String repo, String branchName,
+                                       String user,String password, long startRevision, long endRevision,
+                                       boolean doPrint) throws SVNException, IOException {
         DAVRepositoryFactory.setup();
 
         Collection logEntries = null;
@@ -33,7 +37,9 @@ public class SVNUtils {
         ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(user, password);
         repository.setAuthenticationManager(authManager);
 
-        logEntries = repository.log(new String[]{""}, null, startRevision, endRevision, true, true);
+        _logger.info("Updating SVN log : " + repo);
+
+        logEntries = repository.log(new String[]{""}, null, startRevision, endRevision, true,true);
 
         for (Iterator entries = logEntries.iterator(); entries.hasNext(); ) {
             SVNLogEntry logEntry = (SVNLogEntry) entries.next();
@@ -89,7 +95,17 @@ public class SVNUtils {
     }
 
     public static void main(String[] arg) throws IOException, SVNException {
-        SVNUtils.updateLog(null, "https://svn.riouxsvn.com/svncontrol/trunk/","svncontrol",
-                "zxqiu", "Naisrep007", 0, -1, true);
+        String branchName = "svncontrol";
+        SVNConf svnConf = SVNConf.getSVNConf();
+
+        for (SVNBranch svnBranch : svnConf.getBranches()) {
+            if (branchName != null && branchName.length() > 0 && branchName.equals(branchName) == false) {
+                continue;
+            }
+
+            SVNUtils.updateLog(null, svnBranch.getRepo(),
+                    svnBranch.getBranchName(), svnConf.getUser(), svnConf.getPassword(),
+                    0, -1, true);
+        }
     }
 }

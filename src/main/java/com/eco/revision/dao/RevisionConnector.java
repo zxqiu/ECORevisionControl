@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -83,6 +84,7 @@ public class RevisionConnector implements RevisionDAI {
     public List<Revision> findByBranch(String branchName) {
         return revisionDAO.findByBranch(branchName);
     }
+
     public List<Revision> findByID(String id) {
         return revisionDAO.findByID(id);
     }

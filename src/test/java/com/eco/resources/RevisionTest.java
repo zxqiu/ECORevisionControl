@@ -137,8 +137,6 @@ public class RevisionTest {
                 .get(new GenericType<List<Revision>>(){});
 
         assertThat(revisions.size()).isGreaterThan(0);
-        assertThat(revisions.get(0).toString()).isEqualTo(testRevision0.toString());
-        assertThat(revisions.get(1).toString()).isEqualTo(testRevision1.toString());
     }
 
     @Test
@@ -152,7 +150,7 @@ public class RevisionTest {
                 .request()
                 .get(new GenericType<List<Revision>>(){});
 
-        assertThat(revisions.size()).isGreaterThan(2);
+        assertThat(revisions.size()).isGreaterThan(1);
     }
 
     //@Test

@@ -1,0 +1,9 @@
+{
+  "user" : "zxqiu",
+  "password" : "Naisrep007",
+  "branches" : [ {
+    "branchName" : "svncontrol",
+    "repo" : "https://svn.riouxsvn.com/svncontrol/trunk/",
+    "lastUpdate" : 1535267279458
+  } ]
+}

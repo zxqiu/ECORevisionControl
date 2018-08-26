@@ -6,9 +6,11 @@ import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
+import org.skife.jdbi.v2.util.StringColumnMapper;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by neo on 8/12/18.
@@ -90,7 +92,8 @@ public interface RevisionDAO {
     @Mapper(RevisionMapper.class)
     List<Revision> findAll();
 
-    @SqlQuery("select * from " + TABLE_NAME + " where " + Dict.BRANCH_NAME + " = :" + Dict.BRANCH_NAME)
+    @SqlQuery("select * from " + TABLE_NAME + " where " + Dict.BRANCH_NAME + " = :" + Dict.BRANCH_NAME
+            + " order by " + Dict.REVISION_ID + " desc")
     @Mapper(RevisionMapper.class)
     List<Revision> findByBranch(@Bind(Dict.BRANCH_NAME) String branchName);
 

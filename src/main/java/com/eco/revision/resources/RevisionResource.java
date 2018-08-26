@@ -3,15 +3,22 @@ package com.eco.revision.resources;
 
 import com.codahale.metrics.annotation.Timed;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.eco.svn.SVNBranch;
+import com.eco.svn.SVNConf;
+import com.eco.svn.SVNUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +27,7 @@ import com.eco.revision.core.RevisionData;
 import com.eco.revision.dao.RevisionConnector;
 import com.eco.revision.dao.RevisionDAO;
 import com.eco.utils.misc.Dict;
+import org.tmatesoft.svn.core.SVNException;
 
 /**
  * Created by neo on 8/16/18.
@@ -38,6 +46,8 @@ public class RevisionResource {
     public static final Logger _logger = LoggerFactory.getLogger(RevisionResource.class);
     public static RevisionConnector revisionConnector;
 
+    private static final long REVISION_UPDATE_INTERVAL = 10 * 1000; // ms
+
     public RevisionResource(RevisionDAO revisionDAO) throws Exception {
         RevisionConnector.init(revisionDAO);
         revisionConnector = RevisionConnector.getInstance();
@@ -47,7 +57,8 @@ public class RevisionResource {
     @Timed
     @Path(PATH_GET_ALL)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Revision> getAll() {
+    public List<Revision> getAll() throws IOException, SVNException {
+        updateRevisions(null);
         return revisionConnector.findAll();
     }
 
@@ -55,7 +66,8 @@ public class RevisionResource {
     @Timed
     @Path(PATH_GET_BRANCH)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Revision> getByBranch(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName) {
+    public List<Revision> getByBranch(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName) throws IOException, SVNException {
+        updateRevisions(branchName);
         return revisionConnector.findByBranch(branchName);
     }
 
@@ -64,7 +76,8 @@ public class RevisionResource {
     @Path(PATH_GET_REVISION)
     @Produces(MediaType.APPLICATION_JSON)
     public Revision getByID(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
-                              @PathParam(Dict.REVISION_ID) @NotNull String revisionID) {
+                              @PathParam(Dict.REVISION_ID) @NotNull String revisionID) throws IOException, SVNException {
+        updateRevisions(branchName);
         List<Revision> ret = revisionConnector.findByID(Revision.generateID(branchName, revisionID));
 
         if (ret.size() == 0 ) {
@@ -155,5 +168,43 @@ public class RevisionResource {
         }
 
         return Response.ok().build();
+    }
+
+    private static final Lock revisionUpdateLock = new ReentrantLock();
+    public static void updateRevisions(String branchName) throws IOException {
+        SVNConf svnConf = SVNConf.getSVNConf();
+
+        if (revisionUpdateLock.tryLock()) {
+            try {
+                for (SVNBranch svnBranch : svnConf.getBranches()) {
+                    if (branchName != null && branchName.length() > 0 && branchName.equals(branchName) == false) {
+                        continue;
+                    } else if (new Date().getTime() - svnBranch.getLastUpdate() < REVISION_UPDATE_INTERVAL) {
+                        continue;
+                    }
+
+                    List<Revision> revisions = revisionConnector.findByBranch(svnBranch.getBranchName());
+
+                    if (revisions.size() > 0) {
+                        try {
+                            SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
+                                    svnBranch.getBranchName(), svnConf.getUser(), svnConf.getPassword(),
+                                    Long.valueOf(revisions.get(0).getRevisionId()) + 1, -1, false);
+                        } catch (SVNException e) {
+                            _logger.warn("Failed to update SVN revision from " +
+                                    (Long.valueOf(revisions.get(0).getRevisionId()) + 1) + " to " + -1);
+                            e.printStackTrace();
+                        }
+                    }
+
+                    svnBranch.setLastUpdate(new Date().getTime());
+                }
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(SVNConf.SVNConfFile), svnConf);
+            } finally {
+                revisionUpdateLock.unlock();
+            }
+        }
     }
 }
