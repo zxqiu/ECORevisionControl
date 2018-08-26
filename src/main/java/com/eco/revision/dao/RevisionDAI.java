@@ -17,6 +17,7 @@ public interface RevisionDAI {
     public abstract void insert(Revision revision) throws IOException;
     public abstract List<Revision> findAll();
     public abstract List<Revision> findByID(String id);
+    public abstract List<Revision> findByBranch(String branchName);
     public abstract void delete(String id);
     public abstract void updateCommitInfo(Revision revision);
 }

@@ -12,11 +12,16 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -27,8 +32,8 @@ public class RevisionTest {
     private static final Logger _logger = LoggerFactory.getLogger(RevisionTest.class);
     private static Client client;
 
-    private Revision testRevision0 = new Revision("testBranch0testRevision0",
-                                                 "testBranch0",
+    private Revision testRevision0 = new Revision("testBranchtestRevision0",
+                                                 "testBranch",
                                                  "testRevision0",
                                                  new Date(123),
                                                  "testAuthor0",
@@ -38,28 +43,37 @@ public class RevisionTest {
                                                  new Date(456),
                                                  new RevisionData("testComment0"));
 
-    private Revision testRevision1 = new Revision("testBranch1testRevision1",
-            "testBranch1",
-            "testRevision1",
-            new Date(123),
-            "testAuthor1",
-            1,
-            "testEditor1",
-            "testCommitID1",
-            new Date(456),
-            new RevisionData("testComment1"));
+    private Revision testRevision1 = new Revision("testBranchtestRevision1",
+                                                 "testBranch",
+                                                 "testRevision1",
+                                                 new Date(123),
+                                                 "testAuthor1",
+                                                 1,
+                                                 "testEditor1",
+                                                 "testCommitID1",
+                                                 new Date(456),
+                                                 new RevisionData("testComment1"));
 
     @ClassRule
     public static final DropwizardAppRule<ECOConfiguration> RULE =
         new DropwizardAppRule<ECOConfiguration>(ECORevisionControlService.class,
                 ResourceHelpers.resourceFilePath("ECORevisionControl.yml"));
 
-    @Test
-    public void createRevision() throws IOException {
+    @Before
+    public void setUp() throws IOException {
         if (client == null) {
             client = new JerseyClientBuilder(RULE.getEnvironment()).build("Revision test client");
         }
+        createRevision();
+    }
 
+    @After
+    public void cleanUp() {
+        deleteRevision();
+    }
+
+    //@Test
+    public void createRevision() throws IOException {
         Response response = client
                 .target(String.format("http://localhost:%d%s%s%s/"
                         , RULE.getLocalPort()
@@ -97,11 +111,7 @@ public class RevisionTest {
     }
 
     @Test
-    public void getRevision() {
-        if (client == null) {
-            client = new JerseyClientBuilder(RULE.getEnvironment()).build("Revision test client");
-        }
-
+    public void getByID() {
         Revision revision = client
                 .target(String.format("http://localhost:%d%s%s/%s/%s",
                         RULE.getLocalPort(),
@@ -116,11 +126,37 @@ public class RevisionTest {
     }
 
     @Test
-    public void deleteRevision() {
-        if (client == null) {
-            client = new JerseyClientBuilder(RULE.getEnvironment()).build("Revision test client");
-        }
+    public void getByBranch() {
+        List<Revision> revisions = client
+                .target(String.format("http://localhost:%d%s%s/%s",
+                        RULE.getLocalPort(),
+                        Dict.API_V1_PATH,
+                        RevisionResource.PATH,
+                        testRevision0.getBranchName()))
+                .request()
+                .get(new GenericType<List<Revision>>(){});
 
+        assertThat(revisions.size()).isGreaterThan(0);
+        assertThat(revisions.get(0).toString()).isEqualTo(testRevision0.toString());
+        assertThat(revisions.get(1).toString()).isEqualTo(testRevision1.toString());
+    }
+
+    @Test
+    public void getAll() {
+        List<Revision> revisions = client
+                .target(String.format("http://localhost:%d%s%s",
+                        RULE.getLocalPort(),
+                        Dict.API_V1_PATH,
+                        RevisionResource.PATH
+                        ))
+                .request()
+                .get(new GenericType<List<Revision>>(){});
+
+        assertThat(revisions.size()).isGreaterThan(2);
+    }
+
+    //@Test
+    public void deleteRevision() {
         Response response = client
                 .target(String.format("http://localhost:%d%s%s/%s/%s",
                         RULE.getLocalPort(),

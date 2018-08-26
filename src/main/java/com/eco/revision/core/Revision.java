@@ -40,6 +40,31 @@ public class Revision {
     @JsonProperty
     private RevisionData data;
 
+    public enum STATUS {
+        NEW(0)
+        , COMMITTED(1)
+        , SKIPPED(2);
+
+        private final int value;
+        private STATUS(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return this.value;
+        }
+
+        public static STATUS toSTATUS(int value) {
+            for (STATUS s : STATUS.values()) {
+                if (value == s.getValue()) {
+                    return s;
+                }
+            }
+
+            return null;
+        }
+    }
+
     public Revision(String id, String branchName, String revisionId, Date time, String author, int status, String editor, String commitId, Date editTime, RevisionData data) {
         this.id = id;
         this.branchName = branchName;

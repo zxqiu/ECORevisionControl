@@ -28,7 +28,8 @@ import com.eco.utils.misc.Dict;
 @Path(Dict.API_V1_PATH + RevisionResource.PATH)
 public class RevisionResource {
     public static final String PATH = "/revisions";
-    public static final String PATH_GET = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
+    public static final String PATH_GET_BRANCH = "/{" + Dict.BRANCH_NAME + "}";
+    public static final String PATH_GET_REVISION = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
     public static final String PATH_GET_ALL = "/";
     public static final String PATH_INSERT_FORM = "/";
     public static final String PATH_INSERT_OBJ = "/obj";
@@ -52,9 +53,17 @@ public class RevisionResource {
 
     @GET
     @Timed
-    @Path(PATH_GET)
+    @Path(PATH_GET_BRANCH)
     @Produces(MediaType.APPLICATION_JSON)
-    public Revision get(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
+    public List<Revision> getByBranch(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName) {
+        return revisionConnector.findByBranch(branchName);
+    }
+
+    @GET
+    @Timed
+    @Path(PATH_GET_REVISION)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Revision getByID(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
                               @PathParam(Dict.REVISION_ID) @NotNull String revisionID) {
         List<Revision> ret = revisionConnector.findByID(Revision.generateID(branchName, revisionID));
 

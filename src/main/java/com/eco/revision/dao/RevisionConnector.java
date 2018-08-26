@@ -80,6 +80,9 @@ public class RevisionConnector implements RevisionDAI {
         return revisionDAO.findAll();
     }
 
+    public List<Revision> findByBranch(String branchName) {
+        return revisionDAO.findByBranch(branchName);
+    }
     public List<Revision> findByID(String id) {
         return revisionDAO.findByID(id);
     }

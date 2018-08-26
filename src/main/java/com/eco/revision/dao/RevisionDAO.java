@@ -90,6 +90,10 @@ public interface RevisionDAO {
     @Mapper(RevisionMapper.class)
     List<Revision> findAll();
 
+    @SqlQuery("select * from " + TABLE_NAME + " where " + Dict.BRANCH_NAME + " = :" + Dict.BRANCH_NAME)
+    @Mapper(RevisionMapper.class)
+    List<Revision> findByBranch(@Bind(Dict.BRANCH_NAME) String branchName);
+
     @SqlQuery("select * from " + TABLE_NAME + " where " + Dict.ID + " = :" + Dict.ID)
     @Mapper(RevisionMapper.class)
     List<Revision> findByID(@Bind(Dict.ID) String id);
