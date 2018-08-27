@@ -186,7 +186,7 @@ public class RevisionTest {
                 .request()
                 .get(Revision.class);
 
-        assertThat(revision.getStatus()).isEqualTo(Revision.STATUS.COMMITTED);
+        assertThat(revision.getStatus()).isEqualTo(Revision.STATUS.COMMITTED.getValue());
         assertThat(revision.getEditor()).isEqualTo("newEditor");
         assertThat(revision.getCommitId()).isEqualTo("newCommitID");
         assertThat(revision.getEditTime().getTime()).isEqualTo(999);
