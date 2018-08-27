@@ -16,10 +16,10 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class SVNConf {
     @JsonProperty
-    private String user;
+    private String userDefault;
 
     @JsonProperty
-    private String password;
+    private String passwordDefault;
 
     @JsonProperty
     private List<SVNBranch> branches;
@@ -49,28 +49,28 @@ public class SVNConf {
         return svnConf;
     }
 
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public List<SVNBranch> getBranches() {
         return branches;
     }
 
     public void setBranches(List<SVNBranch> branches) {
         this.branches = branches;
+    }
+
+    public String getUserDefault() {
+        return userDefault;
+    }
+
+    public void setUserDefault(String userDefault) {
+        this.userDefault = userDefault;
+    }
+
+    public String getPasswordDefault() {
+        return passwordDefault;
+    }
+
+    public void setPasswordDefault(String passwordDefault) {
+        this.passwordDefault = passwordDefault;
     }
 
     public static void main(String[] arg) throws IOException {

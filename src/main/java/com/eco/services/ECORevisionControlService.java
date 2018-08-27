@@ -1,5 +1,6 @@
 package com.eco.services;
 
+import com.eco.filter.GeneralRequestFilter;
 import io.dropwizard.Application;
 import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
@@ -48,5 +49,10 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
         environment.jersey().register(new RevisionResource(revisionDAO));
 
         environment.jersey().register(new JsonProcessingExceptionMapper(true));
+
+		/*
+		register all filters
+		 */
+        environment.jersey().register(new GeneralRequestFilter());
     }
 }

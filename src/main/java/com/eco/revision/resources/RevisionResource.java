@@ -33,15 +33,16 @@ import org.tmatesoft.svn.core.SVNException;
  * Created by neo on 8/16/18.
  */
 
-@Path(Dict.API_V1_PATH + RevisionResource.PATH)
+@Path(Dict.API_V1_PATH + RevisionResource.PATH_ROOT)
 public class RevisionResource {
-    public static final String PATH = "/revisions";
-    public static final String PATH_GET_BRANCH = "/{" + Dict.BRANCH_NAME + "}";
-    public static final String PATH_GET_REVISION = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
-    public static final String PATH_GET_ALL = "/";
-    public static final String PATH_INSERT_FORM = "/";
-    public static final String PATH_INSERT_OBJ = "/obj";
-    public static final String PATH_DELETE = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
+    public static final String PATH_ROOT            = "/revisions";
+    public static final String PATH_GET_BRANCH      = "/{" + Dict.BRANCH_NAME + "}";
+    public static final String PATH_GET_REVISION    = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
+    public static final String PATH_GET_ALL         = "/";
+    public static final String PATH_POST_FORM       = "/";
+    public static final String PATH_POST_OBJ        = "/obj";
+    public static final String PATH_PUT_FORM        = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
+    public static final String PATH_DELETE          = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
 
     public static final Logger _logger = LoggerFactory.getLogger(RevisionResource.class);
     public static RevisionConnector revisionConnector;
@@ -58,7 +59,7 @@ public class RevisionResource {
     @Path(PATH_GET_ALL)
     @Produces(MediaType.APPLICATION_JSON)
     public List<Revision> getAll() throws IOException, SVNException {
-        updateRevisions(null);
+        _syncRevisions(null);
         return revisionConnector.findAll();
     }
 
@@ -67,7 +68,7 @@ public class RevisionResource {
     @Path(PATH_GET_BRANCH)
     @Produces(MediaType.APPLICATION_JSON)
     public List<Revision> getByBranch(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName) throws IOException, SVNException {
-        updateRevisions(branchName);
+        _syncRevisions(branchName);
         return revisionConnector.findByBranch(branchName);
     }
 
@@ -77,7 +78,7 @@ public class RevisionResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Revision getByID(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
                               @PathParam(Dict.REVISION_ID) @NotNull String revisionID) throws IOException, SVNException {
-        updateRevisions(branchName);
+        _syncRevisions(branchName);
         List<Revision> ret = revisionConnector.findByID(Revision.generateID(branchName, revisionID));
 
         if (ret.size() == 0 ) {
@@ -87,15 +88,35 @@ public class RevisionResource {
         return ret.get(0);
     }
 
-    @POST
+    @PUT
     @Timed
-    @Path(PATH_INSERT_FORM)
+    @Path(PATH_PUT_FORM)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response insertRevision(@FormParam(Dict.BRANCH_NAME) String branchName,
-                                   @FormParam(Dict.REVISION_ID) String revisionId,
-                                   @FormParam(Dict.TIME) long time,
-                                   @FormParam(Dict.AUTHOR) String author,
+    public Response update(@PathParam(Dict.BRANCH_NAME) String branchName,
+                           @PathParam(Dict.REVISION_ID) String revisionID,
+                           @FormParam(Dict.STATUS) @NotNull int status,
+                           @FormParam(Dict.EDITOR) @NotNull String editor,
+                           @FormParam(Dict.COMMIT_ID) String commitID,
+                           @FormParam(Dict.EDIT_TIME) @NotNull long editTime
+                           ) {
+        _logger.error("process update");
+        Date editTimeParsed = new Date(editTime);
+
+        revisionConnector.update(branchName, revisionID, status, editor, commitID, editTimeParsed);
+
+        return Response.ok().build();
+    }
+
+    @POST
+    @Timed
+    @Path(PATH_POST_FORM)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response insertRevision(@FormParam(Dict.BRANCH_NAME) @NotNull String branchName,
+                                   @FormParam(Dict.REVISION_ID) @NotNull String revisionId,
+                                   @FormParam(Dict.TIME) @NotNull long time,
+                                   @FormParam(Dict.AUTHOR) @NotNull String author,
                                    @FormParam(Dict.COMMENT) String comment,
                                    @FormParam(Dict.STATUS) int status,
                                    @FormParam(Dict.EDITOR) String editor,
@@ -103,17 +124,8 @@ public class RevisionResource {
                                    @FormParam(Dict.EDIT_TIME) long editTime
                                    ) throws IOException {
 
-        Date timeParsed = null;
-        Date editTimeParsed = null;
-
-        try {
-            timeParsed = new Date(time);
-            editTimeParsed = new Date(editTime);
-        } catch (Exception e) {
-            _logger.error("Error : failed to parse event date : " + e.getMessage());
-            e.printStackTrace();
-            return Response.serverError().build();
-        }
+        Date timeParsed = new Date(time);
+        Date editTimeParsed = new Date(editTime);
         Revision revision = new Revision(Revision.generateID(branchName, revisionId),
                                          branchName,
                                          revisionId,
@@ -137,7 +149,7 @@ public class RevisionResource {
 
     @POST
     @Timed
-    @Path(PATH_INSERT_OBJ)
+    @Path(PATH_POST_OBJ)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insertRevisionObject(Revision revision) throws IOException {
@@ -171,7 +183,7 @@ public class RevisionResource {
     }
 
     private static final Lock revisionUpdateLock = new ReentrantLock();
-    public static void updateRevisions(String branchName) throws IOException {
+    private static void _syncRevisions(String branchName) throws IOException {
         SVNConf svnConf = SVNConf.getSVNConf();
 
         if (revisionUpdateLock.tryLock()) {
@@ -184,17 +196,25 @@ public class RevisionResource {
                     }
 
                     List<Revision> revisions = revisionConnector.findByBranch(svnBranch.getBranchName());
+                    String user = (svnBranch.getUser() != null && svnBranch.getUser().length() > 0) ?
+                                    svnBranch.getUser() : svnConf.getUserDefault();
+                    String password = (svnBranch.getPassword() != null && svnBranch.getPassword().length() > 0) ?
+                                    svnBranch.getPassword() : svnConf.getPasswordDefault();
 
-                    if (revisions.size() > 0) {
-                        try {
+                    try {
+                        if (revisions.size() > 0) {
                             SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
-                                    svnBranch.getBranchName(), svnConf.getUser(), svnConf.getPassword(),
+                                    svnBranch.getBranchName(), user, password,
                                     Long.valueOf(revisions.get(0).getRevisionId()), -1, false);
-                        } catch (SVNException e) {
-                            _logger.warn("Failed to update SVN revision from " +
-                                    (Long.valueOf(revisions.get(0).getRevisionId())) + " to " + -1);
-                            e.printStackTrace();
+                        } else {
+                            SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
+                                    svnBranch.getBranchName(), user, password,
+                                    0, -1, false);
                         }
+                    } catch (SVNException e) {
+                        _logger.warn("Failed to update SVN revision from " +
+                                (Long.valueOf(revisions.get(0).getRevisionId())) + " to " + -1);
+                        e.printStackTrace();
                     }
 
                     svnBranch.setLastUpdate(new Date().getTime());

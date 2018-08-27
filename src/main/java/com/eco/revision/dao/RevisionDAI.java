@@ -19,5 +19,6 @@ public interface RevisionDAI {
     public abstract List<Revision> findByID(String id);
     public abstract List<Revision> findByBranch(String branchName);
     public abstract void delete(String id);
-    public abstract void updateCommitInfo(Revision revision);
+    public abstract void update(String branchName, String revisionID, int status,
+                                String editor, String commitID, Date editTime);
 }

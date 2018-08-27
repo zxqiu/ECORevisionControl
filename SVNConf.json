@@ -1,9 +1,11 @@
 {
-  "user" : "zxqiu",
-  "password" : "Naisrep007",
+  "userDefault" : "zxqiu",
+  "passwordDefault" : "",
   "branches" : [ {
+    "user" : "zxqiu",
+    "password" : "fortinet",
     "branchName" : "svncontrol",
     "repo" : "https://svn.riouxsvn.com/svncontrol/trunk/",
-    "lastUpdate" : 1535319310795
+    "lastUpdate" : 1535335352756
   } ]
 }

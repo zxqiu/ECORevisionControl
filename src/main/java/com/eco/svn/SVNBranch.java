@@ -7,6 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SVNBranch {
     @JsonProperty
+    private String user;
+
+    @JsonProperty
+    private String password;
+
+    @JsonProperty
     private String branchName;
 
     @JsonProperty
@@ -39,5 +45,21 @@ public class SVNBranch {
 
     public void setLastUpdate(long lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

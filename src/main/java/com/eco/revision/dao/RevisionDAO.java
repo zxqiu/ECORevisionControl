@@ -81,7 +81,7 @@ public interface RevisionDAO {
             + ", " + Dict.EDIT_TIME + "= :" + Dict.EDIT_TIME
             + " where " + Dict.ID + "= :" + Dict.ID
     )
-    void updateCommitInfoByID(@Bind(Dict.ID) String id
+    void updateByID(@Bind(Dict.ID) String id
             , @Bind(Dict.STATUS) int status
             , @Bind(Dict.EDITOR) String editor
             , @Bind(Dict.COMMIT_ID) String commitID

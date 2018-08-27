@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
@@ -72,9 +73,8 @@ public class RevisionConnector implements RevisionDAI {
                 revision.getEditTime(), revision.getData().toByteArray());
     }
 
-    public void updateCommitInfo(Revision revision) {
-        revisionDAO.updateCommitInfoByID(revision.getId(), revision.getStatus(), revision.getEditor(),
-                revision.getCommitId(), revision.getEditTime());
+    public void update(String branchName, String revisionID, int status, String editor, String commitID, Date editTime) {
+        revisionDAO.updateByID(Revision.generateID(branchName, revisionID), status, editor, commitID, editTime);
     }
 
     public List<Revision> findAll() {

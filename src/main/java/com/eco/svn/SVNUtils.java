@@ -120,7 +120,7 @@ public class SVNUtils {
             }
 
             SVNUtils.updateLog(null, svnBranch.getRepo(),
-                    svnBranch.getBranchName(), svnConf.getUser(), svnConf.getPassword(),
+                    svnBranch.getBranchName(), svnBranch.getUser(), svnBranch.getPassword(),
                     0, -1, true);
         }
     }

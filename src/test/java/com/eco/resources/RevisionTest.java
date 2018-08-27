@@ -20,6 +20,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.client.ClientProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -37,7 +38,7 @@ public class RevisionTest {
                                                  "testRevision0",
                                                  new Date(123),
                                                  "testAuthor0",
-                                                 1,
+                                                 0,
                                                  "testEditor0",
                                                  "testCommitID0",
                                                  new Date(456),
@@ -48,7 +49,7 @@ public class RevisionTest {
                                                  "testRevision1",
                                                  new Date(123),
                                                  "testAuthor1",
-                                                 1,
+                                                 0,
                                                  "testEditor1",
                                                  "testCommitID1",
                                                  new Date(456),
@@ -63,6 +64,7 @@ public class RevisionTest {
     public void setUp() throws IOException {
         if (client == null) {
             client = new JerseyClientBuilder(RULE.getEnvironment()).build("Revision test client");
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
         }
         createRevision();
     }
@@ -78,8 +80,8 @@ public class RevisionTest {
                 .target(String.format("http://localhost:%d%s%s%s/"
                         , RULE.getLocalPort()
                         , Dict.API_V1_PATH
-                        , RevisionResource.PATH
-                        , RevisionResource.PATH_INSERT_OBJ)
+                        , RevisionResource.PATH_ROOT
+                        , RevisionResource.PATH_POST_OBJ)
                         )
                 .request()
                 .post(Entity.entity(testRevision0, MediaType.APPLICATION_JSON));
@@ -101,8 +103,8 @@ public class RevisionTest {
                 .target(String.format("http://localhost:%d%s%s%s"
                         , RULE.getLocalPort()
                         , Dict.API_V1_PATH
-                        , RevisionResource.PATH
-                        , RevisionResource.PATH_INSERT_FORM)
+                        , RevisionResource.PATH_ROOT
+                        , RevisionResource.PATH_POST_FORM)
                         )
                 .request()
                 .post(Entity.form(form));
@@ -116,7 +118,7 @@ public class RevisionTest {
                 .target(String.format("http://localhost:%d%s%s/%s/%s",
                         RULE.getLocalPort(),
                         Dict.API_V1_PATH,
-                        RevisionResource.PATH,
+                        RevisionResource.PATH_ROOT,
                         testRevision0.getBranchName(),
                         testRevision0.getRevisionId()))
                 .request()
@@ -131,7 +133,7 @@ public class RevisionTest {
                 .target(String.format("http://localhost:%d%s%s/%s",
                         RULE.getLocalPort(),
                         Dict.API_V1_PATH,
-                        RevisionResource.PATH,
+                        RevisionResource.PATH_ROOT,
                         testRevision0.getBranchName()))
                 .request()
                 .get(new GenericType<List<Revision>>(){});
@@ -145,12 +147,49 @@ public class RevisionTest {
                 .target(String.format("http://localhost:%d%s%s",
                         RULE.getLocalPort(),
                         Dict.API_V1_PATH,
-                        RevisionResource.PATH
+                        RevisionResource.PATH_ROOT
                         ))
                 .request()
                 .get(new GenericType<List<Revision>>(){});
 
         assertThat(revisions.size()).isGreaterThan(1);
+    }
+
+    @Test
+    public void updateRevision() {
+        Form form = new Form();
+        form.param(Dict.STATUS, String.valueOf(Revision.STATUS.COMMITTED.getValue()));
+        form.param(Dict.EDITOR, "newEditor");
+        form.param(Dict.COMMIT_ID, "newCommitID");
+        form.param(Dict.EDIT_TIME, String.valueOf(new Date(999).getTime()));
+
+        Response response = client
+                .target(String.format("http://localhost:%d%s%s"
+                        , RULE.getLocalPort()
+                        , Dict.API_V1_PATH
+                        , RevisionResource.PATH_ROOT)
+                )
+                .path(testRevision1.getBranchName())
+                .path(testRevision1.getRevisionId())
+                .request()
+                .put(Entity.form(form));
+
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+
+        Revision revision = client
+                .target(String.format("http://localhost:%d%s%s/%s/%s",
+                        RULE.getLocalPort(),
+                        Dict.API_V1_PATH,
+                        RevisionResource.PATH_ROOT,
+                        testRevision1.getBranchName(),
+                        testRevision1.getRevisionId()))
+                .request()
+                .get(Revision.class);
+
+        assertThat(revision.getStatus()).isEqualTo(Revision.STATUS.COMMITTED);
+        assertThat(revision.getEditor()).isEqualTo("newEditor");
+        assertThat(revision.getCommitId()).isEqualTo("newCommitID");
+        assertThat(revision.getEditTime().getTime()).isEqualTo(999);
     }
 
     //@Test
@@ -159,7 +198,7 @@ public class RevisionTest {
                 .target(String.format("http://localhost:%d%s%s/%s/%s",
                         RULE.getLocalPort(),
                         Dict.API_V1_PATH,
-                        RevisionResource.PATH,
+                        RevisionResource.PATH_ROOT,
                         testRevision0.getBranchName(),
                         testRevision0.getRevisionId()))
                 .request()
@@ -171,7 +210,7 @@ public class RevisionTest {
                 .target(String.format("http://localhost:%d%s%s/%s/%s",
                         RULE.getLocalPort(),
                         Dict.API_V1_PATH,
-                        RevisionResource.PATH,
+                        RevisionResource.PATH_ROOT,
                         testRevision1.getBranchName(),
                         testRevision1.getRevisionId()))
                 .request()
