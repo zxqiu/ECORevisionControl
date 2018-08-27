@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Created by neo on 8/16/18.
- * Revision Data Access Interface
+ * Revision Data GUI Interface
  */
 public interface RevisionDAI {
     public abstract void createTable();

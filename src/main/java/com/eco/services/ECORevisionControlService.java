@@ -1,6 +1,9 @@
 package com.eco.services;
 
+import com.eco.branch.resources.BranchResource;
 import com.eco.filter.GeneralRequestFilter;
+import com.eco.views.resources.GUI;
+import com.fizzed.rocker.runtime.RockerRuntime;
 import io.dropwizard.Application;
 import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
@@ -47,8 +50,16 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
         _logger.info("Register all resources");
         /* register resources */
         environment.jersey().register(new RevisionResource(revisionDAO));
+        environment.jersey().register(new BranchResource());
+        environment.jersey().register(new GUI());
 
         environment.jersey().register(new JsonProcessingExceptionMapper(true));
+        environment.jersey().register(new RockerMessageBodyWriter());
+
+	    /*
+	    dev option: real time rocker reloading
+	     */
+        RockerRuntime.getInstance().setReloading(true);
 
 		/*
 		register all filters

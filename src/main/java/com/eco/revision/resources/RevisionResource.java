@@ -68,6 +68,10 @@ public class RevisionResource {
     @Path(PATH_GET_BRANCH)
     @Produces(MediaType.APPLICATION_JSON)
     public List<Revision> getByBranch(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName) throws IOException, SVNException {
+        return utilGetByBranch(branchName);
+    }
+
+    public static List<Revision> utilGetByBranch(String branchName) throws IOException, SVNException {
         _syncRevisions(branchName);
         return revisionConnector.findByBranch(branchName);
     }

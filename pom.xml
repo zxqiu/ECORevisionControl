@@ -19,6 +19,7 @@
         <junit.version>4.12</junit.version>
         <mockito-all.version>1.9.5</mockito-all.version>
         <svnkit.version>1.9.3</svnkit.version>
+        <rocker.version>1.0.0</rocker.version>
     </properties>
 
     <build>
@@ -66,7 +67,41 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.fizzed</groupId>
+                <artifactId>rocker-maven-plugin</artifactId>
+                <version>${rocker.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-rocker-templates</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!--<extendsClass>com.fizzed.ninja.rocker.NinjaRockerTemplate</extendsClass>-->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                    <exclude>**/*.rocker.html</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 
@@ -178,6 +213,12 @@
             <version>${svnkit.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.fizzed/rocker-maven-plugin -->
+        <dependency>
+            <groupId>com.fizzed</groupId>
+            <artifactId>rocker-maven-plugin</artifactId>
+            <version>${rocker.version}</version>
+        </dependency>
 
     </dependencies>
 

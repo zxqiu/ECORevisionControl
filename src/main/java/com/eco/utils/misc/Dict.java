@@ -16,4 +16,5 @@ public class Dict {
     public static final String COMMIT_ID = "commitID";
     public static final String EDIT_TIME = "editTime";
     public static final String DATA = "data";
+    public static final String URL = "url";
 }
