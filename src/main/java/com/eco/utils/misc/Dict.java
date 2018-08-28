@@ -17,4 +17,6 @@ public class Dict {
     public static final String EDIT_TIME = "editTime";
     public static final String DATA = "data";
     public static final String URL = "url";
+    public static final String BEGIN = "begin";
+    public static final String END = "end";
 }

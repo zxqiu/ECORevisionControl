@@ -136,6 +136,13 @@ public interface RevisionDAO {
     @Mapper(RevisionMapper.class)
     List<Revision> findByBranch(@Bind(Dict.BRANCH_NAME) String branchName);
 
+    @SqlQuery("select * from " + TABLE_NAME + " where " + Dict.BRANCH_NAME + " = :" + Dict.BRANCH_NAME
+            + " order by cast(`" + Dict.REVISION_ID + "` as bigint) desc limit :" + Dict.BEGIN + ",:" + Dict.END)
+    @Mapper(RevisionMapper.class)
+    List<Revision> findLimitByBranch(@Bind(Dict.BRANCH_NAME) String branchName
+                                    , @Bind(Dict.BEGIN) long begin
+                                    , @Bind(Dict.END) long end);
+
     @SqlQuery("select max( cast(`" + Dict.REVISION_ID + "` as bigint) ) from " + TABLE_NAME + " where " + Dict.BRANCH_NAME + " = :" + Dict.BRANCH_NAME)
     long findLargestRevisionID(@Bind(Dict.BRANCH_NAME) String branchName);
 

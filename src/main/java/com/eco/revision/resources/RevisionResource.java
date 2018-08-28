@@ -76,6 +76,11 @@ public class RevisionResource {
         return revisionConnector.findByBranch(branchName);
     }
 
+    public static List<Revision> utilGetLimitByBranch(String branchName, long begin, long end) throws IOException {
+        _syncRevisions(branchName);
+        return revisionConnector.findLimitByBranch(branchName, begin, end);
+    }
+
     @GET
     @Timed
     @Path(PATH_GET_REVISION)

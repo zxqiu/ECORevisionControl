@@ -34,7 +34,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 @Provider
-@Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_XHTML_XML })
+@Produces({ MediaType.TEXT_HTML, MediaType.APPLICATION_XHTML_XML, MediaType.APPLICATION_JSON})
 public class RockerMessageBodyWriter implements MessageBodyWriter<RockerModel> {
     static private final Logger log = LoggerFactory.getLogger(RockerMessageBodyWriter.class);
 

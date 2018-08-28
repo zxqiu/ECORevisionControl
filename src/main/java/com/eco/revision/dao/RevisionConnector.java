@@ -126,6 +126,10 @@ public class RevisionConnector implements RevisionDAI {
         return revisionDAO.findLargestRevisionID(branchName);
     }
 
+    public List<Revision> findLimitByBranch(String branchName, long begin, long end) {
+        return revisionDAO.findLimitByBranch(branchName, begin, end);
+    }
+
     public void delete(String id) {
         revisionDAO.deleteByID(id);
     }
