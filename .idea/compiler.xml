@@ -6,11 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="eco" />
+        <module name="ECORevisionControl" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="eco" target="1.8" />
       <module name="ECORevisionControl" target="1.8" />
     </bytecodeTargetLevel>
   </component>

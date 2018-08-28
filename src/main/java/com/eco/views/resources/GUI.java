@@ -26,7 +26,7 @@ import java.util.Map;
 @Path(GUI.PATH_ROOT)
 public class GUI {
     public static final String PATH_ROOT = "/";
-    public static final String PATH_BRANCHES = "/";
+    public static final String PATH_BRANCHES = "";
     public static final String PATH_REVISIONS = "/{" + Dict.BRANCH_NAME + "}";
 
     public static final Logger _logger = LoggerFactory.getLogger(GUI.class);
@@ -66,15 +66,20 @@ public class GUI {
         long prevEnd = begin - 1;
         long nextBegin = end + 1;
         long nextEnd = end + 100;
-        String urlFormat = "/" + branchName + "?" + Dict.BEGIN + "=%l&" + Dict.END + "=%l";
 
-        String prevUrl = (prevEnd < 0) ? "#" : String.format(urlFormat, prevBegin, prevEnd);
-        String nextUrl = (nextBegin > revisionConnector.findLargestRevisionID(branchName)) ? "#" : String.format(urlFormat, nextBegin, nextEnd);
+        _logger.info(prevBegin + " " + prevEnd + " " + nextBegin + " " + nextEnd + " latest " + revisionConnector.findLargestRevisionID(branchName));
+
+        String urlPrev = (prevEnd < 0) ? "#" :
+                String.format(PATH_ROOT + PATH_REVISIONS + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", prevBegin, prevEnd);
+        String urlNext = (nextBegin > revisionConnector.findLargestRevisionID(branchName)) ? "#" :
+                String.format(PATH_ROOT + PATH_REVISIONS + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", nextBegin, nextEnd);
+        String urlBranches = PATH_ROOT + PATH_BRANCHES;
 
         return Response.ok().entity(
                 views.revisions.template(RevisionResource.utilGetLimitByBranch(branchName, begin, end)
-                                        , prevUrl
-                                        , nextUrl)
+                                        , urlPrev
+                                        , urlNext
+                                        , urlBranches)
         ).build();
     }
 }

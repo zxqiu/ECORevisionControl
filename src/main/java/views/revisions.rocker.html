@@ -3,7 +3,7 @@
 @import com.eco.utils.misc.Dict;
 @import java.util.List;
 
-@args(List<Revision> revisions, String urlNext, String urlPrev)
+@args(List<Revision> revisions, String urlNext, String urlPrev, String urlBranches)
 
 <html lang="en">
 
@@ -26,10 +26,10 @@
 <body>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-4">
-        <h3>Revisions:</h3>
-    </div>
-    <div class="col-md-7"></div>
+    <div class="col-md-3" style="text-align: left"><input type="button" value="Prev" onclick="window.location.href='@urlPrev'"></div>
+    <div class="col-md-4" style="text-align: center"><input type="button" value="Branches" onclick="window.location.href='@urlBranches'"></div>
+    <div class="col-md-3" style="text-align: right"><input type="button" value="Next" onclick="window.location.href='@urlNext'"></div>
+    <div class="col-md-1"></div>
 </div>
 <div class="row">
     <div class="col-md-1"></div>
