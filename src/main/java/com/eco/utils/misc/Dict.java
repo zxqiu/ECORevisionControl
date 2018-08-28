@@ -19,4 +19,5 @@ public class Dict {
     public static final String URL = "url";
     public static final String BEGIN = "begin";
     public static final String END = "end";
+    public static final String COMMIT_STATUSES = "commitStatuses";
 }

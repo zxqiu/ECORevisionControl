@@ -15,6 +15,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.eco.revision.core.CommitStatus;
 import com.eco.svn.SVNBranch;
 import com.eco.svn.SVNConf;
 import com.eco.svn.SVNUtils;
@@ -97,22 +98,79 @@ public class RevisionResource {
         return ret.get(0);
     }
 
+    private class _CommitStatusWrapper {
+        @FormParam(Dict.BRANCH_NAME)
+        private String branchName;
+
+        @FormParam(Dict.REVISION_ID)
+        private String revisionID;
+
+        @FormParam(Dict.EDITOR)
+        private String editor;
+
+        @FormParam(Dict.EDIT_TIME)
+        private long editTime;
+
+        @FormParam(Dict.COMMIT_STATUSES)
+        private List<CommitStatus> commitStatuses;
+
+        public _CommitStatusWrapper(List<CommitStatus> commitStatuses) {
+            this.commitStatuses = commitStatuses;
+        }
+
+        public void setCommitStatuses(List<CommitStatus> commitStatuses) {
+            this.commitStatuses = commitStatuses;
+        }
+
+        public List<CommitStatus> getCommitStatuses() {
+            return commitStatuses;
+        }
+
+        public void setBranchName(String branchName) {
+            this.branchName = branchName;
+        }
+
+        public String getBranchName() {
+            return branchName;
+        }
+
+        public void setRevisionID(String revisionID) {
+            this.revisionID = revisionID;
+        }
+
+        public String getRevisionID() {
+            return revisionID;
+        }
+
+        public void setEditor(String editor) {
+            this.editor = editor;
+        }
+
+        public String getEditor() {
+            return editor;
+        }
+
+        public void setEditTime(long editTime) {
+            this.editTime = editTime;
+        }
+
+        public long getEditTime() {
+            return editTime;
+        }
+    }
+
     @PUT
     @Timed
     @Path(PATH_PUT_FORM)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response update(@PathParam(Dict.BRANCH_NAME) String branchName,
-                           @PathParam(Dict.REVISION_ID) String revisionID,
-                           @FormParam(Dict.STATUS) @NotNull int status,
-                           @FormParam(Dict.EDITOR) @NotNull String editor,
-                           @FormParam(Dict.COMMIT_ID) String commitID,
-                           @FormParam(Dict.EDIT_TIME) @NotNull long editTime
-                           ) {
-        _logger.error("process update");
-        Date editTimeParsed = new Date(editTime);
+    public Response update(@BeanParam _CommitStatusWrapper commitStatusWrapper
+                           ) throws IOException {
+        Date editTimeParsed = new Date(commitStatusWrapper.getEditTime());
+        RevisionData revisionData = new RevisionData(commitStatusWrapper.getCommitStatuses());
 
-        revisionConnector.update(branchName, revisionID, status, editor, commitID, editTimeParsed);
+        revisionConnector.update(commitStatusWrapper.getBranchName(), commitStatusWrapper.getRevisionID(),
+                commitStatusWrapper.editor, editTimeParsed, revisionData);
 
         return Response.ok().build();
     }
@@ -140,11 +198,10 @@ public class RevisionResource {
                                          revisionId,
                                          timeParsed,
                                          author,
-                                         status,
+                                         comment,
                                          editor,
-                                         commitID,
                                          editTimeParsed,
-                                         new RevisionData(comment));
+                                         new RevisionData());
         try {
             revisionConnector.insert(revision);
         } catch (IOException e) {

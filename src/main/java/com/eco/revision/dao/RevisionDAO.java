@@ -26,10 +26,9 @@ public interface RevisionDAO {
             + "`" + Dict.REVISION_ID + "` varchar(32) not null,"
             + "`" + Dict.TIME + "` date not null,"
             + "`" + Dict.AUTHOR + "` varchar(32) not null,"
-            + "`" + Dict.STATUS + "` int not null,"
-            + "`" + Dict.EDITOR + "` varchar(32),"
-            + "`" + Dict.COMMIT_ID + "` varchar(32),"
+            + "`" + Dict.COMMENT + "` text not null,"
             + "`" + Dict.EDIT_TIME + "` date,"
+            + "`" + Dict.EDITOR + "` varchar(32),"
             + "`" + Dict.DATA + "` blob,"
             + "primary key (`" + Dict.ID + "`)"
             + ");"
@@ -45,10 +44,9 @@ public interface RevisionDAO {
             + ", " + Dict.REVISION_ID
             + ", " + Dict.TIME
             + ", " + Dict.AUTHOR
-            + ", " + Dict.STATUS
-            + ", " + Dict.EDITOR
-            + ", " + Dict.COMMIT_ID
+            + ", " + Dict.COMMENT
             + ", " + Dict.EDIT_TIME
+            + ", " + Dict.EDITOR
             + ", " + Dict.DATA
             + ") values ("
             + ":" + Dict.ID
@@ -56,10 +54,9 @@ public interface RevisionDAO {
             + ", :" + Dict.REVISION_ID
             + ", :" + Dict.TIME
             + ", :" + Dict.AUTHOR
-            + ", :" + Dict.STATUS
-            + ", :" + Dict.EDITOR
-            + ", :" + Dict.COMMIT_ID
+            + ", :" + Dict.COMMENT
             + ", :" + Dict.EDIT_TIME
+            + ", :" + Dict.EDITOR
             + ", :" + Dict.DATA
             + ")"
     )
@@ -69,10 +66,9 @@ public interface RevisionDAO {
             ,@Bind(Dict.REVISION_ID) String revisionID
             ,@Bind(Dict.TIME) Date time
             ,@Bind(Dict.AUTHOR) String author
-            ,@Bind(Dict.STATUS) int status
-            ,@Bind(Dict.EDITOR) String editor
-            ,@Bind(Dict.COMMIT_ID) String commitID
+            ,@Bind(Dict.COMMENT) String comment
             ,@Bind(Dict.EDIT_TIME) Date editTime
+            ,@Bind(Dict.EDITOR) String editor
             ,@Bind(Dict.DATA) byte[] data
     );
 
@@ -82,10 +78,9 @@ public interface RevisionDAO {
             + ", " + Dict.REVISION_ID
             + ", " + Dict.TIME
             + ", " + Dict.AUTHOR
-            + ", " + Dict.STATUS
-            + ", " + Dict.EDITOR
-            + ", " + Dict.COMMIT_ID
+            + ", " + Dict.COMMENT
             + ", " + Dict.EDIT_TIME
+            + ", " + Dict.EDITOR
             + ", " + Dict.DATA
             + ") values ("
             + ":" + Dict.ID
@@ -93,10 +88,9 @@ public interface RevisionDAO {
             + ", :" + Dict.REVISION_ID
             + ", :" + Dict.TIME
             + ", :" + Dict.AUTHOR
-            + ", :" + Dict.STATUS
-            + ", :" + Dict.EDITOR
-            + ", :" + Dict.COMMIT_ID
+            + ", :" + Dict.COMMENT
             + ", :" + Dict.EDIT_TIME
+            + ", :" + Dict.EDITOR
             + ", :" + Dict.DATA
             + ")"
     )
@@ -106,25 +100,22 @@ public interface RevisionDAO {
             ,@Bind(Dict.REVISION_ID) List<String> revisionID
             ,@Bind(Dict.TIME) List<Date> time
             ,@Bind(Dict.AUTHOR) List<String> author
-            ,@Bind(Dict.STATUS) List<Integer> status
-            ,@Bind(Dict.EDITOR) List<String> editor
-            ,@Bind(Dict.COMMIT_ID) List<String> commitID
+            ,@Bind(Dict.COMMENT) List<String> comment
             ,@Bind(Dict.EDIT_TIME) List<Date> editTime
+            ,@Bind(Dict.EDITOR) List<String> editor
             ,@Bind(Dict.DATA) List<byte[]> data
     );
 
     @SqlUpdate("update " + TABLE_NAME + " set "
-            + Dict.STATUS + "= :" + Dict.STATUS
-            + ", " + Dict.EDITOR + "= :" + Dict.EDITOR
-            + ", " + Dict.COMMIT_ID + "= :" + Dict.COMMIT_ID
+            + Dict.EDITOR + "= :" + Dict.EDITOR
             + ", " + Dict.EDIT_TIME + "= :" + Dict.EDIT_TIME
+            + ", " + Dict.DATA + "= :" + Dict.DATA
             + " where " + Dict.ID + "= :" + Dict.ID
     )
     void updateByID(@Bind(Dict.ID) String id
-            , @Bind(Dict.STATUS) int status
             , @Bind(Dict.EDITOR) String editor
-            , @Bind(Dict.COMMIT_ID) String commitID
             , @Bind(Dict.EDIT_TIME) Date editTime
+            , @Bind(Dict.DATA) byte[] data
     );
 
     @SqlQuery("select * from " + TABLE_NAME)

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by neo on 8/12/18.
@@ -26,19 +28,17 @@ public class Revision {
     private String author;
 
     @JsonProperty
-    private int status;
-
-    @JsonProperty
-    private String editor;
-
-    @JsonProperty
-    private String commitId;
+    private String comment;
 
     @JsonProperty
     private Date editTime;
 
     @JsonProperty
+    private String editor;
+
+    @JsonProperty
     private RevisionData data;
+
 
     public enum STATUS {
         NEW(0)
@@ -65,15 +65,15 @@ public class Revision {
         }
     }
 
-    public Revision(String id, String branchName, String revisionId, Date time, String author, int status, String editor, String commitId, Date editTime, RevisionData data) {
+    public Revision(String id, String branchName, String revisionId, Date time, String author,
+                    String comment, String editor, Date editTime, RevisionData data) {
         this.id = id;
         this.branchName = branchName;
         this.revisionId = revisionId;
         this.time = time;
         this.author = author;
-        this.status = status;
+        this.comment = comment;
         this.editor = editor;
-        this.commitId = commitId;
         this.editTime = editTime;
         this.data = data;
     }
@@ -120,28 +120,12 @@ public class Revision {
         this.author = author;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public String getEditor() {
         return editor;
     }
 
     public void setEditor(String editor) {
         this.editor = editor;
-    }
-
-    public String getCommitId() {
-        return commitId;
-    }
-
-    public void setCommitId(String commitId) {
-        this.commitId = commitId;
     }
 
     public RevisionData getData() {
@@ -176,17 +160,27 @@ public class Revision {
         this.editTime = editTime;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public static void main(String[] arg) {
+        List<CommitStatus> commitStatuses = new ArrayList<>();
+        commitStatuses.add(new CommitStatus("testBranch1", 0, "testComment1"));
+
         Revision testRevision = new Revision("testBranchtestRevision",
                 "testBranch",
                 "testRevision",
                 new Date(123),
                 "testAuthor",
-                1,
+                "testComment",
                 "testEditor",
-                "testCommitID",
                 new Date(456),
-                new RevisionData("testComment"));
+                new RevisionData(commitStatuses));
 
         System.out.println(testRevision.toString());
     }

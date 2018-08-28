@@ -22,6 +22,6 @@ public interface RevisionDAI {
     public abstract long findLargestRevisionID(String branchName);
     public abstract List<Revision> findLimitByBranch(String branchName, long begin, long end);
     public abstract void delete(String id);
-    public abstract void update(String branchName, String revisionID, int status,
-                                String editor, String commitID, Date editTime);
+    public abstract void update(String branchName, String revisionID,
+                                String editor, Date editTime, RevisionData revisionData) throws IOException;
 }

@@ -1,6 +1,7 @@
 package com.eco.revision.dao;
 
 import com.eco.revision.core.Revision;
+import com.eco.revision.core.RevisionData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,8 +71,8 @@ public class RevisionConnector implements RevisionDAI {
 
     public void insert(Revision revision) throws IOException {
         revisionDAO.insert(revision.getId(), revision.getBranchName(), revision.getRevisionId(), revision.getTime(),
-                revision.getAuthor(), revision.getStatus(), revision.getEditor(), revision.getCommitId(),
-                revision.getEditTime(), revision.getData().toByteArray());
+                revision.getAuthor(), revision.getComment(), revision.getEditTime(), revision.getEditor()
+                , revision.getData().toByteArray());
     }
 
     public void insertBatch(List<Revision> revisions) throws IOException {
@@ -84,30 +85,28 @@ public class RevisionConnector implements RevisionDAI {
         List<String> revisionID = new ArrayList<>();
         List<Date> time = new ArrayList<>();
         List<String> author = new ArrayList<>();
-        List<Integer> status = new ArrayList<>();
-        List<String> editor = new ArrayList<>();
-        List<String> commitID = new ArrayList<>();
+        List<String> comment = new ArrayList<>();
         List<Date> editTime = new ArrayList<>();
+        List<String> editor = new ArrayList<>();
         List<byte[]> data = new ArrayList<>();
 
-        for (Revision revision :revisions) {
+        for (Revision revision : revisions) {
             id.add(revision.getId());
             branchName.add(revision.getBranchName());
             revisionID.add(revision.getRevisionId());
             time.add(revision.getTime());
             author.add(revision.getAuthor());
-            status.add(revision.getStatus());
-            editor.add(revision.getEditor());
-            commitID.add(revision.getCommitId());
+            comment.add(revision.getComment());
             editTime.add(revision.getEditTime());
+            editor.add(revision.getEditor());
             data.add(revision.getData().toByteArray());
         }
 
-        revisionDAO.insertBatch(id, branchName, revisionID, time, author, status, editor, commitID, editTime, data);
+        revisionDAO.insertBatch(id, branchName, revisionID, time, author, comment, editTime, editor, data);
     }
 
-    public void update(String branchName, String revisionID, int status, String editor, String commitID, Date editTime) {
-        revisionDAO.updateByID(Revision.generateID(branchName, revisionID), status, editor, commitID, editTime);
+    public void update(String branchName, String revisionID, String editor, Date editTime, RevisionData revisionData) throws IOException {
+        revisionDAO.updateByID(Revision.generateID(branchName, revisionID), editor, editTime, revisionData.toByteArray());
     }
 
     public List<Revision> findAll() {

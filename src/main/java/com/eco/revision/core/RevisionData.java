@@ -2,13 +2,13 @@ package com.eco.revision.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import com.eco.utils.misc.Dict;
 import com.eco.utils.misc.Serializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by neo on 8/12/18.
@@ -17,7 +17,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
     static final long serialVersionUID = 529269941459L;
 
     @JsonProperty
-    private String comment;
+    private List<CommitStatus> commitStatuses;
 
     @Override
     public String toString() {
@@ -32,8 +32,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
 
     public RevisionData() {}
 
-    public RevisionData(String comment) {
-        this.comment = comment;
+    public RevisionData(List<CommitStatus> commitStatuses) {
     }
 
     public RevisionData(InputStream is) throws NullPointerException, IOException, ClassNotFoundException {
@@ -46,7 +45,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
 
         is.close();
 
-        this.comment = revisionData.comment;
+        this.commitStatuses = revisionData.commitStatuses;
     }
 
     public byte[] toByteArray() throws IOException {
@@ -69,16 +68,18 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         return revisionData;
     }
 
-    public String getComment() {
-        return this.comment;
+    public List<CommitStatus> getCommitStatuses() {
+        return commitStatuses;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setCommitStatuses(List<CommitStatus> commitStatuses) {
+        this.commitStatuses = commitStatuses;
     }
 
     public static void main(String[] arg) throws IOException, ClassNotFoundException {
-        RevisionData testRevisionData = new RevisionData("testComment");
+        List<CommitStatus> commitStatuses = new ArrayList<>();
+        commitStatuses.add(new CommitStatus("testBranch1", 0, "testComment1"));
+        RevisionData testRevisionData = new RevisionData(commitStatuses);
 
         byte[] bytes = testRevisionData.toByteArray();
         RevisionData revisionData = new RevisionData(new ByteArrayInputStream(bytes));

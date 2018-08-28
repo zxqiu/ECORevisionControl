@@ -4,4 +4,4 @@ dependency-reduced-pom.xml
 db/*
 *.log
 cscope*
-SVNConf.json
+./SVNConf.json
