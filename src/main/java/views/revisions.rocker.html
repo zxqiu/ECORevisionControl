@@ -1,4 +1,6 @@
 @import com.eco.revision.core.Revision;
+@import com.eco.revision.resources.RevisionResource;
+@import com.eco.utils.misc.Dict;
 @import java.util.List;
 
 @args(List<Revision> revisions)
@@ -31,20 +33,34 @@
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <ul>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Revision</th>
+                    <th>Submit Time</th>
+                    <th>Author</th>
+                    <th>ECO Status</th>
+                    <th>Last Change</th>
+                    <th>Edit By</th>
+                </tr>
+            </thead>
+            <tbody>
             @if (revisions != null) {
                 @for (revision : revisions) {
-            <li>
-                <form>
-                    <div class="form-group">
-                        <input disabled value="@revision.getRevisionId()">
-                        <input disabled value="@revision.getTime().getMonth()-@revision.getTime().getDay()-@revision.getTime().getYear() @revision.getTime().getHours():@revision.getTime().getMinutes():@revision.getTime().getSeconds()">
-                    </div>
-                </form>
-            </li>
+                <tr>
+                    <form>
+                        <th scope="row"><input disabled value="@revision.getRevisionId()"></th>
+                        <td><input disabled value="@revision.getTime().toString()"></td>
+                        <td><input disabled value="@revision.getAuthor()"></td>
+                        <td><input disabled value="@Revision.STATUS.toSTATUS(revision.getStatus())"></td>
+                        <td><input disabled value="@revision.getEditTime().toString()"></td>
+                        <td><input disabled value="@revision.getEditor()"></td>
+                    </form>
+                </tr>
                 }
             }
-        </ul>
+            </tbody>
+        </table>
     </div>
     <div class="col-md-1"></div>
 </div>

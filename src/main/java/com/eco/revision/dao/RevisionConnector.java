@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -73,6 +74,38 @@ public class RevisionConnector implements RevisionDAI {
                 revision.getEditTime(), revision.getData().toByteArray());
     }
 
+    public void insertBatch(List<Revision> revisions) throws IOException {
+        if (revisions == null || revisions.size() == 0) {
+            return;
+        }
+
+        List<String> id = new ArrayList<>();
+        List<String> branchName = new ArrayList<>();
+        List<String> revisionID = new ArrayList<>();
+        List<Date> time = new ArrayList<>();
+        List<String> author = new ArrayList<>();
+        List<Integer> status = new ArrayList<>();
+        List<String> editor = new ArrayList<>();
+        List<String> commitID = new ArrayList<>();
+        List<Date> editTime = new ArrayList<>();
+        List<byte[]> data = new ArrayList<>();
+
+        for (Revision revision :revisions) {
+            id.add(revision.getId());
+            branchName.add(revision.getBranchName());
+            revisionID.add(revision.getRevisionId());
+            time.add(revision.getTime());
+            author.add(revision.getAuthor());
+            status.add(revision.getStatus());
+            editor.add(revision.getEditor());
+            commitID.add(revision.getCommitId());
+            editTime.add(revision.getEditTime());
+            data.add(revision.getData().toByteArray());
+        }
+
+        revisionDAO.insertBatch(id, branchName, revisionID, time, author, status, editor, commitID, editTime, data);
+    }
+
     public void update(String branchName, String revisionID, int status, String editor, String commitID, Date editTime) {
         revisionDAO.updateByID(Revision.generateID(branchName, revisionID), status, editor, commitID, editTime);
     }
@@ -87,6 +120,10 @@ public class RevisionConnector implements RevisionDAI {
 
     public List<Revision> findByID(String id) {
         return revisionDAO.findByID(id);
+    }
+
+    public long findLargestRevisionID(String branchName) {
+        return revisionDAO.findLargestRevisionID(branchName);
     }
 
     public void delete(String id) {

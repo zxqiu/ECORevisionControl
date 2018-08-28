@@ -39,7 +39,7 @@ public class SVNUtils {
      * @throws SVNException
      * @throws IOException
      */
-    public static Collection updateLog(RevisionConnector revisionConnector, String repo, String branchName,
+    public static void updateLog(RevisionConnector revisionConnector, String repo, String branchName,
                                        String user,String password, long startRevision, long endRevision,
                                        boolean doPrint) throws SVNException, IOException {
         DAVRepositoryFactory.setup();
@@ -51,8 +51,13 @@ public class SVNUtils {
         repository.setAuthenticationManager(authManager);
 
         _logger.info("Updating SVN log : " + repo);
+        _logger.info("Updating SVN log from " + startRevision + " to " + endRevision);
 
-        logEntries = repository.log(new String[]{""}, null, startRevision, endRevision, true,true);
+        logEntries = repository.log(new String[]{""}, null, startRevision, endRevision, true, false);
+
+        _logger.info(logEntries.size() + " SVN log fetched.");
+
+        List<Revision> revisions = new ArrayList<>();
 
         for (Iterator entries = logEntries.iterator(); entries.hasNext(); ) {
             SVNLogEntry logEntry = (SVNLogEntry) entries.next();
@@ -82,40 +87,31 @@ public class SVNUtils {
             }
 
             if (startRevision != logEntry.getRevision()) {
-                saveLog(revisionConnector, branchName, logEntry);
+                revisions.add(new Revision(Revision.generateID(branchName, String.valueOf(logEntry.getRevision()))
+                        , branchName
+                        , String.valueOf(logEntry.getRevision())
+                        , logEntry.getDate()
+                        , logEntry.getAuthor()
+                        , Revision.STATUS.NEW.getValue()
+                        , ""
+                        , ""
+                        , new Date(0)
+                        , new RevisionData("")));
             }
-
         }
 
-        return logEntries;
-    }
-
-    private static void saveLog(RevisionConnector revisionConnector, String branchName, SVNLogEntry svnLogEntry) throws IOException {
-        if (revisionConnector == null || svnLogEntry == null) {
-            return;
+        if (revisionConnector != null) {
+            revisionConnector.insertBatch(revisions);
+            _logger.info("SVN log saved.");
         }
-
-        Revision revision = new Revision(Revision.generateID(branchName, String.valueOf(svnLogEntry.getRevision()))
-                , branchName
-                , String.valueOf(svnLogEntry.getRevision())
-                , svnLogEntry.getDate()
-                , svnLogEntry.getAuthor()
-                , Revision.STATUS.NEW.getValue()
-                , ""
-                , ""
-                , new Date(0)
-                , new RevisionData("")
-        );
-
-        revisionConnector.insert(revision);
     }
 
     public static void main(String[] arg) throws IOException, SVNException {
-        String branchName = "svncontrol";
+        String branchName = "FOS_60bmcs";
         SVNConf svnConf = SVNConf.getSVNConf();
 
         for (SVNBranch svnBranch : svnConf.getBranches()) {
-            if (branchName != null && branchName.length() > 0 && branchName.equals(branchName) == false) {
+            if (branchName != null && branchName.length() > 0 && branchName.equals(svnBranch.getBranchName()) == false) {
                 continue;
             }
 

@@ -70,7 +70,6 @@ public class Revision {
         this.branchName = branchName;
         this.revisionId = revisionId;
         this.time = time;
-        time.getSeconds()
         this.author = author;
         this.status = status;
         this.editor = editor;

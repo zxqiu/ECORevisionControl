@@ -193,32 +193,26 @@ public class RevisionResource {
         if (revisionUpdateLock.tryLock()) {
             try {
                 for (SVNBranch svnBranch : svnConf.getBranches()) {
-                    if (branchName != null && branchName.length() > 0 && branchName.equals(branchName) == false) {
+                    if (branchName != null && branchName.length() > 0 && branchName.equals(svnBranch.getBranchName()) == false) {
                         continue;
                     } else if (new Date().getTime() - svnBranch.getLastUpdate() < REVISION_UPDATE_INTERVAL) {
                         continue;
                     }
 
-                    List<Revision> revisions = revisionConnector.findByBranch(svnBranch.getBranchName());
+                    Long latestRevisionID = revisionConnector.findLargestRevisionID(branchName);
                     String user = (svnBranch.getUser() != null && svnBranch.getUser().length() > 0) ?
                                     svnBranch.getUser() : svnConf.getUserDefault();
                     String password = (svnBranch.getPassword() != null && svnBranch.getPassword().length() > 0) ?
                                     svnBranch.getPassword() : svnConf.getPasswordDefault();
 
-                    try {
-                        if (revisions.size() > 0) {
-                            SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
-                                    svnBranch.getBranchName(), user, password,
-                                    Long.valueOf(revisions.get(0).getRevisionId()), -1, false);
-                        } else {
-                            SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
-                                    svnBranch.getBranchName(), user, password,
-                                    0, -1, false);
-                        }
-                    } catch (SVNException e) {
-                        _logger.warn("Failed to update SVN revision from " +
-                                (Long.valueOf(revisions.get(0).getRevisionId())) + " to " + -1);
-                        e.printStackTrace();
+                    if (latestRevisionID != null) {
+                        SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
+                                svnBranch.getBranchName(), user, password,
+                                latestRevisionID, -1, false);
+                    } else {
+                        SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
+                                svnBranch.getBranchName(), user, password,
+                                0, -1, false);
                     }
 
                     svnBranch.setLastUpdate(new Date().getTime());
@@ -226,6 +220,9 @@ public class RevisionResource {
 
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(SVNConf.SVNConfFile), svnConf);
+            } catch (SVNException e) {
+                _logger.error("Failed to update SVN revision");
+                e.printStackTrace();
             } finally {
                 revisionUpdateLock.unlock();
             }
