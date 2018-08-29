@@ -1,13 +1,13 @@
 package com.eco.revision.core;
 
-import com.eco.utils.misc.Dict;
 import com.eco.utils.misc.Serializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.ws.rs.FormParam;
 import java.io.*;
+import java.util.List;
 
 /**
  * Created by neo on 8/27/18.
@@ -53,6 +53,21 @@ public class CommitStatus implements Serializable, Serializer<CommitStatus> {
         }
 
         return "";
+    }
+
+    public static String toJSONString(List<CommitStatus> commitStatuses) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String commitStatusesJSON = objectMapper.writeValueAsString(commitStatuses);
+
+        return commitStatusesJSON;
+    }
+
+    public static List<CommitStatus> toList(String commitStatusesJSON) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<CommitStatus> commitStatuses = objectMapper.readValue(commitStatusesJSON,
+                new TypeReference<List<CommitStatus>>() {});
+
+        return commitStatuses;
     }
 
     public byte[] toByteArray() throws IOException {

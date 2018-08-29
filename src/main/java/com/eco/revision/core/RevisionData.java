@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.eco.utils.misc.Serializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
@@ -33,6 +34,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
     public RevisionData() {}
 
     public RevisionData(List<CommitStatus> commitStatuses) {
+        this.commitStatuses = commitStatuses;
     }
 
     public RevisionData(InputStream is) throws NullPointerException, IOException, ClassNotFoundException {
@@ -46,6 +48,10 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         is.close();
 
         this.commitStatuses = revisionData.commitStatuses;
+    }
+
+    public RevisionData(String commitStatusesJSON) throws IOException {
+        this.commitStatuses = CommitStatus.toList(commitStatusesJSON);
     }
 
     public byte[] toByteArray() throws IOException {
@@ -80,6 +86,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         List<CommitStatus> commitStatuses = new ArrayList<>();
         commitStatuses.add(new CommitStatus("testBranch1", 0, "testComment1"));
         RevisionData testRevisionData = new RevisionData(commitStatuses);
+        System.out.println(testRevisionData.toString());
 
         byte[] bytes = testRevisionData.toByteArray();
         RevisionData revisionData = new RevisionData(new ByteArrayInputStream(bytes));

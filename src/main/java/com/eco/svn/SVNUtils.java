@@ -92,11 +92,10 @@ public class SVNUtils {
                         , String.valueOf(logEntry.getRevision())
                         , logEntry.getDate()
                         , logEntry.getAuthor()
-                        , Revision.STATUS.NEW.getValue()
-                        , ""
+                        , logEntry.getMessage()
                         , ""
                         , new Date(0)
-                        , new RevisionData("")));
+                        , new RevisionData()));
             }
         }
 

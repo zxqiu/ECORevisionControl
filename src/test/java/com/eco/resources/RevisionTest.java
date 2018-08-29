@@ -1,16 +1,21 @@
 package com.eco.resources;
 
+import com.eco.revision.core.CommitStatus;
 import com.eco.revision.core.Revision;
 import com.eco.revision.core.RevisionData;
 import com.eco.revision.resources.RevisionResource;
 import com.eco.services.ECOConfiguration;
 import com.eco.services.ECORevisionControlService;
 import com.eco.utils.misc.Dict;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ws.rs.client.Client;
@@ -39,22 +44,20 @@ public class RevisionTest {
                                                  "testRevision0",
                                                  new Date(123),
                                                  "testAuthor0",
-                                                 0,
+                                                 "testComment0",
                                                  "testEditor0",
-                                                 "testCommitID0",
                                                  new Date(456),
-                                                 new RevisionData("testComment0"));
+                                                 new RevisionData());
 
     private Revision testRevision1 = new Revision("testBranchtestRevision1",
                                                  "testBranch",
                                                  "testRevision1",
                                                  new Date(123),
                                                  "testAuthor1",
-                                                 0,
+                                                 "testComment1",
                                                  "testEditor1",
-                                                 "testCommitID1",
                                                  new Date(456),
-                                                 new RevisionData("testComment1"));
+                                                 new RevisionData());
 
     @ClassRule
     public static final DropwizardAppRule<ECOConfiguration> RULE =
@@ -94,10 +97,8 @@ public class RevisionTest {
         form.param(Dict.REVISION_ID, testRevision1.getRevisionId());
         form.param(Dict.TIME, String.valueOf(testRevision1.getTime().getTime()));
         form.param(Dict.AUTHOR, testRevision1.getAuthor());
-        form.param(Dict.COMMENT, testRevision1.getData().getComment());
-        form.param(Dict.STATUS, String.valueOf(testRevision1.getStatus()));
+        form.param(Dict.COMMENT, testRevision1.getComment());
         form.param(Dict.EDITOR, testRevision1.getEditor());
-        form.param(Dict.COMMIT_ID, testRevision1.getCommitId());
         form.param(Dict.EDIT_TIME, String.valueOf(testRevision1.getEditTime().getTime()));
 
         response = client
@@ -157,12 +158,24 @@ public class RevisionTest {
     }
 
     @Test
-    public void updateRevision() {
+    public void updateRevision() throws IOException {
+        Revision revisionCopy = Revision.toRevision(testRevision1.toString());
+        revisionCopy.setEditor("newEditor");
+        revisionCopy.setEditTime(new Date(999));
+
         Form form = new Form();
-        form.param(Dict.STATUS, String.valueOf(Revision.STATUS.COMMITTED.getValue()));
-        form.param(Dict.EDITOR, "newEditor");
-        form.param(Dict.COMMIT_ID, "newCommitID");
-        form.param(Dict.EDIT_TIME, String.valueOf(new Date(999).getTime()));
+        form.param(Dict.EDITOR, revisionCopy.getEditor());
+        form.param(Dict.EDIT_TIME, String.valueOf(revisionCopy.getEditTime().getTime()));
+
+        List<CommitStatus> commitStatuses = new ArrayList<>();
+        commitStatuses.add(new CommitStatus("testCommitBranch2", Revision.STATUS.COMMITTED.getValue(), "committed"));
+        commitStatuses.add(new CommitStatus("testCommitBranch3", Revision.STATUS.SKIPPED.getValue(), "skipped"));
+        if (revisionCopy.getData() == null) {
+            revisionCopy.setData(new RevisionData());
+        }
+        revisionCopy.getData().setCommitStatuses(commitStatuses);
+
+        form.param(Dict.COMMIT_STATUSES, CommitStatus.toJSONString(revisionCopy.getData().getCommitStatuses()));
 
         Response response = client
                 .target(String.format("http://localhost:%d%s%s"
@@ -187,10 +200,7 @@ public class RevisionTest {
                 .request()
                 .get(Revision.class);
 
-        assertThat(revision.getStatus()).isEqualTo(Revision.STATUS.COMMITTED.getValue());
-        assertThat(revision.getEditor()).isEqualTo("newEditor");
-        assertThat(revision.getCommitId()).isEqualTo("newCommitID");
-        assertThat(revision.getEditTime().getTime()).isEqualTo(999);
+        assertThat(revision.toString()).isEqualTo(revisionCopy.toString());
     }
 
     //@Test

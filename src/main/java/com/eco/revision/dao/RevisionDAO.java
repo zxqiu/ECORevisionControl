@@ -26,7 +26,7 @@ public interface RevisionDAO {
             + "`" + Dict.REVISION_ID + "` varchar(32) not null,"
             + "`" + Dict.TIME + "` date not null,"
             + "`" + Dict.AUTHOR + "` varchar(32) not null,"
-            + "`" + Dict.COMMENT + "` text not null,"
+            + "`" + Dict.COMMENT + "` text,"
             + "`" + Dict.EDIT_TIME + "` date,"
             + "`" + Dict.EDITOR + "` varchar(32),"
             + "`" + Dict.DATA + "` blob,"

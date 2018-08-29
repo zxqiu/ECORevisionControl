@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -79,6 +80,13 @@ public class Revision {
     }
 
     public Revision() {
+    }
+
+    public static Revision toRevision(String revisionJSON) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Revision revision = objectMapper.readValue(revisionJSON, Revision.class);
+
+        return revision;
     }
 
     @Override
