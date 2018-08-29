@@ -6,12 +6,10 @@ import com.eco.views.resources.GUI;
 import com.fizzed.rocker.runtime.RockerRuntime;
 import com.google.common.cache.CacheBuilderSpec;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.dropwizard.assets.AssetsBundle;
-
-
 import io.dropwizard.jdbi.DBIFactory;
 
 import org.skife.jdbi.v2.DBI;
@@ -39,9 +37,7 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ECOConfiguration> bootstrap) {
-        CacheBuilderSpec cacheSpec = AssetsBundle.DEFAULT_CACHE_SPEC;
-        bootstrap.addBundle(new AssetsBundle("/assets/", cacheSpec, "/"));
-
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/r"));
     }
 
     @Override

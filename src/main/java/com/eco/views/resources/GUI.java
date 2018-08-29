@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Path(GUI.PATH_ROOT)
 public class GUI {
-    public static final String PATH_ROOT = "/";
+    public static final String PATH_ROOT = "";
     public static final String PATH_BRANCHES = "";
     public static final String PATH_REVISIONS = "/{" + Dict.BRANCH_NAME + "}";
 
@@ -49,7 +49,7 @@ public class GUI {
         for (SVNBranch svnBranch : svnConf.getBranches()) {
             Map<String, String> map = new HashMap<>();
             map.put(Dict.BRANCH_NAME, svnBranch.getBranchName());
-            map.put(Dict.URL, "/" + svnBranch.getBranchName() + "?" + Dict.BEGIN + "=0&" + Dict.END + "=100");
+            map.put(Dict.URL, PATH_ROOT + "/" + svnBranch.getBranchName() + "?" + Dict.BEGIN + "=0&" + Dict.END + "=100");
             branches.add(map);
         }
         return Response.ok().entity(views.branches.template(branches)).build();
@@ -70,10 +70,10 @@ public class GUI {
         _logger.info(branchName + " : " + prevBegin + " " + prevEnd + " " + nextBegin + " " + nextEnd + " latest " + revisionConnector.findLargestRevisionID(branchName));
 
         String urlPrev = (prevEnd <= 0) ? "#" :
-                String.format(PATH_ROOT + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", prevBegin, prevEnd);
+                String.format(PATH_ROOT + "/" + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", prevBegin, prevEnd);
         String urlNext = (nextBegin > revisionConnector.findLargestRevisionID(branchName)) ? "#" :
-                String.format(PATH_ROOT + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", nextBegin, nextEnd);
-        String urlBranches = PATH_ROOT + PATH_BRANCHES;
+                String.format(PATH_ROOT + "/" + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", nextBegin, nextEnd);
+        String urlBranches = PATH_ROOT + "/" + PATH_BRANCHES;
 
         return Response.ok().entity(
                 views.revisions.template(RevisionResource.utilGetLimitByBranch(branchName, begin, end)
