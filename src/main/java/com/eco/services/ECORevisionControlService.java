@@ -4,10 +4,13 @@ import com.eco.branch.resources.BranchResource;
 import com.eco.filter.GeneralRequestFilter;
 import com.eco.views.resources.GUI;
 import com.fizzed.rocker.runtime.RockerRuntime;
+import com.google.common.cache.CacheBuilderSpec;
 import io.dropwizard.Application;
 import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.assets.AssetsBundle;
+
 
 import io.dropwizard.jdbi.DBIFactory;
 
@@ -36,7 +39,9 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ECOConfiguration> bootstrap) {
-        // nothing to do yet
+        CacheBuilderSpec cacheSpec = AssetsBundle.DEFAULT_CACHE_SPEC;
+        bootstrap.addBundle(new AssetsBundle("/assets/", cacheSpec, "/"));
+
     }
 
     @Override

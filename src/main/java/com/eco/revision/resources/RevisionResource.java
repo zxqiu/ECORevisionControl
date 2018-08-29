@@ -15,7 +15,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.eco.revision.core.CommitStatus;
 import com.eco.svn.SVNBranch;
 import com.eco.svn.SVNConf;
 import com.eco.svn.SVNUtils;
@@ -48,7 +47,7 @@ public class RevisionResource {
     public static final Logger _logger = LoggerFactory.getLogger(RevisionResource.class);
     public static RevisionConnector revisionConnector;
 
-    private static final long REVISION_UPDATE_INTERVAL = 10 * 1000; // ms
+    private static final long REVISION_UPDATE_INTERVAL = 30 * 1000; // ms
 
     public RevisionResource(RevisionDAO revisionDAO) throws Exception {
         RevisionConnector.init(revisionDAO);
