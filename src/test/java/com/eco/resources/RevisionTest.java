@@ -159,7 +159,6 @@ public class RevisionTest {
     public void updateRevision() throws IOException {
         Revision revisionCopy = Revision.toRevision(testRevision1.toString());
         revisionCopy.setEditor("newEditor");
-        revisionCopy.setEditTime(new Date(999));
 
         List<CommitStatus> commitStatuses = new ArrayList<>();
         commitStatuses.add(new CommitStatus("testCommitBranch2", Revision.STATUS.COMMITTED.getValue(), "commitID2", "committed"));
@@ -177,8 +176,7 @@ public class RevisionTest {
         */
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String param = "{\"" + Dict.EDIT_TIME + "\":" + revisionCopy.getEditTime().getTime()
-                + ",\"" + Dict.EDITOR + "\":\"" + revisionCopy.getEditor() + "\",\""
+        String param = "{\"" + Dict.EDITOR + "\":\"" + revisionCopy.getEditor() + "\",\""
                 + Dict.COMMIT_STATUSES + "\":"
                 + objectMapper.writeValueAsString(revisionCopy.getData().getCommitStatuses())
                 + "}";
@@ -207,6 +205,7 @@ public class RevisionTest {
                 .request()
                 .get(Revision.class);
 
+        revisionCopy.setEditTime(revision.getEditTime());
         assertThat(revision.toString()).isEqualTo(revisionCopy.toString());
     }
 

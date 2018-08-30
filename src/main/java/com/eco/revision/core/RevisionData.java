@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.eco.utils.misc.Serializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
  */
 public class RevisionData implements Serializable, Serializer<RevisionData> {
     static final long serialVersionUID = 529269941459L;
+    private static final Logger _logger = LoggerFactory.getLogger(RevisionData.class);
 
     @JsonProperty
     private List<CommitStatus> commitStatuses;

@@ -44,7 +44,7 @@ public class RevisionResource {
     public static final String PATH_GET_ALL         = "/";
     public static final String PATH_POST_FORM       = "/";
     public static final String PATH_POST_OBJ        = "/obj";
-    public static final String PATH_PUT_QUERY       = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
+    public static final String PATH_PUT_JSON        = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
     public static final String PATH_DELETE          = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
 
     public static final Logger _logger = LoggerFactory.getLogger(RevisionResource.class);
@@ -102,15 +102,13 @@ public class RevisionResource {
 
     @PUT
     @Timed
-    @Path(PATH_PUT_QUERY)
+    @Path(PATH_PUT_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam(Dict.BRANCH_NAME) String branchName,
                            @PathParam(Dict.REVISION_ID) String revisionID,
-                           updateParamWrapper paramWrapper
+                           UpdateParamWrapper paramWrapper
                            ) throws IOException {
-        Date editTimeParsed = new Date(paramWrapper.getEditTime());
-
         List<Revision> revisions = revisionConnector.findByID(branchName, revisionID);
 
         if (revisions == null || revisions.size() == 0) {
@@ -119,11 +117,15 @@ public class RevisionResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        Revision revision = revisions.get(0);
         List<CommitStatus> newCommitStatuses = paramWrapper.getCommitStatuses();
 
+        Revision revision = revisions.get(0);
         if (revision.getData() == null) {
             revision.setData(new RevisionData(new ArrayList<CommitStatus>()));
+        }
+
+        if (revision.getData().getCommitStatuses() == null) {
+            revision.getData().setCommitStatuses(new ArrayList<CommitStatus>());
         }
 
         RevisionData revisionData = revision.getData();
@@ -148,7 +150,7 @@ public class RevisionResource {
         }
 
         revisionConnector.update(branchName, revisionID,
-                paramWrapper.getEditor(), editTimeParsed, revisionData);
+                paramWrapper.getEditor(), new Date(), revisionData);
 
         return Response.ok().build();
     }
@@ -268,23 +270,12 @@ public class RevisionResource {
     }
 }
 
-class updateParamWrapper {
-    @JsonProperty
-    private Long editTime;
-
+class UpdateParamWrapper {
     @JsonProperty
     private String editor;
 
     @JsonProperty
     private List<CommitStatus> commitStatuses;
-
-    public Long getEditTime() {
-        return editTime;
-    }
-
-    public void setEditTime(Long editTime) {
-        this.editTime = editTime;
-    }
 
     public String getEditor() {
         return editor;

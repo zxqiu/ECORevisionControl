@@ -13,6 +13,8 @@ import java.util.List;
  * Created by neo on 8/27/18.
  */
 public class CommitStatus implements Serializable, Serializer<CommitStatus> {
+    static final long serialVersionUID = -5292699414591234L;
+
     @JsonProperty
     private String branchName;
 
