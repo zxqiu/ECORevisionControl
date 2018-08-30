@@ -1,5 +1,6 @@
 package com.eco.svn;
 
+import com.eco.revision.core.CommitStatus;
 import com.eco.revision.core.Revision;
 import com.eco.revision.core.RevisionData;
 import com.eco.revision.dao.RevisionConnector;
@@ -87,6 +88,9 @@ public class SVNUtils {
             }
 
             if (startRevision != logEntry.getRevision()) {
+                RevisionData rd = new RevisionData(new ArrayList<>());
+                rd.getCommitStatuses().add(new CommitStatus("test0", Revision.STATUS.COMMITTED.getValue(), ""));
+                rd.getCommitStatuses().add(new CommitStatus("test1", Revision.STATUS.COMMITTED.getValue(), ""));
                 revisions.add(new Revision(Revision.generateID(branchName, String.valueOf(logEntry.getRevision()))
                         , branchName
                         , String.valueOf(logEntry.getRevision())
@@ -95,7 +99,8 @@ public class SVNUtils {
                         , logEntry.getMessage()
                         , ""
                         , new Date(0)
-                        , new RevisionData()));
+                        , rd));
+                        //, new RevisionData()));
             }
         }
 

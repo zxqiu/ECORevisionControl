@@ -1,4 +1,6 @@
 @import com.eco.revision.core.Revision;
+@import com.eco.revision.core.RevisionData;
+@import com.eco.revision.core.CommitStatus;
 @import com.eco.revision.resources.RevisionResource;
 @import com.eco.utils.misc.Dict;
 @import java.util.List;
@@ -42,6 +44,8 @@
                     <th>Author</th>
                     <th>Last Change</th>
                     <th>Edit By</th>
+                    <th>Committed</th>
+                    <th>Skipped</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,11 +53,33 @@
                 @for (revision : revisions) {
                 <tr>
                     <form>
-                        <th scope="row"><input disabled value="@revision.getRevisionId()"></th>
+                        <th scope="row"><input disabled size="10" value="@revision.getRevisionId()"></th>
                         <td><input disabled value="@revision.getTime().toString()"></td>
                         <td><input disabled value="@revision.getAuthor()"></td>
                         <td><input disabled value="@revision.getEditTime().toString()"></td>
                         <td><input disabled value="@revision.getEditor()"></td>
+                        <td>
+                            <textarea disabled>
+                            @if (revision.getData() != null && revision.getData().getCommitStatuses() != null) {
+                                @for (commitStatus : revision.getData().getCommitStatuses()) {
+                                    @if (commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
+@commitStatus.getBranchName(),
+                                    }
+                                }
+                            }
+                            </textarea>
+                        </td>
+                        <td>
+                            <textarea disabled>
+                            @if (revision.getData() != null && revision.getData().getCommitStatuses() != null) {
+                                @for (commitStatus : revision.getData().getCommitStatuses()) {
+                                    @if (commitStatus.getStatus() == Revision.STATUS.SKIPPED.getValue()) {
+@commitStatus.getBranchName(),
+                                    }
+                                }
+                            }
+                            </textarea>
+                        </td>
                     </form>
                 </tr>
                 }
