@@ -42,9 +42,9 @@ public class Revision {
 
 
     public enum STATUS {
-        NEW(0)
-        , COMMITTED(1)
-        , SKIPPED(2);
+        COMMITTED(0)
+        , SKIPPED(1)
+        , DELETED(2);
 
         private final int value;
         private STATUS(int value) {
@@ -178,7 +178,7 @@ public class Revision {
 
     public static void main(String[] arg) {
         List<CommitStatus> commitStatuses = new ArrayList<>();
-        commitStatuses.add(new CommitStatus("testBranch1", 0, "testComment1"));
+        commitStatuses.add(new CommitStatus("testBranch1", 0, "commitID1", "testComment1"));
 
         Revision testRevision = new Revision("testBranchtestRevision",
                 "testBranch",

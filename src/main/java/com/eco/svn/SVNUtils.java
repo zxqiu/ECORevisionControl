@@ -19,8 +19,6 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import java.io.IOException;
 import java.util.*;
 
-import static com.eco.revision.resources.RevisionResource.revisionConnector;
-
 /**
  * Created by neo on 8/25/18.
  */
@@ -89,8 +87,8 @@ public class SVNUtils {
 
             if (startRevision != logEntry.getRevision()) {
                 RevisionData rd = new RevisionData(new ArrayList<>());
-                rd.getCommitStatuses().add(new CommitStatus("test0", Revision.STATUS.COMMITTED.getValue(), ""));
-                rd.getCommitStatuses().add(new CommitStatus("test1", Revision.STATUS.COMMITTED.getValue(), ""));
+                rd.getCommitStatuses().add(new CommitStatus("test0", Revision.STATUS.COMMITTED.getValue(), "commitID0", ""));
+                rd.getCommitStatuses().add(new CommitStatus("test1", Revision.STATUS.COMMITTED.getValue(), "commitID1", ""));
                 revisions.add(new Revision(Revision.generateID(branchName, String.valueOf(logEntry.getRevision()))
                         , branchName
                         , String.valueOf(logEntry.getRevision())

@@ -5,6 +5,7 @@ import com.codahale.metrics.annotation.Timed;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -15,9 +16,11 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.eco.revision.core.CommitStatus;
 import com.eco.svn.SVNBranch;
 import com.eco.svn.SVNConf;
 import com.eco.svn.SVNUtils;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +44,7 @@ public class RevisionResource {
     public static final String PATH_GET_ALL         = "/";
     public static final String PATH_POST_FORM       = "/";
     public static final String PATH_POST_OBJ        = "/obj";
-    public static final String PATH_PUT_FORM        = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
+    public static final String PATH_PUT_QUERY       = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
     public static final String PATH_DELETE          = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
 
     public static final Logger _logger = LoggerFactory.getLogger(RevisionResource.class);
@@ -88,7 +91,7 @@ public class RevisionResource {
     public Revision getByID(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
                               @PathParam(Dict.REVISION_ID) @NotNull String revisionID) throws IOException, SVNException {
         _syncRevisions(branchName);
-        List<Revision> ret = revisionConnector.findByID(Revision.generateID(branchName, revisionID));
+        List<Revision> ret = revisionConnector.findByID(branchName, revisionID);
 
         if (ret.size() == 0 ) {
             return null;
@@ -99,20 +102,53 @@ public class RevisionResource {
 
     @PUT
     @Timed
-    @Path(PATH_PUT_FORM)
+    @Path(PATH_PUT_QUERY)
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam(Dict.BRANCH_NAME) String branchName,
                            @PathParam(Dict.REVISION_ID) String revisionID,
-                           @FormParam(Dict.EDIT_TIME) Long editTime,
-                           @FormParam(Dict.EDITOR) String editor,
-                           @FormParam(Dict.COMMIT_STATUSES) String commitStatusesJSON
+                           updateParamWrapper paramWrapper
                            ) throws IOException {
-        Date editTimeParsed = new Date(editTime);
-        RevisionData revisionData = new RevisionData(commitStatusesJSON);
+        Date editTimeParsed = new Date(paramWrapper.getEditTime());
+
+        List<Revision> revisions = revisionConnector.findByID(branchName, revisionID);
+
+        if (revisions == null || revisions.size() == 0) {
+            _logger.error("Requested branch name and revision ID combination not found: branch "
+                    + branchName + " revision " + revisionID);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        Revision revision = revisions.get(0);
+        List<CommitStatus> newCommitStatuses = paramWrapper.getCommitStatuses();
+
+        if (revision.getData() == null) {
+            revision.setData(new RevisionData(new ArrayList<CommitStatus>()));
+        }
+
+        RevisionData revisionData = revision.getData();
+        List<CommitStatus> commitStatuses = revisionData.getCommitStatuses();
+
+        for (CommitStatus commitStatus : newCommitStatuses) {
+            int i;
+            for (i = 0; i < commitStatuses.size(); i++) {
+                CommitStatus cs = commitStatuses.get(i);
+                if (cs.getBranchName().equals(commitStatus.getBranchName())) {
+                    cs.setStatus(commitStatus.getStatus());
+                    cs.setCommitID(commitStatus.getCommitID());
+                    cs.setComment(commitStatus.getComment());
+                    break;
+                }
+            }
+
+            if (i == commitStatuses.size()) {
+                // new commit status
+                commitStatuses.add(commitStatus);
+            }
+        }
 
         revisionConnector.update(branchName, revisionID,
-                editor, editTimeParsed, revisionData);
+                paramWrapper.getEditor(), editTimeParsed, revisionData);
 
         return Response.ok().build();
     }
@@ -231,3 +267,39 @@ public class RevisionResource {
         }
     }
 }
+
+class updateParamWrapper {
+    @JsonProperty
+    private Long editTime;
+
+    @JsonProperty
+    private String editor;
+
+    @JsonProperty
+    private List<CommitStatus> commitStatuses;
+
+    public Long getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(Long editTime) {
+        this.editTime = editTime;
+    }
+
+    public String getEditor() {
+        return editor;
+    }
+
+    public void setEditor(String editor) {
+        this.editor = editor;
+    }
+
+    public List<CommitStatus> getCommitStatuses() {
+        return commitStatuses;
+    }
+
+    public void setCommitStatuses(List<CommitStatus> commitStatuses) {
+        this.commitStatuses = commitStatuses;
+    }
+}
+

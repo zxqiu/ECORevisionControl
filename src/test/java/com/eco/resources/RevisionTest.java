@@ -7,8 +7,6 @@ import com.eco.revision.resources.RevisionResource;
 import com.eco.services.ECOConfiguration;
 import com.eco.services.ECORevisionControlService;
 import com.eco.utils.misc.Dict;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.ResourceHelpers;
@@ -163,19 +161,27 @@ public class RevisionTest {
         revisionCopy.setEditor("newEditor");
         revisionCopy.setEditTime(new Date(999));
 
-        Form form = new Form();
-        form.param(Dict.EDITOR, revisionCopy.getEditor());
-        form.param(Dict.EDIT_TIME, String.valueOf(revisionCopy.getEditTime().getTime()));
-
         List<CommitStatus> commitStatuses = new ArrayList<>();
-        commitStatuses.add(new CommitStatus("testCommitBranch2", Revision.STATUS.COMMITTED.getValue(), "committed"));
-        commitStatuses.add(new CommitStatus("testCommitBranch3", Revision.STATUS.SKIPPED.getValue(), "skipped"));
+        commitStatuses.add(new CommitStatus("testCommitBranch2", Revision.STATUS.COMMITTED.getValue(), "commitID2", "committed"));
+        commitStatuses.add(new CommitStatus("testCommitBranch3", Revision.STATUS.SKIPPED.getValue(), "commitID3", "skipped"));
         if (revisionCopy.getData() == null) {
             revisionCopy.setData(new RevisionData());
         }
         revisionCopy.getData().setCommitStatuses(commitStatuses);
 
+        /*
+        Form form = new Form();
+        form.param(Dict.EDITOR, revisionCopy.getEditor());
+        form.param(Dict.EDIT_TIME, String.valueOf(revisionCopy.getEditTime().getTime()));
         form.param(Dict.COMMIT_STATUSES, CommitStatus.toJSONString(revisionCopy.getData().getCommitStatuses()));
+        */
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String param = "{\"" + Dict.EDIT_TIME + "\":" + revisionCopy.getEditTime().getTime()
+                + ",\"" + Dict.EDITOR + "\":\"" + revisionCopy.getEditor() + "\",\""
+                + Dict.COMMIT_STATUSES + "\":"
+                + objectMapper.writeValueAsString(revisionCopy.getData().getCommitStatuses())
+                + "}";
 
         Response response = client
                 .target(String.format("http://localhost:%d%s%s"
@@ -186,7 +192,8 @@ public class RevisionTest {
                 .path(testRevision1.getBranchName())
                 .path(testRevision1.getRevisionId())
                 .request()
-                .put(Entity.form(form));
+                .put(Entity.entity(param, MediaType.APPLICATION_JSON_TYPE));
+                //.put(Entity.form(form));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 

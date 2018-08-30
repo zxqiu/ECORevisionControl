@@ -117,8 +117,8 @@ public class RevisionConnector implements RevisionDAI {
         return revisionDAO.findByBranch(branchName);
     }
 
-    public List<Revision> findByID(String id) {
-        return revisionDAO.findByID(id);
+    public List<Revision> findByID(String branchName, String revisionID) {
+        return revisionDAO.findByID(Revision.generateID(branchName, revisionID));
     }
 
     public long findLargestRevisionID(String branchName) {

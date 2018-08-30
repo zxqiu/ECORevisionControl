@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.eco.utils.misc.Serializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
@@ -84,7 +83,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
 
     public static void main(String[] arg) throws IOException, ClassNotFoundException {
         List<CommitStatus> commitStatuses = new ArrayList<>();
-        commitStatuses.add(new CommitStatus("testBranch1", 0, "testComment1"));
+        commitStatuses.add(new CommitStatus("testBranch1", 0, "commitID1", "testComment1"));
         RevisionData testRevisionData = new RevisionData(commitStatuses);
         System.out.println(testRevisionData.toString());
 

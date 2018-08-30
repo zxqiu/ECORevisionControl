@@ -7,12 +7,8 @@ import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
-import org.skife.jdbi.v2.util.StringColumnMapper;
-import org.skife.jdbi.v2.util.StringMapper;
-
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by neo on 8/12/18.
