@@ -65,8 +65,8 @@
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
                                 @if (commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
                             <li>
-                                <a id="committedBranchName">@commitStatus.getBranchName()</a> : <a id="commitID">@commitStatus.getCommitID()</a>
-                                <input type="button" value="x" class="DeleteCommitted">
+                                <a class="operationBranchName">@commitStatus.getBranchName()</a> : <a class="commitID">@commitStatus.getCommitID()</a>
+                                <input type="button" value="x" class="Delete">
                             </li>
                                 }
                             }
@@ -82,11 +82,15 @@
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
                                 @if (commitStatus.getStatus() == Revision.STATUS.SKIPPED.getValue()) {
                             <li>
-                                    @commitStatus.getBranchName()
+                                <a class="operationBranchName">@commitStatus.getBranchName()</a><a hidden class="commitID">@commitStatus.getCommitID()</a>
+                                <input type="button" value="x" class="Delete">
                             </li>
                                 }
                             }
                         }
+                            <li style="list-style-type: none;">
+                                <input type="button" value="add" onclick="window.location.href='#'">
+                            </li>
                         </ul>
                     </td>
                 </tr>

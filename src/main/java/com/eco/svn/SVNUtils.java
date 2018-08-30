@@ -89,6 +89,7 @@ public class SVNUtils {
                 RevisionData rd = new RevisionData(new ArrayList<>());
                 rd.getCommitStatuses().add(new CommitStatus("test0", Revision.STATUS.COMMITTED.getValue(), "commitID0", ""));
                 rd.getCommitStatuses().add(new CommitStatus("test1", Revision.STATUS.COMMITTED.getValue(), "commitID1", ""));
+                rd.getCommitStatuses().add(new CommitStatus("test2", Revision.STATUS.SKIPPED.getValue(), "", ""));
                 revisions.add(new Revision(Revision.generateID(branchName, String.valueOf(logEntry.getRevision()))
                         , branchName
                         , String.valueOf(logEntry.getRevision())

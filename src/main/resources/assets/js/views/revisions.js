@@ -1,6 +1,6 @@
 var api = APIs.createNew();
 
-$(".DeleteCommitted").on("click", function(e) {
+$(".Delete").on("click", function(e) {
     var btn = $(e.target);
     var parent = btn.parent();
     var grandparent = parent.parent();
@@ -14,9 +14,9 @@ $(".DeleteCommitted").on("click", function(e) {
     request["editor"] = "user0";
     request["commitStatuses"] = [];
     request["commitStatuses"][0] = {};
-    request["commitStatuses"][0]["branchName"] = $(parent[0]).find("#committedBranchName")[0].text;
+    request["commitStatuses"][0]["branchName"] = $(parent[0]).find(".operationBranchName")[0].text;
     request["commitStatuses"][0]["status"] = 2; // deleted
-    request["commitStatuses"][0]["commitID"] = $(parent[0]).find("#commitID")[0].text;
+    request["commitStatuses"][0]["commitID"] = $(parent[0]).find(".commitID")[0].text;
     request["commitStatuses"][0]["comment"] = ""; // deleted
 
     api.setPutRevisionSuccess(function (response) {
