@@ -272,9 +272,11 @@ public class RevisionResource {
 
 class UpdateParamWrapper {
     @JsonProperty
+    @NotNull
     private String editor;
 
     @JsonProperty
+    @NotNull
     private List<CommitStatus> commitStatuses;
 
     public String getEditor() {

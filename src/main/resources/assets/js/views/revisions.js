@@ -1,6 +1,6 @@
 var api = APIs.createNew();
 
-$(".BtnDelete").on("click", function(e) {
+$(document).on("click", ".BtnDelete", function(e) {
     var btn = $(e.target);
     var parent = btn.parent();
     var grandparent = parent.parent();
@@ -21,8 +21,120 @@ $(".BtnDelete").on("click", function(e) {
 
     api.setPutRevisionSuccess(function (response) {
         grandparent[0].removeChild(parent[0]);
-        console.log("Delete " + request["commitStatuses"][0]["branchName"] + " from " + branchName + " successfully")
+        $(data).find("#editor").text(request["editor"]);
+        console.log("Delete " + request["commitStatuses"][0]["branchName"] + " from " + branchName + " successfully");
     });
 
     api.putRevision(branchName, revisionID, request);
+});
+
+$(document).on("click", ".BtnAdd", function(e) {
+    var btn = $(e.target);
+    var parent = btn.parent();
+    var grandparent = parent.parent();
+    var data = grandparent[0];
+
+    var request = new Object();
+    var branchName = $(data).find(".branchName")[0].value;
+    var revisionID = $(data).find(".revisionID")[0].value;
+    request["editor"] = "user0";
+    request["commitStatuses"] = [];
+    request["commitStatuses"][0] = {};
+    request["commitStatuses"][0]["branchName"] = $(data).find(".addingBranchName")[0].value;
+    request["commitStatuses"][0]["status"] = $(data).find('.addingStatus')[0].value; // deleted
+    request["commitStatuses"][0]["commitID"] = $(data).find(".addingCommitID")[0].value;
+    request["commitStatuses"][0]["comment"] = $(data).find(".addingComment")[0].value;;
+
+    if (request["commitStatuses"][0]["status"] == 0) { // committed
+        var hasError = false;
+
+        if (request["commitStatuses"][0]["branchName"] == "") {
+            $(data).find(".addingBranchName").css("border-color", "red");
+            hasError = true;
+        }
+
+        if (request["commitStatuses"][0]["commitID"] == "") {
+            $(data).find(".addingCommitID").css("border-color", "red");
+            hasError = true;
+        }
+
+        if (hasError == true) {
+            return;
+        }
+    } else if (request["commitStatuses"][0]["status"] == 1) { // skipped
+        var hasError = false;
+
+        if (request["commitStatuses"][0]["branchName"] == "") {
+            $(data).find(".addingBranchName").css("border-color", "red");
+            hasError = true;
+        }
+
+        if (hasError == true) {
+            return;
+        }
+    }
+
+    api.setPutRevisionSuccess(function (response) {
+        $(data).find(".addingBranchName").css("border-color", "");
+        $(data).find(".addingCommitID").css("border-color", "");
+
+        var grandgrandgrandgrandparent = btn.parent().parent().parent().parent().parent();
+        var display = grandgrandgrandgrandparent.find("#" + revisionID);
+
+        if (request["commitStatuses"][0]["status"] == 0) {
+            var list = display.find(".committedList");
+
+            if (list.find("#committed" + request["commitStatuses"][0]["branchName"]).length == 0) {
+                list.append("<li id=\"committed" + request["commitStatuses"][0]["branchName"] + "\">"
+                          + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a> : <a class=\"commitID\">" + request["commitStatuses"][0]["commitID"] + "</a>"
+                          + "<button type=\"button\" class=\"btn btn-outline-danger btn-sm BtnDelete\">x</button>"
+                          + "</li>"
+                           );
+            }
+
+            // remove the same node from skipped list
+            list = display.find(".skippedList");
+            if (list.find("#skipped" + request["commitStatuses"][0]["branchName"]).length > 0) {
+                list[0].removeChild(list.find("#skipped" + request["commitStatuses"][0]["branchName"])[0])
+            }
+
+            //btnDeleteInit();
+        } else if (request["commitStatuses"][0]["status"] == 1) {
+            var list = display.find(".skippedList");
+
+            if (list.find("#skipped" + request["commitStatuses"][0]["branchName"]).length == 0) {
+                list.append("<li id=\"skipped" + request["commitStatuses"][0]["branchName"] + "\">"
+                          + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a>"
+                          + "<a class=\"commitID\" style=\"display: none\">" + request["commitStatuses"][0]["commitID"] + "</a>"
+                          + "<button type=\"button\" class=\"btn btn-outline-danger btn-sm BtnDelete\">x</button>"
+                          + "</li>"
+                           );
+            }
+
+            // remove the same node from committed list
+            list = display.find(".committedList");
+            if (list.find("#committed" + request["commitStatuses"][0]["branchName"]).length > 0) {
+                list[0].removeChild(list.find("#committed" + request["commitStatuses"][0]["branchName"])[0])
+            }
+
+            //btnAddInit();
+        }
+
+        console.log("Add " + request["commitStatuses"][0]["branchName"] + " to " + branchName + " successfully");
+    });
+
+    api.putRevision(branchName, revisionID, request);
+});
+
+$(document).on("change", ".addingStatus", function(e) {
+    var selector = $(e.target);
+    var parent = selector.parent();
+    var data = parent[0];
+    var status = selector[0].value;
+
+    if (status == 0) {
+        $(data).find(".addingCommitID").removeAttr("disabled");
+    } else if (status == 1) {
+        $(data).find(".addingCommitID").attr("disabled", true);
+    }
 });

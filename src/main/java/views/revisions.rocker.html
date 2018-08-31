@@ -51,20 +51,20 @@
             <tbody>
             @if (revisions != null) {
                 @for (revision : revisions) {
-                <tr>
+                <tr id="@revision.getRevisionId()">
                     <input class="branchName" type="hidden" value="@revision.getBranchName()">
                     <input class="revisionID" type="hidden" value="@revision.getRevisionId()">
                     <th scope="row">@revision.getRevisionId()</th>
                     <td>@revision.getTime().toString()</td>
                     <td>@revision.getAuthor()</td>
                     <td>@revision.getEditTime().toString()</td>
-                    <td>@revision.getEditor()</td>
+                    <td id="editor">@revision.getEditor()</td>
                     <td>
-                        <ul>
+                        <ul class="committedList">
                         @if (revision.getData() != null && revision.getData().getCommitStatuses() != null) {
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
-                                @if (commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
-                            <li>
+                                @if (commitStatus != null && commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
+                            <li id="committed@commitStatus.getBranchName()">
                                 <a class="operationBranchName">@commitStatus.getBranchName()</a> : <a class="commitID">@commitStatus.getCommitID()</a>
                                 <button type="button" class="btn btn-outline-danger btn-sm BtnDelete">x</button>
                             </li>
@@ -74,11 +74,11 @@
                         </ul>
                     </td>
                     <td>
-                        <ul>
+                        <ul class="skippedList">
                         @if (revision.getData() != null && revision.getData().getCommitStatuses() != null) {
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
-                                @if (commitStatus.getStatus() == Revision.STATUS.SKIPPED.getValue()) {
-                            <li>
+                                @if (commitStatus != null && commitStatus.getStatus() == Revision.STATUS.SKIPPED.getValue()) {
+                            <li id="skipped@commitStatus.getBranchName()">
                                 <a class="operationBranchName">@commitStatus.getBranchName()</a>
                                 <a class="commitID" style="display: none">@commitStatus.getCommitID()</a>
                                 <button type="button" class="btn btn-outline-danger btn-sm BtnDelete">x</button>
@@ -102,27 +102,27 @@
                             <input class="revisionID" type="hidden" value="@revision.getRevisionId()">
 
                             <div class="input-group-prepend">
-                                <button class="btn btn-outline-success" type="button">Add</button>
+                                <button class="btn btn-outline-success BtnAdd" type="button">Add</button>
                             </div>
-                            <select class="custom-select form-control col-lg-1" id="inputGroupSelect03">
-                                <option value="1" selected>Submitted</option>
-                                <option value="2">Skipped</option>
+                            <select class="custom-select form-control col-lg-1 addingStatus" id="inputGroupSelect03">
+                                <option value="0" selected>Committed</option>
+                                <option value="1">Skipped</option>
                             </select>
 
                             <div class="input-group-prepend">
                                 <span class="input-group-text">BranchName</span>
                             </div>
-                            <input class="form-control col-lg-2">
+                            <input class="form-control col-lg-2 addingBranchName" placeholder="Required">
 
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Commit ID</span>
                             </div>
-                            <input class="form-control col-lg-1">
+                            <input class="form-control col-lg-1 addingCommitID" placeholder="Required">
 
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Comment</span>
                             </div>
-                            <textarea class="form-control"></textarea>
+                            <textarea class="form-control addingComment" placeholder="Optional"></textarea>
                         </div>
                     </td>
                 </tr>

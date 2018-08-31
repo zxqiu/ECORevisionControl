@@ -1,6 +1,7 @@
 package com.eco.revision.core;
 
 import com.eco.utils.misc.Serializer;
+import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,15 +17,19 @@ public class CommitStatus implements Serializable, Serializer<CommitStatus> {
     static final long serialVersionUID = -5292699414591234L;
 
     @JsonProperty
+    @NotNull
     private String branchName;
 
     @JsonProperty
+    @NotNull
     private int status;
 
     @JsonProperty
+    @NotNull
     private String commitID;
 
     @JsonProperty
+    @NotNull
     private String comment;
 
     public CommitStatus() {
