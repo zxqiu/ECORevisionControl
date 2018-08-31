@@ -52,8 +52,8 @@
             @if (revisions != null) {
                 @for (revision : revisions) {
                 <tr>
-                    <input id="branchName" type="hidden" value="@revision.getBranchName()">
-                    <input id="revisionID" type="hidden" value="@revision.getRevisionId()">
+                    <input class="branchName" type="hidden" value="@revision.getBranchName()">
+                    <input class="revisionID" type="hidden" value="@revision.getRevisionId()">
                     <th scope="row">@revision.getRevisionId()</th>
                     <td>@revision.getTime().toString()</td>
                     <td>@revision.getAuthor()</td>
@@ -66,14 +66,11 @@
                                 @if (commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
                             <li>
                                 <a class="operationBranchName">@commitStatus.getBranchName()</a> : <a class="commitID">@commitStatus.getCommitID()</a>
-                                <input type="button" value="x" class="Delete">
+                                <button type="button" class="btn btn-outline-danger btn-sm BtnDelete">x</button>
                             </li>
                                 }
                             }
                         }
-                            <li style="list-style-type: none;">
-                                <input type="button" value="add" onclick="window.location.href='#'">
-                            </li>
                         </ul>
                     </td>
                     <td>
@@ -82,15 +79,13 @@
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
                                 @if (commitStatus.getStatus() == Revision.STATUS.SKIPPED.getValue()) {
                             <li>
-                                <a class="operationBranchName">@commitStatus.getBranchName()</a><a hidden class="commitID">@commitStatus.getCommitID()</a>
-                                <input type="button" value="x" class="Delete">
+                                <a class="operationBranchName">@commitStatus.getBranchName()</a>
+                                <a class="commitID" style="display: none">@commitStatus.getCommitID()</a>
+                                <button type="button" class="btn btn-outline-danger btn-sm BtnDelete">x</button>
                             </li>
                                 }
                             }
                         }
-                            <li style="list-style-type: none;">
-                                <input type="button" value="add" onclick="window.location.href='#'">
-                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -98,6 +93,37 @@
                     <td></td>
                     <td>Comment:</td>
                     <td colspan="5"><p>@revision.getComment()</p></td>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        <div class="input-group input-group-sm mb-3">
+                            <input class="branchName" type="hidden" value="@revision.getBranchName()">
+                            <input class="revisionID" type="hidden" value="@revision.getRevisionId()">
+
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-success" type="button">Add</button>
+                            </div>
+                            <select class="custom-select" id="inputGroupSelect03">
+                                <option value="1" selected>Submitted</option>
+                                <option value="2">Skipped</option>
+                            </select>
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">BranchName</span>
+                            </div>
+                            <input class="form-control">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Commit ID</span>
+                            </div>
+                            <input class="form-control">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Comment</span>
+                            </div>
+                            <textarea class="form-control"></textarea>
+                        </div>
+                    </td>
                 </tr>
                 }
             }
