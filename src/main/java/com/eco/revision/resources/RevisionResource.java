@@ -239,7 +239,7 @@ public class RevisionResource {
                         continue;
                     }
 
-                    Long latestRevisionID = revisionConnector.findLargestRevisionID(branchName);
+                    Long latestRevisionID = revisionConnector.findLargestRevisionID(svnBranch.getBranchName());
                     String user = (svnBranch.getUser() != null && svnBranch.getUser().length() > 0) ?
                                     svnBranch.getUser() : svnConf.getUserDefault();
                     String password = (svnBranch.getPassword() != null && svnBranch.getPassword().length() > 0) ?
