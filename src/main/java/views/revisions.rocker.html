@@ -95,7 +95,8 @@
                     <td colspan="5"><p>@revision.getComment()</p></td>
                 </tr>
                 <tr>
-                    <td colspan="7">
+                    <td></td>
+                    <td colspan="6">
                         <div class="input-group input-group-sm mb-3">
                             <input class="branchName" type="hidden" value="@revision.getBranchName()">
                             <input class="revisionID" type="hidden" value="@revision.getRevisionId()">
@@ -103,7 +104,7 @@
                             <div class="input-group-prepend">
                                 <button class="btn btn-outline-success" type="button">Add</button>
                             </div>
-                            <select class="custom-select" id="inputGroupSelect03">
+                            <select class="custom-select form-control col-lg-1" id="inputGroupSelect03">
                                 <option value="1" selected>Submitted</option>
                                 <option value="2">Skipped</option>
                             </select>
@@ -111,12 +112,12 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">BranchName</span>
                             </div>
-                            <input class="form-control">
+                            <input class="form-control col-lg-2">
 
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Commit ID</span>
                             </div>
-                            <input class="form-control">
+                            <input class="form-control col-lg-1">
 
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Comment</span>
