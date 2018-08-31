@@ -37,8 +37,9 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ECOConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/assets/", "/r"));
-        bootstrap.addBundle(new AssetsBundle("/assets/js", "/r/js"));
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/r", null, "root"));
+        bootstrap.addBundle(new AssetsBundle("/assets/js", "/r/js", null, "js"));
+        bootstrap.addBundle(new AssetsBundle("/assets/css", "/r/css", null, "css"));
     }
 
     @Override
