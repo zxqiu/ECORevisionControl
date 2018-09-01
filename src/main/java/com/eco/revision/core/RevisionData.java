@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.Valid;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
     private static final Logger _logger = LoggerFactory.getLogger(RevisionData.class);
 
     @JsonProperty
+    @Valid
     private List<CommitStatus> commitStatuses;
 
     @Override

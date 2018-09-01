@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -22,6 +23,7 @@ import com.eco.svn.SVNConf;
 import com.eco.svn.SVNUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,9 +107,9 @@ public class RevisionResource {
     @Path(PATH_PUT_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam(Dict.BRANCH_NAME) String branchName,
-                           @PathParam(Dict.REVISION_ID) String revisionID,
-                           UpdateParamWrapper paramWrapper
+    public Response update(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
+                           @PathParam(Dict.REVISION_ID) @NotEmpty String revisionID,
+                           @Valid UpdateParamWrapper paramWrapper
                            ) throws IOException {
         List<Revision> revisions = revisionConnector.findByID(branchName, revisionID);
 
@@ -160,10 +162,10 @@ public class RevisionResource {
     @Path(PATH_POST_FORM)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response insertRevision(@FormParam(Dict.BRANCH_NAME) @NotNull String branchName,
-                                   @FormParam(Dict.REVISION_ID) @NotNull String revisionId,
+    public Response insertRevision(@FormParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
+                                   @FormParam(Dict.REVISION_ID) @NotEmpty String revisionId,
                                    @FormParam(Dict.TIME) @NotNull long time,
-                                   @FormParam(Dict.AUTHOR) @NotNull String author,
+                                   @FormParam(Dict.AUTHOR) @NotEmpty String author,
                                    @FormParam(Dict.COMMENT) String comment,
                                    @FormParam(Dict.EDITOR) String editor,
                                    @FormParam(Dict.EDIT_TIME) long editTime
@@ -196,7 +198,7 @@ public class RevisionResource {
     @Path(PATH_POST_OBJ)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response insertRevisionObject(Revision revision) throws IOException {
+    public Response insertRevisionObject(@NotNull @Valid Revision revision) throws IOException {
         try {
             revisionConnector.insert(revision);
         } catch (Exception e) {
@@ -212,8 +214,8 @@ public class RevisionResource {
     @Timed
     @Path(PATH_DELETE)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteRevision(@PathParam(Dict.BRANCH_NAME) String branchName,
-                                   @PathParam(Dict.REVISION_ID) String revisionID) {
+    public Response deleteRevision(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
+                                   @PathParam(Dict.REVISION_ID) @NotEmpty String revisionID) {
         try {
             revisionConnector.delete(Revision.generateID(branchName, revisionID));
         } catch (Exception e) {
@@ -272,11 +274,11 @@ public class RevisionResource {
 
 class UpdateParamWrapper {
     @JsonProperty
-    @NotNull
+    @NotEmpty(message = "editor cannot be null")
     private String editor;
 
     @JsonProperty
-    @NotNull
+    @Valid
     private List<CommitStatus> commitStatuses;
 
     public String getEditor() {

@@ -3,7 +3,10 @@ package com.eco.revision.core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,18 +17,23 @@ import java.util.List;
  */
 public class Revision {
     @JsonProperty
+    @NotEmpty
     private String id;
 
     @JsonProperty
+    @NotEmpty
     private String branchName;
 
     @JsonProperty
+    @NotEmpty
     private String revisionId;
 
     @JsonProperty
+    @NotNull
     private Date time;
 
     @JsonProperty
+    @NotEmpty
     private String author;
 
     @JsonProperty
@@ -38,6 +46,7 @@ public class Revision {
     private String editor;
 
     @JsonProperty
+    @Valid
     private RevisionData data;
 
 

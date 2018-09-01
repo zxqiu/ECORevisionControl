@@ -1,12 +1,16 @@
 package com.eco.revision.core;
 
 import com.eco.utils.misc.Serializer;
-import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.util.List;
 
@@ -15,9 +19,10 @@ import java.util.List;
  */
 public class CommitStatus implements Serializable, Serializer<CommitStatus> {
     static final long serialVersionUID = -5292699414591234L;
+    private static final Logger _logger = LoggerFactory.getLogger(CommitStatus.class);
 
     @JsonProperty
-    @NotNull
+    @NotEmpty
     private String branchName;
 
     @JsonProperty
@@ -25,11 +30,11 @@ public class CommitStatus implements Serializable, Serializer<CommitStatus> {
     private int status;
 
     @JsonProperty
-    @NotNull
+    @NotEmpty
     private String commitID;
 
     @JsonProperty
-    @NotNull
+    @NotEmpty
     private String comment;
 
     public CommitStatus() {
