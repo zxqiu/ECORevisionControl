@@ -1,11 +1,13 @@
-package com.eco.svn;
+package com.eco.svn.core;
 
+import com.eco.revision.core.Branch;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by neo on 8/25/18.
  */
-public class SVNBranch {
+public class SVNBranch implements Branch {
     @JsonProperty
     private String user;
 
@@ -21,7 +23,14 @@ public class SVNBranch {
     @JsonProperty
     private long lastUpdate;
 
+    @JsonIgnore
+    private String url;
+
     public SVNBranch() {}
+
+    public String getURL() {
+        return "/" + branchName + "?begin=0&end=100";
+    }
 
     public String getBranchName() {
         return branchName;

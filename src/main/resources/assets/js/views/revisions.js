@@ -11,7 +11,8 @@ $(document).on("click", ".BtnDelete", function(e) {
     var request = new Object();
     var branchName = $(data).find(".branchName")[0].value;
     var revisionID = $(data).find(".revisionID")[0].value;
-    request["editor"] = "user0";
+    var userName = $(data).find(".userName")[0].value;
+    request["editor"] = userName;
     request["commitStatuses"] = [];
     request["commitStatuses"][0] = {};
     request["commitStatuses"][0]["branchName"] = $(parent[0]).find(".operationBranchName")[0].text;
@@ -37,13 +38,17 @@ $(document).on("click", ".BtnAdd", function(e) {
     var request = new Object();
     var branchName = $(data).find(".branchName")[0].value;
     var revisionID = $(data).find(".revisionID")[0].value;
-    request["editor"] = "user0";
+    var userName = $(data).find(".userName")[0].value;
+    request["editor"] = userName;
     request["commitStatuses"] = [];
     request["commitStatuses"][0] = {};
     request["commitStatuses"][0]["branchName"] = $(data).find(".addingBranchName")[0].value;
     request["commitStatuses"][0]["status"] = $(data).find('.addingStatus')[0].value; // deleted
     request["commitStatuses"][0]["commitID"] = $(data).find(".addingCommitID")[0].value;
     request["commitStatuses"][0]["comment"] = $(data).find(".addingComment")[0].value;;
+
+    $(data).find(".addingBranchName").css("border-color", "");
+    $(data).find(".addingCommitID").css("border-color", "");
 
     if (request["commitStatuses"][0]["status"] == 0) { // committed
         var hasError = false;
@@ -75,18 +80,18 @@ $(document).on("click", ".BtnAdd", function(e) {
     }
 
     api.setPutRevisionSuccess(function (response) {
-        $(data).find(".addingBranchName").css("border-color", "");
-        $(data).find(".addingCommitID").css("border-color", "");
-
         var grandgrandgrandgrandparent = btn.parent().parent().parent().parent().parent();
         var display = grandgrandgrandgrandparent.find("#" + revisionID);
+        $(display).find("#editor").text(request["editor"]);
 
         if (request["commitStatuses"][0]["status"] == 0) {
             var list = display.find(".committedList");
 
             if (list.find("#committed" + request["commitStatuses"][0]["branchName"]).length == 0) {
                 list.append("<li id=\"committed" + request["commitStatuses"][0]["branchName"] + "\">"
+                          + "<span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\" + >"
                           + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a> : <a class=\"commitID\">" + request["commitStatuses"][0]["commitID"] + "</a>"
+                          + "</span>"
                           + "<button type=\"button\" class=\"btn btn-outline-danger btn-sm BtnDelete\">x</button>"
                           + "</li>"
                            );
@@ -97,15 +102,15 @@ $(document).on("click", ".BtnAdd", function(e) {
             if (list.find("#skipped" + request["commitStatuses"][0]["branchName"]).length > 0) {
                 list[0].removeChild(list.find("#skipped" + request["commitStatuses"][0]["branchName"])[0])
             }
-
-            //btnDeleteInit();
         } else if (request["commitStatuses"][0]["status"] == 1) {
             var list = display.find(".skippedList");
 
             if (list.find("#skipped" + request["commitStatuses"][0]["branchName"]).length == 0) {
                 list.append("<li id=\"skipped" + request["commitStatuses"][0]["branchName"] + "\">"
+                          + "<span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\" + >"
                           + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a>"
                           + "<a class=\"commitID\" style=\"display: none\">" + request["commitStatuses"][0]["commitID"] + "</a>"
+                          + "</span>"
                           + "<button type=\"button\" class=\"btn btn-outline-danger btn-sm BtnDelete\">x</button>"
                           + "</li>"
                            );
@@ -116,8 +121,6 @@ $(document).on("click", ".BtnAdd", function(e) {
             if (list.find("#committed" + request["commitStatuses"][0]["branchName"]).length > 0) {
                 list[0].removeChild(list.find("#committed" + request["commitStatuses"][0]["branchName"])[0])
             }
-
-            //btnAddInit();
         }
 
         console.log("Add " + request["commitStatuses"][0]["branchName"] + " to " + branchName + " successfully");

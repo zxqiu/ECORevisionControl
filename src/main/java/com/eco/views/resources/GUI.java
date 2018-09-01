@@ -1,10 +1,13 @@
 package com.eco.views.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.eco.revision.core.Branch;
+import com.eco.revision.core.BranchConf;
+import com.eco.revision.core.BranchConfFactory;
 import com.eco.revision.dao.RevisionConnector;
 import com.eco.revision.dao.RevisionDAO;
 import com.eco.revision.resources.RevisionResource;
-import com.eco.svn.SVNBranch;
+import com.eco.svn.core.SVNBranch;
 import com.eco.svn.SVNConf;
 import com.eco.utils.misc.Dict;
 import org.slf4j.Logger;
@@ -43,16 +46,25 @@ public class GUI {
     @Path(PATH_BRANCHES)
     @Produces(MediaType.TEXT_HTML)
     public Response branches() throws IOException {
-        SVNConf svnConf = SVNConf.getSVNConf();
+        BranchConf branchConf = BranchConfFactory.getBranchConf();
         List<Map<String, String>> branches = new ArrayList<>();
 
-        for (SVNBranch svnBranch : svnConf.getBranches()) {
+        for (Branch branch : branchConf.getBranches()) {
             Map<String, String> map = new HashMap<>();
-            map.put(Dict.BRANCH_NAME, svnBranch.getBranchName());
-            map.put(Dict.URL, PATH_ROOT + "/" + svnBranch.getBranchName() + "?" + Dict.BEGIN + "=0&" + Dict.END + "=100");
+            map.put(Dict.BRANCH_NAME, branch.getBranchName());
+            map.put(Dict.URL, PATH_ROOT + "/" + branch.getBranchName() + "?" + Dict.BEGIN + "=0&" + Dict.END + "=100");
             branches.add(map);
         }
-        return Response.ok().entity(views.branches.template(branches)).build();
+
+        return Response.ok().entity(
+                views.revisions.template(""
+                                        , ""
+                                        , branchConf.getBranches()
+                                        , null
+                                        , "#"
+                                        , "#"
+                                        , "#")
+        ).build();
     }
 
     @GET
@@ -75,8 +87,13 @@ public class GUI {
                 String.format(PATH_ROOT + "/" + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", nextBegin, nextEnd);
         String urlBranches = PATH_ROOT + "/" + PATH_BRANCHES;
 
+        BranchConf branchConf = BranchConfFactory.getBranchConf();
+
         return Response.ok().entity(
-                views.revisions.template(RevisionResource.utilGetLimitByBranch(branchName, begin, end)
+                views.revisions.template(branchName
+                                        , "user1000"
+                                        , branchConf.getBranches()
+                                        , RevisionResource.utilGetLimitByBranch(branchName, begin, end)
                                         , urlNext
                                         , urlPrev
                                         , urlBranches)

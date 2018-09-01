@@ -30,7 +30,6 @@ public class CommitStatus implements Serializable, Serializer<CommitStatus> {
     private int status;
 
     @JsonProperty
-    @NotEmpty
     private String commitID;
 
     @JsonProperty

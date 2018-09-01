@@ -1,11 +1,12 @@
 @import com.eco.revision.core.Revision;
 @import com.eco.revision.core.RevisionData;
+@import com.eco.revision.core.Branch;
 @import com.eco.revision.core.CommitStatus;
 @import com.eco.revision.resources.RevisionResource;
 @import com.eco.utils.misc.Dict;
 @import java.util.List;
 
-@args(List<Revision> revisions, String urlNext, String urlPrev, String urlBranches)
+@args(String branchName, String userName, List<Branch> branches, List<Revision> revisions, String urlNext, String urlPrev, String urlBranches)
 
 <html lang="en">
 
@@ -26,13 +27,51 @@
 
 
 <body>
+
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-3" style="text-align: left"><button type="button" class="btn btn-secondary" onclick="window.location.href='@urlPrev'">Prev</button></div>
-    <div class="col-md-4" style="text-align: center"><button type="button" class="btn btn-dark" onclick="window.location.href='@urlBranches'">Branches</button></div>
-    <div class="col-md-3" style="text-align: right"><button type="button" class="btn btn-secondary" onclick="window.location.href='@urlNext'">Next</button></div>
+    <div class="col-md-10">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#"><h4>ECO Revision Control</h4></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @if (branchName != null && branchName.length() > 0) {
+                                Branch : @branchName
+                            } else {
+                                Select Branch
+                            }
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @if (branches != null) {
+                                @for (Branch branch : branches) {
+                                <a class="dropdown-item" href="@branch.getURL()">@branch.getBranchName()</a>
+                                }
+                            }
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
     <div class="col-md-1"></div>
 </div>
+
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4" style="text-align: left"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlPrev'">Prev</button></div>
+    <div class="col-md-2" style="text-align: center"></div>
+    <div class="col-md-4" style="text-align: right"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlNext'">Next</button></div>
+    <div class="col-md-1"></div>
+</div>
+
+@if (branchName != null && branchName.length() > 0) {
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
@@ -54,6 +93,7 @@
                 <tr id="@revision.getRevisionId()">
                     <input class="branchName" type="hidden" value="@revision.getBranchName()">
                     <input class="revisionID" type="hidden" value="@revision.getRevisionId()">
+                    <input class="userName" type="hidden" value="@userName">
                     <th scope="row">@revision.getRevisionId()</th>
                     <td>@revision.getTime().toString()</td>
                     <td>@revision.getAuthor()</td>
@@ -65,7 +105,9 @@
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
                                 @if (commitStatus != null && commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
                             <li id="committed@commitStatus.getBranchName()">
-                                <a class="operationBranchName">@commitStatus.getBranchName()</a> : <a class="commitID">@commitStatus.getCommitID()</a>
+                                <span data-toggle="tooltip" data-placement="bottom" title="@commitStatus.getComment()">
+                                    <a class="operationBranchName">@commitStatus.getBranchName()</a> : <a class="commitID">@commitStatus.getCommitID()</a>
+                                </span>
                                 <button type="button" class="btn btn-outline-danger btn-sm BtnDelete">x</button>
                             </li>
                                 }
@@ -100,6 +142,7 @@
                         <div class="input-group input-group-sm mb-3">
                             <input class="branchName" type="hidden" value="@revision.getBranchName()">
                             <input class="revisionID" type="hidden" value="@revision.getRevisionId()">
+                            <input class="userName" type="hidden" value="@userName">
 
                             <div class="input-group-prepend">
                                 <button class="btn btn-outline-success BtnAdd" type="button">Add</button>
@@ -133,9 +176,15 @@
     </div>
     <div class="col-md-1"></div>
 </div>
+}
 
 <script src="/r/js/API.js"></script>
 <script src="/r/js/views/revisions.js"></script>
+<script>
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 
 </body>
 </html>

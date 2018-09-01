@@ -2,6 +2,7 @@ package com.eco.services;
 
 import com.eco.branch.resources.BranchResource;
 import com.eco.filter.GeneralRequestFilter;
+import com.eco.revision.core.BranchConfFactory;
 import com.eco.views.resources.GUI;
 import com.fizzed.rocker.runtime.RockerRuntime;
 import com.google.common.cache.CacheBuilderSpec;
@@ -68,5 +69,11 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 		register all filters
 		 */
         environment.jersey().register(new GeneralRequestFilter());
+
+
+        /*
+        set BranchConf type
+         */
+        BranchConfFactory.setType(BranchConfFactory.TYPE.SVN);
     }
 }

@@ -17,9 +17,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.eco.revision.core.CommitStatus;
-import com.eco.svn.SVNBranch;
-import com.eco.svn.SVNConf;
+import com.eco.revision.core.*;
+import com.eco.svn.core.SVNBranch;
 import com.eco.svn.SVNUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,8 +26,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eco.revision.core.Revision;
-import com.eco.revision.core.RevisionData;
 import com.eco.revision.dao.RevisionConnector;
 import com.eco.revision.dao.RevisionDAO;
 import com.eco.utils.misc.Dict;
@@ -230,38 +227,38 @@ public class RevisionResource {
 
     private static final Lock revisionUpdateLock = new ReentrantLock();
     private static void _syncRevisions(String branchName) throws IOException {
-        SVNConf svnConf = SVNConf.getSVNConf();
+        BranchConf branchConf = BranchConfFactory.getBranchConf();
 
         if (revisionUpdateLock.tryLock()) {
             try {
-                for (SVNBranch svnBranch : svnConf.getBranches()) {
-                    if (branchName != null && branchName.length() > 0 && branchName.equals(svnBranch.getBranchName()) == false) {
+                for (Branch branch : branchConf.getBranches()) {
+                    if (branchName != null && branchName.length() > 0 && branchName.equals(branch.getBranchName()) == false) {
                         continue;
-                    } else if (new Date().getTime() - svnBranch.getLastUpdate() < REVISION_UPDATE_INTERVAL) {
+                    } else if (new Date().getTime() - branch.getLastUpdate() < REVISION_UPDATE_INTERVAL) {
                         continue;
                     }
 
-                    Long latestRevisionID = revisionConnector.findLargestRevisionID(svnBranch.getBranchName());
-                    String user = (svnBranch.getUser() != null && svnBranch.getUser().length() > 0) ?
-                                    svnBranch.getUser() : svnConf.getUserDefault();
-                    String password = (svnBranch.getPassword() != null && svnBranch.getPassword().length() > 0) ?
-                                    svnBranch.getPassword() : svnConf.getPasswordDefault();
+                    Long latestRevisionID = revisionConnector.findLargestRevisionID(branch.getBranchName());
+                    String user = (branch.getUser() != null && branch.getUser().length() > 0) ?
+                                    branch.getUser() : branchConf.getUserDefault();
+                    String password = (branch.getPassword() != null && branch.getPassword().length() > 0) ?
+                                    branch.getPassword() : branchConf.getPasswordDefault();
 
                     if (latestRevisionID != null) {
-                        SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
-                                svnBranch.getBranchName(), user, password,
+                        SVNUtils.updateLog(revisionConnector, branch.getRepo(),
+                                branch.getBranchName(), user, password,
                                 latestRevisionID, -1, false);
                     } else {
-                        SVNUtils.updateLog(revisionConnector, svnBranch.getRepo(),
-                                svnBranch.getBranchName(), user, password,
+                        SVNUtils.updateLog(revisionConnector, branch.getRepo(),
+                                branch.getBranchName(), user, password,
                                 0, -1, false);
                     }
 
-                    svnBranch.setLastUpdate(new Date().getTime());
+                    branch.setLastUpdate(new Date().getTime());
                 }
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(SVNConf.SVNConfFile), svnConf);
+                objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(branchConf.getConfFile()), branchConf);
             } catch (SVNException e) {
                 _logger.error("Failed to update SVN revision");
                 e.printStackTrace();

@@ -1,8 +1,11 @@
 package com.eco.branch.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.eco.revision.core.Branch;
+import com.eco.revision.core.BranchConf;
+import com.eco.revision.core.BranchConfFactory;
 import com.eco.revision.resources.RevisionResource;
-import com.eco.svn.SVNBranch;
+import com.eco.svn.core.SVNBranch;
 import com.eco.svn.SVNConf;
 import com.eco.utils.misc.Dict;
 
@@ -30,16 +33,16 @@ public class BranchResource {
     @Path(PATH_GET_ALL)
     @Produces(MediaType.APPLICATION_JSON)
     public List<Map<String, String>> getAll() throws IOException {
-        SVNConf svnConf = SVNConf.getSVNConf();
+        BranchConf branchConf = BranchConfFactory.getBranchConf();
         List<Map<String, String>> branches = new ArrayList<>();
 
-        for (SVNBranch svnBranch : svnConf.getBranches()) {
+        for (Branch branch : branchConf.getBranches()) {
             Map<String, String> map = new HashMap<>();
-            map.put(Dict.BRANCH_NAME, svnBranch.getBranchName());
+            map.put(Dict.BRANCH_NAME, branch.getBranchName());
             map.put(Dict.URL, String.format(Dict.API_V1_PATH +
                             RevisionResource.PATH_ROOT +
                             "/%s",
-                    svnBranch.getBranchName()));
+                    branch.getBranchName()));
             branches.add(map);
         }
 

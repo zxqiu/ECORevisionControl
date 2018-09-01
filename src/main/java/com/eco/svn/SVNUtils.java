@@ -1,8 +1,6 @@
 package com.eco.svn;
 
-import com.eco.revision.core.CommitStatus;
-import com.eco.revision.core.Revision;
-import com.eco.revision.core.RevisionData;
+import com.eco.revision.core.*;
 import com.eco.revision.dao.RevisionConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,15 +109,15 @@ public class SVNUtils {
 
     public static void main(String[] arg) throws IOException, SVNException {
         String branchName = "FOS_60bmcs";
-        SVNConf svnConf = SVNConf.getSVNConf();
+        BranchConf conf = SVNConf.getConf();
 
-        for (SVNBranch svnBranch : svnConf.getBranches()) {
-            if (branchName != null && branchName.length() > 0 && branchName.equals(svnBranch.getBranchName()) == false) {
+        for (Branch branch : conf.getBranches()) {
+            if (branchName != null && branchName.length() > 0 && branchName.equals(branch.getBranchName()) == false) {
                 continue;
             }
 
-            SVNUtils.updateLog(null, svnBranch.getRepo(),
-                    svnBranch.getBranchName(), svnBranch.getUser(), svnBranch.getPassword(),
+            SVNUtils.updateLog(null, branch.getRepo(),
+                    branch.getBranchName(), branch.getUser(), branch.getPassword(),
                     0, -1, true);
         }
     }
