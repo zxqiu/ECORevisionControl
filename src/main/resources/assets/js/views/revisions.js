@@ -86,15 +86,19 @@ $(document).on("click", ".BtnAdd", function(e) {
 
         if (request["commitStatuses"][0]["status"] == 0) {
             var list = display.find(".committedList");
+            var li = list.find("#committed" + request["commitStatuses"][0]["branchName"]);
 
-            if (list.find("#committed" + request["commitStatuses"][0]["branchName"]).length == 0) {
+            if (li.length == 0) {
                 list.append("<li id=\"committed" + request["commitStatuses"][0]["branchName"] + "\">"
-                          + "<span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\" + >"
+                          + "<span  class=\"commentTooltip\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\">"
                           + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a> : <a class=\"commitID\">" + request["commitStatuses"][0]["commitID"] + "</a>"
                           + "</span>"
                           + "<button type=\"button\" class=\"btn btn-outline-danger btn-sm BtnDelete\">x</button>"
                           + "</li>"
                            );
+            } else {
+                li.find(".commentTooltip").attr("title", request["commitStatuses"][0]["comment"]);
+                li.find(".commentTooltip").attr("data-original-title", "");
             }
 
             // remove the same node from skipped list
@@ -104,16 +108,20 @@ $(document).on("click", ".BtnAdd", function(e) {
             }
         } else if (request["commitStatuses"][0]["status"] == 1) {
             var list = display.find(".skippedList");
+            var li = list.find("#skipped" + request["commitStatuses"][0]["branchName"]);
 
-            if (list.find("#skipped" + request["commitStatuses"][0]["branchName"]).length == 0) {
+            if (li.length == 0) {
                 list.append("<li id=\"skipped" + request["commitStatuses"][0]["branchName"] + "\">"
-                          + "<span data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\" + >"
+                          + "<span class=\"commentTooltip\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\">"
                           + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a>"
                           + "<a class=\"commitID\" style=\"display: none\">" + request["commitStatuses"][0]["commitID"] + "</a>"
                           + "</span>"
                           + "<button type=\"button\" class=\"btn btn-outline-danger btn-sm BtnDelete\">x</button>"
                           + "</li>"
                            );
+            } else {
+                li.find(".commentTooltip").attr("title", request["commitStatuses"][0]["comment"]);
+                li.find(".commentTooltip").attr("data-original-title", "");
             }
 
             // remove the same node from committed list

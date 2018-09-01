@@ -5,6 +5,7 @@
 @import com.eco.revision.resources.RevisionResource;
 @import com.eco.utils.misc.Dict;
 @import java.util.List;
+@import org.apache.commons.text.StringEscapeUtils;
 
 @args(String branchName, String userName, List<Branch> branches, List<Revision> revisions, String urlNext, String urlPrev, String urlBranches)
 
@@ -105,7 +106,7 @@
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
                                 @if (commitStatus != null && commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
                             <li id="committed@commitStatus.getBranchName()">
-                                <span data-toggle="tooltip" data-placement="bottom" title="@commitStatus.getComment()">
+                                <span class="commentTooltip" data-toggle="tooltip" data-placement="bottom" data-html="true" title="@StringEscapeUtils.escapeHtml4(commitStatus.getComment()).replaceAll("(\r\n|\n)", "<br/>")">
                                     <a class="operationBranchName">@commitStatus.getBranchName()</a> : <a class="commitID">@commitStatus.getCommitID()</a>
                                 </span>
                                 <button type="button" class="btn btn-outline-danger btn-sm BtnDelete">x</button>
@@ -121,8 +122,10 @@
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
                                 @if (commitStatus != null && commitStatus.getStatus() == Revision.STATUS.SKIPPED.getValue()) {
                             <li id="skipped@commitStatus.getBranchName()">
-                                <a class="operationBranchName">@commitStatus.getBranchName()</a>
-                                <a class="commitID" style="display: none">@commitStatus.getCommitID()</a>
+                                <span class="commentTooltip" data-toggle="tooltip" data-placement="bottom" data-html="true" title="@StringEscapeUtils.escapeHtml4(commitStatus.getComment()).replaceAll("(\r\n|\n)", "<br/>")">
+                                    <a class="operationBranchName">@commitStatus.getBranchName()</a>
+                                    <a class="commitID" style="display: none">@commitStatus.getCommitID()</a>
+                                </span>
                                 <button type="button" class="btn btn-outline-danger btn-sm BtnDelete">x</button>
                             </li>
                                 }
