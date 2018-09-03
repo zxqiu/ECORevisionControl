@@ -1,6 +1,9 @@
 package com.eco.services;
 
 import com.eco.branch.resources.BranchResource;
+import com.eco.changeOrder.core.ChangeOrder;
+import com.eco.changeOrder.dao.ChangeOrderDAO;
+import com.eco.changeOrder.resources.ChangeOrderResource;
 import com.eco.filter.GeneralRequestFilter;
 import com.eco.revision.core.BranchConfFactory;
 import com.eco.views.resources.GUI;
@@ -8,6 +11,9 @@ import com.fizzed.rocker.runtime.RockerRuntime;
 import com.google.common.cache.CacheBuilderSpec;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.hibernate.ScanningHibernateBundle;
 import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -38,9 +44,11 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ECOConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/assets/", "/r", null, "root"));
-        bootstrap.addBundle(new AssetsBundle("/assets/js", "/r/js", null, "js"));
-        bootstrap.addBundle(new AssetsBundle("/assets/css", "/r/css", null, "css"));
+        bootstrap.addBundle(new AssetsBundle("/assets/favicon.ico", "/favicon.ico", null, "favicon.ico"));
+        bootstrap.addBundle(new AssetsBundle("/assets/js", "/js", null, "js"));
+        bootstrap.addBundle(new AssetsBundle("/assets/css", "/css", null, "css"));
+
+        bootstrap.addBundle(hibernate);
     }
 
     @Override
@@ -50,12 +58,14 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 	    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
 
 	    final RevisionDAO revisionDAO = jdbi.onDemand(RevisionDAO.class);
+	    final ChangeOrderDAO changeOrderDAO = new ChangeOrderDAO(hibernate.getSessionFactory());
 
         _logger.info("Register all resources");
         /* register resources */
         environment.jersey().register(new RevisionResource(revisionDAO));
         environment.jersey().register(new BranchResource());
         environment.jersey().register(new GUI(revisionDAO));
+        environment.jersey().register(new ChangeOrderResource(changeOrderDAO));
 
         environment.jersey().register(new JsonProcessingExceptionMapper(true));
         environment.jersey().register(new RockerMessageBodyWriter());
@@ -76,4 +86,11 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
          */
         BranchConfFactory.setType(BranchConfFactory.TYPE.SVN);
     }
+
+    private final HibernateBundle<ECOConfiguration> hibernate = new ScanningHibernateBundle<ECOConfiguration>("com.eco") {
+        @Override
+        public DataSourceFactory getDataSourceFactory(ECOConfiguration configuration) {
+            return configuration.getDataSourceFactory();
+        }
+    };
 }

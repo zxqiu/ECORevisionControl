@@ -33,6 +33,27 @@ database:
   # the JDBC user
   user:
 
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyApplication Health Check */ SELECT 1"
+
+  initialSize: 8
+
+  # the minimum number of connections to keep open
+  minSize: 4
+
+  # the maximum number of connections to keep open
+  maxSize: 8
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: false
+
+  properties:
+    hibernate.dialect: org.hibernate.dialect.SQLiteDialect
+    hibernate.generate_statistics: true
+    hibernate.show_sql: true
+    hibernate.format_sql: true
+    hibernate.hbm2ddl.auto: create
+
 logging:
   level: INFO
   appenders:

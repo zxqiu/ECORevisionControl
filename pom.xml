@@ -20,6 +20,7 @@
         <mockito-all.version>1.9.5</mockito-all.version>
         <svnkit.version>1.9.3</svnkit.version>
         <rocker.version>1.0.0</rocker.version>
+        <sqlite-dialect.version>1.0</sqlite-dialect.version>
     </properties>
 
     <build>
@@ -180,6 +181,20 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-assets</artifactId>
             <version>${dropwizard.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.dropwizard/dropwizard-hibernate -->
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-hibernate</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.zsoltfabok/sqlite-dialect -->
+        <dependency>
+            <groupId>com.zsoltfabok</groupId>
+            <artifactId>sqlite-dialect</artifactId>
+            <version>${sqlite-dialect.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
