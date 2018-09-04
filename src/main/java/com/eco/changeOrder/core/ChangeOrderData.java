@@ -32,10 +32,6 @@ public class ChangeOrderData implements Serializable, Serializer<ChangeOrderData
         this.comment = changeOrderData.getComment();
     }
 
-    public ChangeOrderData(String comment, ArrayList<String> strings) {
-
-    }
-
     public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);

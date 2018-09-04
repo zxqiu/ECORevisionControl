@@ -2,12 +2,18 @@ package com.eco.changeOrder.core;
 
 import com.eco.utils.misc.Dict;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by neo on 9/1/18.
@@ -21,6 +27,7 @@ import javax.validation.Valid;
 
 public class ChangeOrder {
     public static final String TABLE_NAME = "ChangeOrder";
+    private static final Logger _logger = LoggerFactory.getLogger(ChangeOrder.class);
 
     @JsonProperty
     @NotEmpty
@@ -68,5 +75,24 @@ public class ChangeOrder {
 
     public void setData(ChangeOrderData data) {
         this.data = data;
+    }
+
+    public static void main(String[] args) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ChangeOrderData changeOrderData = new ChangeOrderData("test comment", new ArrayList<String>());
+        ChangeOrder testChangeOrder = new ChangeOrder("testID", "testAuthor", changeOrderData);
+
+        try {
+            String json = objectMapper.writeValueAsString(testChangeOrder);
+            _logger.info("original: " + json);
+            ChangeOrder changeOrderCopy = objectMapper.readValue(json, ChangeOrder.class);
+            _logger.info("copied : " + objectMapper.writeValueAsString(changeOrderCopy));
+        } catch (JsonProcessingException e) {
+            _logger.error(e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            _logger.error(e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

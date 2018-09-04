@@ -21,9 +21,10 @@ import java.util.List;
 public class ChangeOrderResource {
     public static final String PATH_ROOT = "changeOrder";
     public static final String PATH_GET_ALL = "";
-    public static final String PATH_POST = Dict.ID;
-    public static final String PATH_PUT = Dict.ID;
-    public static final String PATH_DELETE = Dict.ID;
+    public static final String PATH_GET = "{" + Dict.ID + "}";
+    public static final String PATH_POST = "{" + Dict.ID + "}";
+    public static final String PATH_PUT = "{" + Dict.ID + "}";
+    public static final String PATH_DELETE = "{" + Dict.ID + "}";
 
     private ChangeOrderDAO changeOrderDAO;
 
@@ -34,10 +35,19 @@ public class ChangeOrderResource {
     @GET
     @Path("/" + PATH_GET_ALL)
     @Timed
-    @UnitOfWork
     @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
     public List<ChangeOrder> getAll() {
         return changeOrderDAO.findAll();
+    }
+
+    @GET
+    @Path("/" + PATH_GET)
+    @Timed
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    public ChangeOrder get(@PathParam(Dict.ID) @NotEmpty String id) {
+        return changeOrderDAO.findByID(id);
     }
 
     @POST

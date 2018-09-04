@@ -2,6 +2,7 @@ package com.eco.resources;
 
 import com.eco.changeOrder.core.ChangeOrder;
 import com.eco.changeOrder.core.ChangeOrderData;
+import com.eco.changeOrder.resources.ChangeOrderResource;
 import com.eco.services.ECOConfiguration;
 import com.eco.services.ECORevisionControlService;
 import com.eco.utils.misc.Dict;
@@ -49,7 +50,8 @@ public class ChangeOrderTest {
         }
 
         Response response = client
-                .target(Dict.API_V1_PATH)
+                .target("http://localhost:8080" + Dict.API_V1_PATH)
+                .path(ChangeOrderResource.PATH_ROOT)
                 .path(testChangeOrder.getId())
                 .request()
                 .post(Entity.entity(testChangeOrder, MediaType.APPLICATION_JSON_TYPE));
@@ -60,7 +62,8 @@ public class ChangeOrderTest {
     @After
     public void cleanUp() {
         Response response = client
-                .target(Dict.API_V1_PATH)
+                .target("http://localhost:8080" + Dict.API_V1_PATH)
+                .path(ChangeOrderResource.PATH_ROOT)
                 .path(testChangeOrder.getId())
                 .request()
                 .delete();
@@ -75,7 +78,8 @@ public class ChangeOrderTest {
         changeOrderCopy.getData().getBugNumbers().add("test bug");
 
         Response response = client
-                .target(Dict.API_V1_PATH)
+                .target("http://localhost:8080" + Dict.API_V1_PATH)
+                .path(ChangeOrderResource.PATH_ROOT)
                 .path(testChangeOrder.getId())
                 .request()
                 .put(Entity.entity(changeOrderCopy, MediaType.APPLICATION_JSON_TYPE));
@@ -86,7 +90,8 @@ public class ChangeOrderTest {
     @Test
     public void get() throws JsonProcessingException {
         ChangeOrder changeOrder = client
-                .target(Dict.API_V1_PATH)
+                .target("http://localhost:8080" + Dict.API_V1_PATH)
+                .path(ChangeOrderResource.PATH_ROOT)
                 .path(testChangeOrder.getId())
                 .request()
                 .get(ChangeOrder.class);
