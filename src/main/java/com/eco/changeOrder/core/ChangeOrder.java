@@ -22,7 +22,6 @@ import javax.validation.Valid;
 public class ChangeOrder {
     public static final String TABLE_NAME = "ChangeOrder";
 
-
     @JsonProperty
     @NotEmpty
     @Column(name = Dict.ID, unique = true)

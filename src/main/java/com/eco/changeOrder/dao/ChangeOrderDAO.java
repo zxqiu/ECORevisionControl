@@ -25,4 +25,13 @@ public class ChangeOrderDAO extends AbstractDAO<ChangeOrder> {
     public List<ChangeOrder> findAll() {
         return list(namedQuery("com.eco.changeOrder.core.ChangeOrder.findAll"));
     }
+
+    public void update(ChangeOrder changeOrder) {
+        persist(changeOrder);
+    }
+
+    public void delete(String id) {
+        ChangeOrder changeOrder = findByID(id);
+        currentSession().delete(changeOrder);
+    }
 }
