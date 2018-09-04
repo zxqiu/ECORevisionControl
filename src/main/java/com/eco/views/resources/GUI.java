@@ -78,12 +78,13 @@ public class GUI {
         long prevEnd = begin - 1;
         long nextBegin = end + 1;
         long nextEnd = end + 100;
+        long latestRevision = revisionConnector.findLargestRevisionID(branchName);
 
-        _logger.info(branchName + " : " + prevBegin + " " + prevEnd + " " + nextBegin + " " + nextEnd + " latest " + revisionConnector.findLargestRevisionID(branchName));
+        _logger.info("calculate display range for " + branchName + " : prev begin : " + prevBegin + " prev end : " + prevEnd + " next begin : " + nextBegin + " next end : " + nextEnd + " latest revision : " + latestRevision);
 
         String urlPrev = (prevEnd <= 0) ? "#" :
                 String.format(PATH_ROOT + "/" + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", prevBegin, prevEnd);
-        String urlNext = (nextBegin > revisionConnector.findLargestRevisionID(branchName)) ? "#" :
+        String urlNext = (nextBegin > latestRevision) ? "#" :
                 String.format(PATH_ROOT + "/" + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", nextBegin, nextEnd);
         String urlBranches = PATH_ROOT + "/" + PATH_BRANCHES;
 

@@ -1,7 +1,7 @@
 var api = APIs.createNew();
 
 $(document).on("click", ".BtnDelete", function(e) {
-    var btn = $(e.target);
+    var btn = $(e.target).parent();
     var parent = btn.parent();
     var grandparent = parent.parent();
     var grandgrandparent = grandparent.parent();
@@ -93,7 +93,9 @@ $(document).on("click", ".BtnAdd", function(e) {
                           + "<span  class=\"commentTooltip\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\">"
                           + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a> : <a class=\"commitID\">" + request["commitStatuses"][0]["commitID"] + "</a>"
                           + "</span>"
-                          + "<button type=\"button\" class=\"btn btn-outline-danger btn-sm BtnDelete\">x</button>"
+                          + "<button type=\"button\" class=\"close BtnDelete\" aria-label=\"Close\">"
+                          + "<span aria-hidden=\"true\">&times;</span>"
+                          + "</button>"
                           + "</li>"
                            );
             } else {
@@ -116,7 +118,9 @@ $(document).on("click", ".BtnAdd", function(e) {
                           + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a>"
                           + "<a class=\"commitID\" style=\"display: none\">" + request["commitStatuses"][0]["commitID"] + "</a>"
                           + "</span>"
-                          + "<button type=\"button\" class=\"btn btn-outline-danger btn-sm BtnDelete\">x</button>"
+                          + "<button type=\"button\" class=\"close BtnDelete\" aria-label=\"Close\">"
+                          + "<span aria-hidden=\"true\">&times;</span>"
+                          + "</button>"
                           + "</li>"
                            );
             } else {

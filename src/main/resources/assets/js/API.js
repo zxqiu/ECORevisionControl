@@ -33,11 +33,15 @@ var APIs = {
                     if (_api.patchRevisionSuccess && typeof(_api.patchRevisionSuccess) == "function") {
                         _api.patchRevisionSuccess(data);
                     }
+
+                    showSuccessSnackBar();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     if (_api.patchRevisionError && typeof(_api.patchRevisionError) == "function") {
                         _api.patchRevisionError(textStatus);
                     }
+
+                    showErrorSnackBar(textStatus, errorThrown);
                 }
             });
         };
@@ -45,3 +49,28 @@ var APIs = {
         return _api;
     }
 };
+
+function showSuccessSnackBar() {
+    var snackbar = $("#successSnackBar");
+    if (snackbar.length > 0) {
+        snackbar.addClass("show");
+        setTimeout(function () {
+            snackbar.removeClass("show");
+        }, 3000);
+    }
+}
+
+function showErrorSnackBar(textStatus, errorThrown) {
+    var snackbar = $("#errorSnackBar");
+    if (snackbar.length > 0) {
+
+        if (textStatus.length > 0) {
+            snackbar.html(textStatus + ": " + errorThrown);
+        }
+
+        snackbar.addClass("show");
+        setTimeout(function () {
+            snackbar.removeClass("show");
+        }, 3000);
+    }
+}

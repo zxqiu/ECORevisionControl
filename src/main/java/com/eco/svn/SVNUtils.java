@@ -108,7 +108,7 @@ public class SVNUtils {
     }
 
     public static void main(String[] arg) throws IOException, SVNException {
-        String branchName = "FOS_60bmcs";
+        String branchName = "fos_60bmcs";
         BranchConf conf = SVNConf.getConf();
 
         for (Branch branch : conf.getBranches()) {
