@@ -20,13 +20,13 @@ $(document).on("click", ".BtnDelete", function(e) {
     request["commitStatuses"][0]["commitID"] = $(parent[0]).find(".commitID")[0].text;
     request["commitStatuses"][0]["comment"] = ""; // deleted
 
-    api.setPutRevisionSuccess(function (response) {
+    api.setPatchRevisionSuccess(function (response) {
         grandparent[0].removeChild(parent[0]);
         $(data).find("#editor").text(request["editor"]);
         console.log("Delete " + request["commitStatuses"][0]["branchName"] + " from " + branchName + " successfully");
     });
 
-    api.putRevision(branchName, revisionID, request);
+    api.patchRevision(branchName, revisionID, request);
 });
 
 $(document).on("click", ".BtnAdd", function(e) {
@@ -79,7 +79,7 @@ $(document).on("click", ".BtnAdd", function(e) {
         }
     }
 
-    api.setPutRevisionSuccess(function (response) {
+    api.setPatchRevisionSuccess(function (response) {
         var grandgrandgrandgrandparent = btn.parent().parent().parent().parent().parent();
         var display = grandgrandgrandgrandparent.find("#" + revisionID);
         $(display).find("#editor").text(request["editor"]);
@@ -134,7 +134,7 @@ $(document).on("click", ".BtnAdd", function(e) {
         console.log("Add " + request["commitStatuses"][0]["branchName"] + " to " + branchName + " successfully");
     });
 
-    api.putRevision(branchName, revisionID, request);
+    api.patchRevision(branchName, revisionID, request);
 });
 
 $(document).on("change", ".addingStatus", function(e) {

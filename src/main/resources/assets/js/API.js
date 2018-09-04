@@ -6,37 +6,37 @@ var APIs = {
     createNew: function () {
         var _api = {};
 
-        _api.putRevisionSuccess = null;
-        _api.putRevisionError = null;
+        _api.patchRevisionSuccess = null;
+        _api.patchRevisionError = null;
 
-        _api.setPutRevisionSuccess = function(callback) {
-            _api.putRevisionSuccess = callback;
+        _api.setPatchRevisionSuccess = function(callback) {
+            _api.patchRevisionSuccess = callback;
         }
 
-        _api.setPutRevisionError = function(callback) {
-            _api.putRevisionError = callback;
+        _api.setPatchRevisionError = function(callback) {
+            _api.patchRevisionError = callback;
         }
 
-        _api.putRevision = function(branchName, revisionID, jsonObj) {
-            var putURL = hostURL + API_V1 + API_REVISION + "/" + branchName + "/" + revisionID;
-            console.log(putURL);
+        _api.patchRevision = function(branchName, revisionID, jsonObj) {
+            var patchURL = hostURL + API_V1 + API_REVISION + "/" + branchName + "/" + revisionID;
+            console.log(patchURL);
             console.log(jsonObj);
             JSONString = JSON.stringify(jsonObj);
 
             $.ajax({
-                type: "PUT",
-                url: putURL,
+                type: "PATCH",
+                url: patchURL,
                 data: JSONString,
                 //dataType: 'json',
                 contentType: 'application/json',
                 success: function(data, textStatus, jqXHR) {
-                    if (_api.putRevisionSuccess && typeof(_api.putRevisionSuccess) == "function") {
-                        _api.putRevisionSuccess(data);
+                    if (_api.patchRevisionSuccess && typeof(_api.patchRevisionSuccess) == "function") {
+                        _api.patchRevisionSuccess(data);
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    if (_api.putRevisionError && typeof(_api.putRevisionError) == "function") {
-                        _api.putRevisionError(textStatus);
+                    if (_api.patchRevisionError && typeof(_api.patchRevisionError) == "function") {
+                        _api.patchRevisionError(textStatus);
                     }
                 }
             });

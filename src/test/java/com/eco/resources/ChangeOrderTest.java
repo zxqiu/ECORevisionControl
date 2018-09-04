@@ -23,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,8 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ChangeOrderTest {
     private static final int READ_TIMEOUT = 20 * 1000; // second
 
-    private ChangeOrderData changeOrderData = new ChangeOrderData("test comment", new ArrayList<String>());
-    private ChangeOrder testChangeOrder = new ChangeOrder("testID", "testAuthor", changeOrderData);
+    private ChangeOrderData testChangeOrderData = new ChangeOrderData("test comment", new ArrayList<String>());
+    private ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), testChangeOrderData);
 
     @ClassRule
     public static final DropwizardAppRule<ECOConfiguration> RULE =
@@ -73,16 +74,16 @@ public class ChangeOrderTest {
 
     @Test
     public void update() throws IOException {
-        ChangeOrder changeOrderCopy = objectMapper.readValue(objectMapper.writeValueAsString(testChangeOrder), ChangeOrder.class);
-        changeOrderCopy.getData().setComment("modified comment");
-        changeOrderCopy.getData().getBugNumbers().add("test bug");
+        ChangeOrderData changeOrderDataCopy = objectMapper.readValue(objectMapper.writeValueAsString(testChangeOrderData), ChangeOrderData.class);
+        changeOrderDataCopy.setComment("modified comment");
+        changeOrderDataCopy.getBugNumbers().add("test bug");
 
         Response response = client
                 .target("http://localhost:8080" + Dict.API_V1_PATH)
                 .path(ChangeOrderResource.PATH_ROOT)
                 .path(testChangeOrder.getId())
                 .request()
-                .put(Entity.entity(changeOrderCopy, MediaType.APPLICATION_JSON_TYPE));
+                .method("PATCH", Entity.entity(changeOrderDataCopy, MediaType.APPLICATION_JSON_TYPE));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }

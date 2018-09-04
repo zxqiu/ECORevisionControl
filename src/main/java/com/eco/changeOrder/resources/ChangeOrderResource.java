@@ -2,9 +2,11 @@ package com.eco.changeOrder.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.eco.changeOrder.core.ChangeOrder;
+import com.eco.changeOrder.core.ChangeOrderData;
 import com.eco.changeOrder.dao.ChangeOrderDAO;
 import com.eco.utils.misc.Dict;
 import io.dropwizard.hibernate.UnitOfWork;
+import io.dropwizard.jersey.PATCH;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -23,7 +25,7 @@ public class ChangeOrderResource {
     public static final String PATH_GET_ALL = "";
     public static final String PATH_GET = "{" + Dict.ID + "}";
     public static final String PATH_POST = "{" + Dict.ID + "}";
-    public static final String PATH_PUT = "{" + Dict.ID + "}";
+    public static final String PATH_PATCH = "{" + Dict.ID + "}";
     public static final String PATH_DELETE = "{" + Dict.ID + "}";
 
     private ChangeOrderDAO changeOrderDAO;
@@ -63,14 +65,16 @@ public class ChangeOrderResource {
         return Response.ok().build();
     }
 
-    @PUT
-    @Path("/" + PATH_PUT)
+    @PATCH
+    @Path("/" + PATH_PATCH)
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Response update(@PathParam(Dict.ID) @NotEmpty String id
-                        , @Valid ChangeOrder changeOrder) {
+                        , @Valid ChangeOrderData changeOrderData) {
+        ChangeOrder changeOrder = changeOrderDAO.findByID(id);
+        changeOrder.setData(changeOrderData);
         changeOrderDAO.update(changeOrder);
 
         return Response.ok().build();

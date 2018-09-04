@@ -190,7 +190,7 @@ public class RevisionTest {
                 .path(testRevision1.getBranchName())
                 .path(testRevision1.getRevisionId())
                 .request()
-                .put(Entity.entity(param, MediaType.APPLICATION_JSON_TYPE));
+                .method("PATCH", Entity.entity(param, MediaType.APPLICATION_JSON_TYPE));
                 //.put(Entity.form(form));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());

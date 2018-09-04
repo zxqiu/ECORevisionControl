@@ -12,8 +12,10 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by neo on 9/1/18.
@@ -37,8 +39,18 @@ public class ChangeOrder {
 
     @JsonProperty
     @NotEmpty
+    @Column(name = Dict.BRANCH_NAME)
+    private String branchName;
+
+    @JsonProperty
+    @NotEmpty
     @Column(name = Dict.AUTHOR)
     private String author;
+
+    @JsonProperty
+    @NotNull
+    @Column(name = Dict.TIME)
+    private Date time;
 
     @JsonProperty
     @Valid
@@ -47,9 +59,11 @@ public class ChangeOrder {
 
     public ChangeOrder() {}
 
-    public ChangeOrder(String id, String author, ChangeOrderData data) {
+    public ChangeOrder(String id, String branchName, String author, Date time, ChangeOrderData data) {
         this.id = id;
+        this.branchName = branchName;
         this.author = author;
+        this.time = time;
         this.data = data;
     }
 
@@ -61,12 +75,28 @@ public class ChangeOrder {
         this.id = id;
     }
 
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
+
     public String getAuthor() {
         return author;
     }
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 
     public ChangeOrderData getData() {
@@ -80,7 +110,7 @@ public class ChangeOrder {
     public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
         ChangeOrderData changeOrderData = new ChangeOrderData("test comment", new ArrayList<String>());
-        ChangeOrder testChangeOrder = new ChangeOrder("testID", "testAuthor", changeOrderData);
+        ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), changeOrderData);
 
         try {
             String json = objectMapper.writeValueAsString(testChangeOrder);

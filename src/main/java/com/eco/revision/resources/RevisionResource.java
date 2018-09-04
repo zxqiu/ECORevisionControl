@@ -22,6 +22,7 @@ import com.eco.svn.core.SVNBranch;
 import com.eco.svn.SVNUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.jersey.PATCH;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ public class RevisionResource {
     public static final String PATH_GET_ALL         = "/";
     public static final String PATH_POST_FORM       = "/";
     public static final String PATH_POST_OBJ        = "/obj";
-    public static final String PATH_PUT_JSON        = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
+    public static final String PATH_PATCH_JSON        = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
     public static final String PATH_DELETE          = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
 
     public static final Logger _logger = LoggerFactory.getLogger(RevisionResource.class);
@@ -99,9 +100,9 @@ public class RevisionResource {
         return ret.get(0);
     }
 
-    @PUT
+    @PATCH
     @Timed
-    @Path(PATH_PUT_JSON)
+    @Path(PATH_PATCH_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
