@@ -84,13 +84,13 @@
         <table class="table" style="float: left;">
             <thead>
                 <tr>
-                    <th style="width:6%">Revision</th>
-                    <th style="width:15%">Submit Time</th>
-                    <th style="width:8%">Author</th>
-                    <th style="width:15%">Last Change</th>
-                    <th style="width:8%">Edit By</th>
-                    <th style="width:28%">Committed</th>
-                    <th style="width:20%">Skipped</th>
+                    <th style="width:5%">Revision</th>
+                    <th style="width:10%">Submit Time</th>
+                    <th style="width:5%">Author</th>
+                    <th style="width:10%">Last Change</th>
+                    <th style="width:5%">Edit By</th>
+                    <th style="width:25%">Committed</th>
+                    <th style="width:25%">Skipped</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,8 +103,13 @@
                     <th scope="row">@revision.getRevisionId()</th>
                     <td>@revision.getTime().toString()</td>
                     <td>@revision.getAuthor()</td>
-                    <td>@revision.getEditTime().toString()</td>
-                    <td id="editor">@revision.getEditor()</td>
+                        @if (revision.getEditor() == null || revision.getEditor().length() == 0) {
+                            <td>Never</td>
+                            <td></td>
+                        } else {
+                            <td>@revision.getEditTime().toString()</td>
+                            <td id="editor">@revision.getEditor()</td>
+                        }
                     <td>
                         <ul class="committedList">
                         @if (revision.getData() != null && revision.getData().getCommitStatuses() != null) {
@@ -145,8 +150,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Comment:</td>
-                    <td colspan="5"><p style="white-space:pre-wrap;">@StringEscapeUtils.escapeHtml4(revision.getComment())</p></td>
+                    <td colspan="6"><p style="white-space:pre-wrap; width:60em">@StringEscapeUtils.escapeHtml4(revision.getComment())</p></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -189,6 +193,15 @@
     <div class="col-md-1"></div>
 </div>
 }
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4" style="text-align: left"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlPrev'">Prev</button></div>
+    <div class="col-md-2" style="text-align: center"></div>
+    <div class="col-md-4" style="text-align: right"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlNext'">Next</button></div>
+    <div class="col-md-1"></div>
+</div>
+
 
 <script src="/js/API.js"></script>
 <script src="/js/views/revisions.js"></script>
