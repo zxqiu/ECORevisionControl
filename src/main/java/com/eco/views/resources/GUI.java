@@ -13,6 +13,7 @@ import com.eco.svn.SVNConf;
 import com.eco.utils.misc.Dict;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.PATCH;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,12 +119,28 @@ public class GUI {
     @UnitOfWork
     public Response getChangeOrders() {
         return Response.ok().entity(
-                views.changeOrder.template("All"
+                views.changeOrders.template("All"
                                             , "user1000"
                                             , changeOrderDAO.findUniqueBranches()
                                             , changeOrderDAO.findAll()
                                             , "#"
                                             , "#"
+                )
+        ).build();
+    }
+
+    @GET
+    @Timed
+    @Path("/" + PATH_CHANGE_ORDER_BY_ID)
+    @Produces(MediaType.TEXT_HTML)
+    @UnitOfWork
+    public Response getChangeOrder(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName
+                                , @PathParam(Dict.ID) @NotEmpty String id) {
+        return Response.ok().entity(
+                views.changeOrder.template(branchName
+                        , "user1000"
+                        , changeOrderDAO.findUniqueBranches()
+                        , changeOrderDAO.findByID(id)
                 )
         ).build();
     }

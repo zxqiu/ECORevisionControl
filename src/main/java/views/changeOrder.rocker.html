@@ -7,9 +7,9 @@
 @import java.util.List;
 @import org.apache.commons.text.StringEscapeUtils;
 
-@args(String branchName, String userName, List<String> branches, List<ChangeOrder> changeOrders, String urlNext, String urlPrev)
+@args(String branchName, String userName, List<String> branches, ChangeOrder changeOrder)
 
-    <html lang="en">
+<html lang="en">
 
     <head>
         <meta charset="utf-8">
@@ -74,128 +74,51 @@
 
     <div class="row"><br \></div>
 
-    @if (branchName != null && branchName.length() > 0 && changeOrders != null && changeOrders.size() > 0) {
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-4" style="text-align: left"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlPrev'">Prev</button></div>
-        <div class="col-md-2" style="text-align: center"></div>
-        <div class="col-md-4" style="text-align: right"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlNext'">Next</button></div>
-        <div class="col-md-1"></div>
-    </div>
-    <div class="row"><br \></div>
 
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-            <table class="table" style="float: left;">
-                <thead>
-                <tr>
-                    <th style="width:5%">ID</th>
-                    <th style="width:10%">Submit Time</th>
-                    <th style="width:5%">Author</th>
-                    <th style="width:10%">Last Change</th>
-                    <th style="width:5%">Edit By</th>
-                    <th style="width:25%">Bug Numbers</th>
-                </tr>
-                </thead>
-                <tbody>
-                @if (changeOrders != null) {
-                @for (changeOrder : changeOrders) {
-                <tr id="@changeOrder.getId()">
-                    <input type="hidden" class="ChangeOrderID" value="@changeOrder.getId()">
-                    <th scope="row">@changeOrder.getId()</th>
-                    <td>@changeOrder.getTime().toString()</td>
-                    <td>@changeOrder.getAuthor()</td>
-                    @if (changeOrder.getEditor() == null || changeOrder.getEditor().length() == 0) {
-                    <td>Never</td>
-                    <td></td>
-                    } else {
-                    <td>@changeOrder.getEditTime().toString()</td>
-                    <td id="editor">@changeOrder.getEditor()</td>
-                    }
-                    <td>
-                        <ul class="Bugs">
-                            @if (changeOrder.getData() != null && changeOrder.getData().getBugs() != null) {
-                            @for (Bug bug : changeOrder.getData().getBugs()) {
-                            <li id="bug@bug.getId()">
-                                <span>
-                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a>
-                                </span>
-                                <button type="button" class="close BtnDelete" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
-                            }
-                            }
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    @if (changeOrder.getData() != null && changeOrder.getData().getComment() != null) {
-                    <td colspan="6"><p style="white-space:pre-wrap; width:60em">@StringEscapeUtils.escapeHtml4(changeOrder.getData().getComment())</p></td>
-                    }
-                </tr>
-                <tr>
-                    <td></td>
-                    <td colspan="6">
-                        <div class="input-group input-group-sm mb-3">
-                            <input type="hidden" class="ChangeOrderID" value="@changeOrder.getId()">
+            <form>
+                <div class="form-group">
+                    <label for="changeOrderID">ID</label>
+                    <input type="text" class="form-control" id="changeOrderID" placeholder="Required">
+                </div>
 
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-success BtnAdd" type="button">Add</button>
-                            </div>
+                <div class="form-group">
+                    <label for="branchName">Branch Name</label>
+                    <input type="text" class="form-control" id="branchName" placeholder="Required">
+                </div>
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Bug ID</span>
-                            </div>
-                            <input class="form-control col-lg-1 addingBugID required" placeholder="Required">
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" class="form-control" id="author" placeholder="Required">
+                </div>
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Fix Branch</span>
-                            </div>
-                            <input class="form-control col-lg-1 addingFixBranchName optional" placeholder="Optional">
+                <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <input type="text" class="form-control" id="comment" placeholder="Required">
+                </div>
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Fix Revision</span>
-                            </div>
-                            <input class="form-control col-lg-1 addingFixRevisionID optional" placeholder="Optional">
+                <div>
+                    <label class="control-label" for="bugIDs">Bug ID</label>
+                    <div id="bugIDs">
+                        <div class='form-inline input-group'>
+                            <input type='text' class='form-control' id='bugID' placeholder='Bug ID'/>
+                            <input type='text' class='form-control' id='fixBranchName' placeholder='Fix Branch Name'/>
+                            <input type='text' class='form-control' id='fixRevisionID' placeholder='Fix Revision ID'/>
+
+                            <button class='input-group-addon moreBug btn btn-success' style='width: 40px;'>+</button>
                         </div>
-                    </td>
-                </tr>
-                }
-                }
-                </tbody>
-            </table>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="col-md-1"></div>
     </div>
 
-    <div class="row"><br \></div>
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-4" style="text-align: left"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlPrev'">Prev</button></div>
-        <div class="col-md-2" style="text-align: center"></div>
-        <div class="col-md-4" style="text-align: right"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlNext'">Next</button></div>
-        <div class="col-md-1"></div>
-    </div>
-    <div class="row"><br \></div>
-    <div class="row"><br \></div>
-    } else {
-    <div class="row"><br \></div>
-    <div class="row"><br \></div>
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-2"></div>
-        <div class="col-md-6" style="text-align: center"><p><h5>No Change Order found</h5></p></div>
-        <div class="col-md-2"></div>
-        <div class="col-md-1"></div>
-    </div>
-    }
-
 
     <script src="/js/API.js"></script>
-    <script src="/js/views/changeOrders.js"></script>
+    <script src="/js/views/changeOrder.js"></script>
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
@@ -203,4 +126,4 @@
     </script>
 
     </body>
-    </html>
+</html>

@@ -1,0 +1,210 @@
+@import com.eco.changeOrder.core.ChangeOrder;
+@import com.eco.changeOrder.core.ChangeOrderData;
+@import com.eco.changeOrder.core.Bug;
+@import com.eco.views.resources.GUI;
+@import com.eco.revision.core.Branch;
+@import com.eco.utils.misc.Dict;
+@import java.util.List;
+@import org.apache.commons.text.StringEscapeUtils;
+
+@args(String branchName, String userName, List<String> branches, List<ChangeOrder> changeOrders, String urlNext, String urlPrev)
+
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>ECO Revision Controller</title>
+
+        <link rel="stylesheet" href="/css/snackbar.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+        <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+
+
+    <body>
+
+    <div class="snackbar" id="successSnackBar">Success</div>
+    <div class="snackbar" id="errorSnackBar">Error</div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href= "@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS"><h4>Change Orders</h4></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @if (branchName != null && branchName.length() > 0) {
+                                Branch : @branchName
+                                } else {
+                                Select Branch
+                                }
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @if (branches != null) {
+                                @for (branch : branches) {
+                                <a class="dropdown-item" href="/changeOrder/@branch">@branch</a>
+                                }
+                                }
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@GUI.PATH_ROOT/">Show Revisions</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="window.location.href='@GUI.PATH_ROOT/changeOrders/@branchName/0'">New Change Order</button>
+                </div>
+            </nav>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row"><br \></div>
+
+    @if (branchName != null && branchName.length() > 0 && changeOrders != null && changeOrders.size() > 0) {
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-4" style="text-align: left"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlPrev'">Prev</button></div>
+        <div class="col-md-2" style="text-align: center"></div>
+        <div class="col-md-4" style="text-align: right"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlNext'">Next</button></div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row"><br \></div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <table class="table" style="float: left;">
+                <thead>
+                <tr>
+                    <th style="width:5%">ID</th>
+                    <th style="width:10%">Submit Time</th>
+                    <th style="width:5%">Author</th>
+                    <th style="width:10%">Last Change</th>
+                    <th style="width:5%">Edit By</th>
+                    <th style="width:25%">Bug Numbers</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (changeOrders != null) {
+                @for (changeOrder : changeOrders) {
+                <tr id="@changeOrder.getId()">
+                    <input type="hidden" class="ChangeOrderID" value="@changeOrder.getId()">
+                    <th scope="row">@changeOrder.getId()</th>
+                    <td>@changeOrder.getTime().toString()</td>
+                    <td>@changeOrder.getAuthor()</td>
+                    @if (changeOrder.getEditor() == null || changeOrder.getEditor().length() == 0) {
+                    <td>Never</td>
+                    <td></td>
+                    } else {
+                    <td>@changeOrder.getEditTime().toString()</td>
+                    <td id="editor">@changeOrder.getEditor()</td>
+                    }
+                    <td>
+                        <ul class="Bugs">
+                            @if (changeOrder.getData() != null && changeOrder.getData().getBugs() != null) {
+                            @for (Bug bug : changeOrder.getData().getBugs()) {
+                            <li id="bug@bug.getId()">
+                                <span>
+                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a>
+                                </span>
+                                <button type="button" class="close BtnDelete" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </li>
+                            }
+                            }
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    @if (changeOrder.getData() != null && changeOrder.getData().getComment() != null) {
+                    <td colspan="6"><p style="white-space:pre-wrap; width:60em">@StringEscapeUtils.escapeHtml4(changeOrder.getData().getComment())</p></td>
+                    }
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="6">
+                        <div class="input-group input-group-sm mb-3">
+                            <input type="hidden" class="ChangeOrderID" value="@changeOrder.getId()">
+
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-success BtnAdd" type="button">Add</button>
+                            </div>
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Bug ID</span>
+                            </div>
+                            <input class="form-control col-lg-1 addingBugID required" placeholder="Required">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Fix Branch</span>
+                            </div>
+                            <input class="form-control col-lg-1 addingFixBranchName optional" placeholder="Optional">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Fix Revision</span>
+                            </div>
+                            <input class="form-control col-lg-1 addingFixRevisionID optional" placeholder="Optional">
+                        </div>
+                    </td>
+                </tr>
+                }
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row"><br \></div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-4" style="text-align: left"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlPrev'">Prev</button></div>
+        <div class="col-md-2" style="text-align: center"></div>
+        <div class="col-md-4" style="text-align: right"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlNext'">Next</button></div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row"><br \></div>
+    <div class="row"><br \></div>
+    } else {
+    <div class="row"><br \></div>
+    <div class="row"><br \></div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-6" style="text-align: center"><p><h5>No Change Order found</h5></p></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-1"></div>
+    </div>
+    }
+
+
+    <script src="/js/API.js"></script>
+    <script src="/js/views/changeOrders.js"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+    </body>
+</html>
