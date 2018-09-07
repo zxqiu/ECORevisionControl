@@ -4,7 +4,6 @@ import com.eco.utils.misc.Serializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,13 +15,13 @@ public class ChangeOrderData implements Serializable, Serializer<ChangeOrderData
     private String comment;
 
     @JsonProperty
-    private List<String> bugNumbers;
+    private List<Bug> bugs;
 
     public  ChangeOrderData() {}
 
-    public ChangeOrderData(String comment, List<String> bugNumbers) {
+    public ChangeOrderData(String comment, List<Bug> bugs) {
         this.comment = comment;
-        this.bugNumbers = bugNumbers;
+        this.bugs = bugs;
     }
 
     public ChangeOrderData(InputStream is) throws IOException, ClassNotFoundException {
@@ -60,11 +59,11 @@ public class ChangeOrderData implements Serializable, Serializer<ChangeOrderData
         this.comment = comment;
     }
 
-    public List<String> getBugNumbers() {
-        return bugNumbers;
+    public List<Bug> getBugs() {
+        return bugs;
     }
 
-    public void setBugNumbers(List<String> bugNumbers) {
-        this.bugNumbers = bugNumbers;
+    public void setBugs(List<Bug> bugs) {
+        this.bugs = bugs;
     }
 }

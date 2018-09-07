@@ -64,7 +64,7 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
         /* register resources */
         environment.jersey().register(new RevisionResource(revisionDAO));
         environment.jersey().register(new BranchResource());
-        environment.jersey().register(new GUI(revisionDAO));
+        environment.jersey().register(new GUI(revisionDAO, changeOrderDAO));
         environment.jersey().register(new ChangeOrderResource(changeOrderDAO));
 
         environment.jersey().register(new JsonProcessingExceptionMapper(true));

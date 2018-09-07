@@ -1,6 +1,7 @@
 package com.eco.views.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.eco.changeOrder.dao.ChangeOrderDAO;
 import com.eco.revision.core.Branch;
 import com.eco.revision.core.BranchConf;
 import com.eco.revision.core.BranchConfFactory;
@@ -10,6 +11,8 @@ import com.eco.revision.resources.RevisionResource;
 import com.eco.svn.core.SVNBranch;
 import com.eco.svn.SVNConf;
 import com.eco.utils.misc.Dict;
+import io.dropwizard.hibernate.UnitOfWork;
+import io.dropwizard.jersey.PATCH;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,15 +33,20 @@ import java.util.Map;
 public class GUI {
     public static final String PATH_ROOT = "";
     public static final String PATH_BRANCHES = "";
-    public static final String PATH_REVISIONS = "/{" + Dict.BRANCH_NAME + "}";
+    public static final String PATH_REVISIONS = "{" + Dict.BRANCH_NAME + "}";
+    public static final String PATH_CHANGE_ORDERS = "changeOrders";
+    public static final String PATH_CHANGE_ORDERS_BY_BRANCH = "changeOrders/{" + Dict.BRANCH_NAME + "}";
+    public static final String PATH_CHANGE_ORDER_BY_ID = "changeOrders/{" + Dict.BRANCH_NAME + "}/{" + Dict.ID + "}";
 
     public static final Logger _logger = LoggerFactory.getLogger(GUI.class);
 
     public static RevisionConnector revisionConnector = null;
+    public static ChangeOrderDAO changeOrderDAO = null;
 
-    public GUI(RevisionDAO revisionDAO) throws Exception {
+    public GUI(RevisionDAO revisionDAO, ChangeOrderDAO changeOrderDAO) throws Exception {
         RevisionConnector.init(revisionDAO);
         GUI.revisionConnector = RevisionConnector.getInstance();
+        GUI.changeOrderDAO = changeOrderDAO;
     }
 
     @GET
@@ -69,7 +77,7 @@ public class GUI {
 
     @GET
     @Timed
-    @Path(PATH_REVISIONS)
+    @Path("/" + PATH_REVISIONS)
     @Produces(MediaType.TEXT_HTML)
     public Response revisions(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName
                               , @QueryParam(Dict.BEGIN) @NotNull Long begin
@@ -98,6 +106,23 @@ public class GUI {
                                         , urlNext
                                         , urlPrev
                                         , urlBranches)
+        ).build();
+    }
+
+    @GET
+    @Timed
+    @Path("/" + PATH_CHANGE_ORDERS)
+    @Produces(MediaType.TEXT_HTML)
+    @UnitOfWork
+    public Response getChangeOrders() {
+        return Response.ok().entity(
+                views.changeOrder.template("All"
+                                            , "user1000"
+                                            , changeOrderDAO.findUniqueBranches()
+                                            , changeOrderDAO.findAll()
+                                            , "#"
+                                            , "#"
+                )
         ).build();
     }
 }

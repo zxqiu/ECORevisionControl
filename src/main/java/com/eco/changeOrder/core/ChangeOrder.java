@@ -24,7 +24,8 @@ import java.util.Date;
 @Entity
 @Table(name = ChangeOrder.TABLE_NAME)
 @NamedQueries({
-        @NamedQuery(name = "com.eco.changeOrder.core.ChangeOrder.findAll", query = "select c from " + ChangeOrder.TABLE_NAME + " c")
+        @NamedQuery(name = "com.eco.changeOrder.core.ChangeOrder.findAll", query = "select c from " + ChangeOrder.TABLE_NAME + " c"),
+        @NamedQuery(name = "com.eco.changeOrder.core.ChangeOrder.findBranches", query = "select distinct " + Dict.BRANCH_NAME + " from " + ChangeOrder.TABLE_NAME)
 })
 
 public class ChangeOrder {
@@ -53,17 +54,27 @@ public class ChangeOrder {
     private Date time;
 
     @JsonProperty
+    @Column(name = Dict.EDITOR)
+    private String editor;
+
+    @JsonProperty
+    @Column(name = Dict.EDIT_TIME)
+    private Date editTime;
+
+    @JsonProperty
     @Valid
     @Column(name = Dict.DATA)
     private ChangeOrderData data;
 
     public ChangeOrder() {}
 
-    public ChangeOrder(String id, String branchName, String author, Date time, ChangeOrderData data) {
+    public ChangeOrder(String id, String branchName, String author, Date time, String editor, Date editTime, ChangeOrderData data) {
         this.id = id;
         this.branchName = branchName;
         this.author = author;
         this.time = time;
+        this.editor = editor;
+        this.editTime = editTime;
         this.data = data;
     }
 
@@ -99,6 +110,22 @@ public class ChangeOrder {
         this.time = time;
     }
 
+    public String getEditor() {
+        return editor;
+    }
+
+    public void setEditor(String editor) {
+        this.editor = editor;
+    }
+
+    public Date getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(Date editTime) {
+        this.editTime = editTime;
+    }
+
     public ChangeOrderData getData() {
         return data;
     }
@@ -109,8 +136,9 @@ public class ChangeOrder {
 
     public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
-        ChangeOrderData changeOrderData = new ChangeOrderData("test comment", new ArrayList<String>());
-        ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), changeOrderData);
+        ChangeOrderData changeOrderData = new ChangeOrderData("test comment", new ArrayList<Bug>());
+        changeOrderData.getBugs().add(new Bug("testBug", "testBugBranch", "testBugRevision"));
+        ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), "", null, changeOrderData);
 
         try {
             String json = objectMapper.writeValueAsString(testChangeOrder);

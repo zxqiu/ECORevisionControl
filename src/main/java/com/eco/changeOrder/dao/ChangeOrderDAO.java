@@ -5,6 +5,7 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by neo on 9/1/18.
@@ -24,6 +25,10 @@ public class ChangeOrderDAO extends AbstractDAO<ChangeOrder> {
 
     public List<ChangeOrder> findAll() {
         return list(namedQuery("com.eco.changeOrder.core.ChangeOrder.findAll"));
+    }
+
+    public List<String> findUniqueBranches() {
+        return list(namedQuery("com.eco.changeOrder.core.ChangeOrder.findBranches"));
     }
 
     public void update(ChangeOrder changeOrder) {

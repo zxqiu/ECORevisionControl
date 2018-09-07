@@ -1,5 +1,6 @@
 package com.eco.resources;
 
+import com.eco.changeOrder.core.Bug;
 import com.eco.changeOrder.core.ChangeOrder;
 import com.eco.changeOrder.core.ChangeOrderData;
 import com.eco.changeOrder.resources.ChangeOrderResource;
@@ -33,8 +34,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ChangeOrderTest {
     private static final int READ_TIMEOUT = 20 * 1000; // second
 
-    private ChangeOrderData testChangeOrderData = new ChangeOrderData("test comment", new ArrayList<String>());
-    private ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), testChangeOrderData);
+    private ChangeOrderData testChangeOrderData = new ChangeOrderData("test comment", new ArrayList<Bug>());
+    private ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), "", null, testChangeOrderData);
 
     @ClassRule
     public static final DropwizardAppRule<ECOConfiguration> RULE =
@@ -76,7 +77,7 @@ public class ChangeOrderTest {
     public void update() throws IOException {
         ChangeOrderData changeOrderDataCopy = objectMapper.readValue(objectMapper.writeValueAsString(testChangeOrderData), ChangeOrderData.class);
         changeOrderDataCopy.setComment("modified comment");
-        changeOrderDataCopy.getBugNumbers().add("test bug");
+        changeOrderDataCopy.getBugs().add(new Bug("testBug", "testBugBranch", "testBugRevision"));
 
         Response response = client
                 .target("http://localhost:8080" + Dict.API_V1_PATH)

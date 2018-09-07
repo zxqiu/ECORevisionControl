@@ -21,7 +21,7 @@ import java.util.List;
 
 @Path(Dict.API_V1_PATH + "/" + ChangeOrderResource.PATH_ROOT)
 public class ChangeOrderResource {
-    public static final String PATH_ROOT = "changeOrder";
+    public static final String PATH_ROOT = "changeOrders";
     public static final String PATH_GET_ALL = "";
     public static final String PATH_GET = "{" + Dict.ID + "}";
     public static final String PATH_POST = "{" + Dict.ID + "}";
@@ -90,4 +90,5 @@ public class ChangeOrderResource {
 
         return Response.ok().build();
     }
+
 }

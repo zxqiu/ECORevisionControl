@@ -3,6 +3,7 @@
 @import com.eco.revision.core.Branch;
 @import com.eco.revision.core.CommitStatus;
 @import com.eco.revision.resources.RevisionResource;
+@import com.eco.views.resources.GUI;
 @import com.eco.utils.misc.Dict;
 @import java.util.List;
 @import org.apache.commons.text.StringEscapeUtils;
@@ -38,7 +39,7 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#"><h4>ECO Revision Control</h4></a>
+            <a class="navbar-brand" href="/"><h4>Revisions</h4></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -61,6 +62,10 @@
                             }
                         </div>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS">Show Change Orders</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -68,7 +73,9 @@
     <div class="col-md-1"></div>
 </div>
 
+<div class="row"><br \></div>
 
+@if (branchName != null && branchName.length() > 0) {
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-4" style="text-align: left"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlPrev'">Prev</button></div>
@@ -76,8 +83,8 @@
     <div class="col-md-4" style="text-align: right"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlNext'">Next</button></div>
     <div class="col-md-1"></div>
 </div>
+<div class="row"><br \></div>
 
-@if (branchName != null && branchName.length() > 0) {
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
@@ -192,8 +199,8 @@
     </div>
     <div class="col-md-1"></div>
 </div>
-}
 
+<div class="row"><br \></div>
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-4" style="text-align: left"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlPrev'">Prev</button></div>
@@ -201,6 +208,21 @@
     <div class="col-md-4" style="text-align: right"><button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='@urlNext'">Next</button></div>
     <div class="col-md-1"></div>
 </div>
+<div class="row"><br \></div>
+<div class="row"><br \></div>
+} else {
+
+<div class="row"><br \></div>
+<div class="row"><br \></div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-6" style="text-align: center"><p><h5>Select a branch to start</h5></p></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
+</div>
+
+}
 
 
 <script src="/js/API.js"></script>
