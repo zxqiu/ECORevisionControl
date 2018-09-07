@@ -6,10 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -23,9 +20,23 @@ import java.util.List;
 
 @Entity
 @Table(name = Revision.TABLE_NAME)
+@NamedQueries({
+        @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findAll",
+                query = "select c from " + Revision.TABLE_NAME + " c"),
+        @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findByBranch",
+                query = "select c from " + Revision.TABLE_NAME + " c where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME),
+        @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findLimitByBranch",
+                query = "select c from " + Revision.TABLE_NAME + " c where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
+                        + " order by cast("+ Dict.REVISION_ID + " as long) desc"
+        ),
+        @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findLargestRevisionID",
+                query = "select max( cast(" + Dict.REVISION_ID + " as long) ) from " + Revision.TABLE_NAME + " where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
+        )
+})
 
 public class Revision {
     public static final String TABLE_NAME = "Revision";
+    public static final String REVISION_QUERY_PREFIX = "com.eco.revision.core.Revision.";
 
     @JsonProperty
     @NotEmpty

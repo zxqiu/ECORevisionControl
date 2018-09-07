@@ -22,6 +22,7 @@ import com.eco.svn.core.SVNBranch;
 import com.eco.svn.SVNUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.PATCH;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
@@ -61,6 +62,7 @@ public class RevisionResource {
     @Timed
     @Path(PATH_GET_ALL)
     @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
     public List<Revision> getAll() throws IOException, SVNException {
         _syncRevisions(null);
         return revisionConnector.findAll();
@@ -70,16 +72,19 @@ public class RevisionResource {
     @Timed
     @Path(PATH_GET_BRANCH)
     @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
     public List<Revision> getByBranch(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName) throws IOException, SVNException {
         return utilGetByBranch(branchName);
     }
 
+    @UnitOfWork
     public static List<Revision> utilGetByBranch(String branchName) throws IOException, SVNException {
         _syncRevisions(branchName);
         return revisionConnector.findByBranch(branchName);
     }
 
-    public static List<Revision> utilGetLimitByBranch(String branchName, long begin, long end) throws IOException {
+    @UnitOfWork
+    public static List<Revision> utilGetLimitByBranch(String branchName, int begin, int end) throws IOException {
         _syncRevisions(branchName);
         return revisionConnector.findLimitByBranch(branchName, begin, end);
     }
@@ -88,16 +93,11 @@ public class RevisionResource {
     @Timed
     @Path(PATH_GET_REVISION)
     @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
     public Revision getByID(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
                               @PathParam(Dict.REVISION_ID) @NotNull String revisionID) throws IOException, SVNException {
         _syncRevisions(branchName);
-        List<Revision> ret = revisionConnector.findByID(branchName, revisionID);
-
-        if (ret.size() == 0 ) {
-            return null;
-        }
-
-        return ret.get(0);
+        return revisionConnector.findByID(branchName, revisionID);
     }
 
     @PATCH
@@ -105,13 +105,14 @@ public class RevisionResource {
     @Path(PATH_PATCH_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @UnitOfWork
     public Response update(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
                            @PathParam(Dict.REVISION_ID) @NotEmpty String revisionID,
                            @Valid UpdateParamWrapper paramWrapper
                            ) throws IOException {
-        List<Revision> revisions = revisionConnector.findByID(branchName, revisionID);
+        Revision revision = revisionConnector.findByID(branchName, revisionID);
 
-        if (revisions == null || revisions.size() == 0) {
+        if (revision == null) {
             _logger.error("Requested branch name and revision ID combination not found: branch "
                     + branchName + " revision " + revisionID);
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -119,7 +120,6 @@ public class RevisionResource {
 
         List<CommitStatus> newCommitStatuses = paramWrapper.getCommitStatuses();
 
-        Revision revision = revisions.get(0);
         if (revision.getData() == null) {
             revision.setData(new RevisionData(new ArrayList<CommitStatus>()));
         }
@@ -160,6 +160,7 @@ public class RevisionResource {
     @Path(PATH_POST_FORM)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @UnitOfWork
     public Response insertRevision(@FormParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
                                    @FormParam(Dict.REVISION_ID) @NotEmpty String revisionId,
                                    @FormParam(Dict.TIME) @NotNull long time,
@@ -196,6 +197,7 @@ public class RevisionResource {
     @Path(PATH_POST_OBJ)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @UnitOfWork
     public Response insertRevisionObject(@NotNull @Valid Revision revision) throws IOException {
         try {
             revisionConnector.insert(revision);
@@ -212,6 +214,7 @@ public class RevisionResource {
     @Timed
     @Path(PATH_DELETE)
     @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
     public Response deleteRevision(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
                                    @PathParam(Dict.REVISION_ID) @NotEmpty String revisionID) {
         try {
@@ -227,6 +230,7 @@ public class RevisionResource {
     }
 
     private static final Lock revisionUpdateLock = new ReentrantLock();
+    @UnitOfWork
     private static void _syncRevisions(String branchName) throws IOException {
         BranchConf branchConf = BranchConfFactory.getBranchConf();
 

@@ -57,7 +57,7 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 		final DBIFactory factory = new DBIFactory();
 	    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
 
-	    final RevisionDAO revisionDAO = jdbi.onDemand(RevisionDAO.class);
+	    final RevisionDAO revisionDAO = new RevisionDAO(hibernate.getSessionFactory());
 	    final ChangeOrderDAO changeOrderDAO = new ChangeOrderDAO(hibernate.getSessionFactory());
 
         _logger.info("Register all resources");

@@ -12,15 +12,13 @@ import java.util.List;
  * Revision Data GUI Interface
  */
 public interface RevisionDAI {
-    public abstract void createTable();
-    public abstract void dropTable();
     public abstract void insert(Revision revision) throws IOException;
     public abstract void insertBatch(List<Revision> revisions) throws IOException;
     public abstract List<Revision> findAll();
-    public abstract List<Revision> findByID(String branchName, String revisionID);
+    public abstract Revision findByID(String branchName, String revisionID);
     public abstract List<Revision> findByBranch(String branchName);
     public abstract long findLargestRevisionID(String branchName);
-    public abstract List<Revision> findLimitByBranch(String branchName, long begin, long end);
+    public abstract List<Revision> findLimitByBranch(String branchName, int begin, int end);
     public abstract void delete(String id);
     public abstract void update(String branchName, String revisionID,
                                 String editor, Date editTime, RevisionData revisionData) throws IOException;

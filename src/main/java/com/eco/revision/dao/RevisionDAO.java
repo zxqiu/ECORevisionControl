@@ -1,144 +1,87 @@
 package com.eco.revision.dao;
 
 import com.eco.revision.core.Revision;
+import com.eco.revision.core.RevisionData;
 import com.eco.utils.misc.Dict;
-import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.SqlBatch;
-import org.skife.jdbi.v2.sqlobject.SqlQuery;
-import org.skife.jdbi.v2.sqlobject.SqlUpdate;
-import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
+import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by neo on 8/12/18.
  */
-public interface RevisionDAO {
-    public static final String TABLE_NAME = "revision";
+public class RevisionDAO extends AbstractDAO<Revision> {
+    private SessionFactory sessionFactory;
 
-    @SqlUpdate("create table if not exists " + TABLE_NAME + " ("
-            + "`" + Dict.ID + "` varchar(128) not null unique,"
-            + "`" + Dict.BRANCH_NAME + "` varchar(64) not null,"
-            + "`" + Dict.REVISION_ID + "` varchar(32) not null,"
-            + "`" + Dict.TIME + "` date not null,"
-            + "`" + Dict.AUTHOR + "` varchar(32) not null,"
-            + "`" + Dict.COMMENT + "` text,"
-            + "`" + Dict.EDIT_TIME + "` date,"
-            + "`" + Dict.EDITOR + "` varchar(32),"
-            + "`" + Dict.DATA + "` blob,"
-            + "primary key (`" + Dict.ID + "`)"
-            + ");"
-    )
-    void createTable();
+    public RevisionDAO(SessionFactory sessionFactory) {
+        super(sessionFactory);
+        this.sessionFactory = sessionFactory;
+    }
 
-    @SqlUpdate("drop table if exists " + TABLE_NAME)
-    void dropTable();
+    String insert(Revision revision) {
+        return persist(revision).getId();
+    }
 
-    @SqlUpdate("insert into " + TABLE_NAME + " ("
-            + Dict.ID
-            + ", " + Dict.BRANCH_NAME
-            + ", " + Dict.REVISION_ID
-            + ", " + Dict.TIME
-            + ", " + Dict.AUTHOR
-            + ", " + Dict.COMMENT
-            + ", " + Dict.EDIT_TIME
-            + ", " + Dict.EDITOR
-            + ", " + Dict.DATA
-            + ") values ("
-            + ":" + Dict.ID
-            + ", :" + Dict.BRANCH_NAME
-            + ", :" + Dict.REVISION_ID
-            + ", :" + Dict.TIME
-            + ", :" + Dict.AUTHOR
-            + ", :" + Dict.COMMENT
-            + ", :" + Dict.EDIT_TIME
-            + ", :" + Dict.EDITOR
-            + ", :" + Dict.DATA
-            + ")"
-    )
-    void insert(
-            @Bind(Dict.ID) String id
-            ,@Bind(Dict.BRANCH_NAME) String branchName
-            ,@Bind(Dict.REVISION_ID) String revisionID
-            ,@Bind(Dict.TIME) Date time
-            ,@Bind(Dict.AUTHOR) String author
-            ,@Bind(Dict.COMMENT) String comment
-            ,@Bind(Dict.EDIT_TIME) Date editTime
-            ,@Bind(Dict.EDITOR) String editor
-            ,@Bind(Dict.DATA) byte[] data
-    );
+    void insertBatch(List<Revision> revisions) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
 
-    @SqlBatch("insert into " + TABLE_NAME + " ("
-            + Dict.ID
-            + ", " + Dict.BRANCH_NAME
-            + ", " + Dict.REVISION_ID
-            + ", " + Dict.TIME
-            + ", " + Dict.AUTHOR
-            + ", " + Dict.COMMENT
-            + ", " + Dict.EDIT_TIME
-            + ", " + Dict.EDITOR
-            + ", " + Dict.DATA
-            + ") values ("
-            + ":" + Dict.ID
-            + ", :" + Dict.BRANCH_NAME
-            + ", :" + Dict.REVISION_ID
-            + ", :" + Dict.TIME
-            + ", :" + Dict.AUTHOR
-            + ", :" + Dict.COMMENT
-            + ", :" + Dict.EDIT_TIME
-            + ", :" + Dict.EDITOR
-            + ", :" + Dict.DATA
-            + ")"
-    )
-    void insertBatch(
-            @Bind(Dict.ID) List<String> id
-            ,@Bind(Dict.BRANCH_NAME) List<String> branchName
-            ,@Bind(Dict.REVISION_ID) List<String> revisionID
-            ,@Bind(Dict.TIME) List<Date> time
-            ,@Bind(Dict.AUTHOR) List<String> author
-            ,@Bind(Dict.COMMENT) List<String> comment
-            ,@Bind(Dict.EDIT_TIME) List<Date> editTime
-            ,@Bind(Dict.EDITOR) List<String> editor
-            ,@Bind(Dict.DATA) List<byte[]> data
-    );
+        for (int i = 0; i < revisions.size(); i++) {
+            session.save(revisions.get(i));
 
-    @SqlUpdate("update " + TABLE_NAME + " set "
-            + Dict.EDITOR + "= :" + Dict.EDITOR
-            + ", " + Dict.EDIT_TIME + "= :" + Dict.EDIT_TIME
-            + ", " + Dict.DATA + "= :" + Dict.DATA
-            + " where " + Dict.ID + "= :" + Dict.ID
-    )
-    void updateByID(@Bind(Dict.ID) String id
-            , @Bind(Dict.EDITOR) String editor
-            , @Bind(Dict.EDIT_TIME) Date editTime
-            , @Bind(Dict.DATA) byte[] data
-    );
+            if (i > 0 && i % 200 == 0) {
+                session.flush();
+                session.clear();
+            }
+        }
 
-    @SqlQuery("select * from " + TABLE_NAME)
-    @Mapper(RevisionMapper.class)
-    List<Revision> findAll();
+        transaction.commit();
+        session.close();
+    }
 
-    @SqlQuery("select * from " + TABLE_NAME + " where " + Dict.BRANCH_NAME + " = :" + Dict.BRANCH_NAME
-            + " order by cast(`" + Dict.REVISION_ID + "` as bigint) desc")
-    @Mapper(RevisionMapper.class)
-    List<Revision> findByBranch(@Bind(Dict.BRANCH_NAME) String branchName);
+    void updateByID(String branchName, String revisionID, String editor, Date editTime, RevisionData data) {
+        Revision revision = findByID(Revision.generateID(branchName, revisionID));
+        revision.setEditor(editor);
+        revision.setEditTime(editTime);
+        revision.setData(data);
 
-    @SqlQuery("select * from " + TABLE_NAME + " where " + Dict.BRANCH_NAME + " = :" + Dict.BRANCH_NAME
-            + " order by cast(`" + Dict.REVISION_ID + "` as bigint) desc limit :" + Dict.BEGIN + ",:" + Dict.END)
-    @Mapper(RevisionMapper.class)
-    List<Revision> findLimitByBranch(@Bind(Dict.BRANCH_NAME) String branchName
-                                    , @Bind(Dict.BEGIN) long begin
-                                    , @Bind(Dict.END) long end);
+        persist(revision);
+    }
 
-    @SqlQuery("select max( cast(`" + Dict.REVISION_ID + "` as bigint) ) from " + TABLE_NAME + " where " + Dict.BRANCH_NAME + " = :" + Dict.BRANCH_NAME)
-    long findLargestRevisionID(@Bind(Dict.BRANCH_NAME) String branchName);
+    List<Revision> findAll() {
+        return list(namedQuery(Revision.REVISION_QUERY_PREFIX + "findAll"));
+    }
 
-    @SqlQuery("select * from " + TABLE_NAME + " where " + Dict.ID + " = :" + Dict.ID)
-    @Mapper(RevisionMapper.class)
-    List<Revision> findByID(@Bind(Dict.ID) String id);
+    List<Revision> findByBranch(String branchName) {
+        return list(namedQuery(Revision.REVISION_QUERY_PREFIX + "findByBranch")
+                    .setParameter(Dict.BRANCH_NAME, branchName)
+        );
+    }
 
-    @SqlUpdate("delete from " + TABLE_NAME + " where " + Dict.ID + " = :" + Dict.ID)
-    void deleteByID(
-            @Bind(Dict.ID) String id
-    );
+    List<Revision> findLimitByBranch(String branchName, int begin, int end) {
+        return list(namedQuery(Revision.REVISION_QUERY_PREFIX + "findLimitByBranch")
+                    .setParameter(Dict.BRANCH_NAME, branchName)
+                    .setFirstResult(begin)
+                    .setMaxResults(end - begin + 1)
+        );
+    }
+
+    long findLargestRevisionID(String branchName) {
+        return (long) list(namedQuery(Revision.REVISION_QUERY_PREFIX + "findLargestRevisionID")
+                .setParameter(Dict.BRANCH_NAME, branchName)
+        ).get(0);
+    }
+
+    Revision findByID(String id) {
+        return get(id);
+    }
+
+    void deleteByID(String id) {
+        Revision revision = findByID(id);
+        currentSession().delete(revision);
+    }
 }

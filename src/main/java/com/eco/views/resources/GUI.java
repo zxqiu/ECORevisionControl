@@ -53,6 +53,7 @@ public class GUI {
     @Timed
     @Path(PATH_BRANCHES)
     @Produces(MediaType.TEXT_HTML)
+    @UnitOfWork
     public Response branches() throws IOException {
         BranchConf branchConf = BranchConfFactory.getBranchConf();
         List<Map<String, String>> branches = new ArrayList<>();
@@ -79,13 +80,14 @@ public class GUI {
     @Timed
     @Path("/" + PATH_REVISIONS)
     @Produces(MediaType.TEXT_HTML)
+    @UnitOfWork
     public Response revisions(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName
-                              , @QueryParam(Dict.BEGIN) @NotNull Long begin
-                              , @QueryParam(Dict.END) @NotNull Long end) throws IOException {
-        long prevBegin = (begin - 100 < 0) ? 0 : begin - 100;
-        long prevEnd = begin - 1;
-        long nextBegin = end + 1;
-        long nextEnd = end + 100;
+                              , @QueryParam(Dict.BEGIN) @NotNull Integer begin
+                              , @QueryParam(Dict.END) @NotNull Integer end) throws IOException {
+        int prevBegin = (begin - 100 < 0) ? 0 : begin - 100;
+        int prevEnd = begin - 1;
+        int nextBegin = end + 1;
+        int nextEnd = end + 100;
         long latestRevision = revisionConnector.findLargestRevisionID(branchName);
 
         _logger.info("calculate display range for " + branchName + " : prev begin : " + prevBegin + " prev end : " + prevEnd + " next begin : " + nextBegin + " next end : " + nextEnd + " latest revision : " + latestRevision);

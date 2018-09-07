@@ -6,10 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,7 +23,6 @@ public class RevisionConnector implements RevisionDAI {
 
     public static void init(RevisionDAO revisionDAO) throws Exception {
         RevisionConnector.revisionDAO = revisionDAO;
-        revisionDAO.createTable();
 
         _createLock.lock();
         try {
@@ -61,18 +58,8 @@ public class RevisionConnector implements RevisionDAI {
        return _instance;
     }
 
-    public void createTable() {
-        revisionDAO.createTable();
-    }
-
-    public void dropTable() {
-        revisionDAO.dropTable();
-    }
-
     public void insert(Revision revision) throws IOException {
-        revisionDAO.insert(revision.getId(), revision.getBranchName(), revision.getRevisionId(), revision.getTime(),
-                revision.getAuthor(), revision.getComment(), revision.getEditTime(), revision.getEditor()
-                , revision.getData().toByteArray());
+        revisionDAO.insert(revision);
     }
 
     public void insertBatch(List<Revision> revisions) throws IOException {
@@ -80,33 +67,11 @@ public class RevisionConnector implements RevisionDAI {
             return;
         }
 
-        List<String> id = new ArrayList<>();
-        List<String> branchName = new ArrayList<>();
-        List<String> revisionID = new ArrayList<>();
-        List<Date> time = new ArrayList<>();
-        List<String> author = new ArrayList<>();
-        List<String> comment = new ArrayList<>();
-        List<Date> editTime = new ArrayList<>();
-        List<String> editor = new ArrayList<>();
-        List<byte[]> data = new ArrayList<>();
-
-        for (Revision revision : revisions) {
-            id.add(revision.getId());
-            branchName.add(revision.getBranchName());
-            revisionID.add(revision.getRevisionId());
-            time.add(revision.getTime());
-            author.add(revision.getAuthor());
-            comment.add(revision.getComment());
-            editTime.add(revision.getEditTime());
-            editor.add(revision.getEditor());
-            data.add(revision.getData().toByteArray());
-        }
-
-        revisionDAO.insertBatch(id, branchName, revisionID, time, author, comment, editTime, editor, data);
+        revisionDAO.insertBatch(revisions);
     }
 
     public void update(String branchName, String revisionID, String editor, Date editTime, RevisionData revisionData) throws IOException {
-        revisionDAO.updateByID(Revision.generateID(branchName, revisionID), editor, editTime, revisionData.toByteArray());
+        revisionDAO.updateByID(branchName, revisionID, editor, editTime, revisionData);
     }
 
     public List<Revision> findAll() {
@@ -117,7 +82,7 @@ public class RevisionConnector implements RevisionDAI {
         return revisionDAO.findByBranch(branchName);
     }
 
-    public List<Revision> findByID(String branchName, String revisionID) {
+    public Revision findByID(String branchName, String revisionID) {
         return revisionDAO.findByID(Revision.generateID(branchName, revisionID));
     }
 
@@ -125,7 +90,7 @@ public class RevisionConnector implements RevisionDAI {
         return revisionDAO.findLargestRevisionID(branchName);
     }
 
-    public List<Revision> findLimitByBranch(String branchName, long begin, long end) {
+    public List<Revision> findLimitByBranch(String branchName, int begin, int end) {
         return revisionDAO.findLimitByBranch(branchName, begin, end);
     }
 
