@@ -27,8 +27,7 @@ public class RevisionDAO extends AbstractDAO<Revision> {
     }
 
     void insertBatch(List<Revision> revisions) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
+        Session session = currentSession();
 
         for (int i = 0; i < revisions.size(); i++) {
             session.save(revisions.get(i));
@@ -38,9 +37,6 @@ public class RevisionDAO extends AbstractDAO<Revision> {
                 session.clear();
             }
         }
-
-        transaction.commit();
-        session.close();
     }
 
     void updateByID(String branchName, String revisionID, String editor, Date editTime, RevisionData data) {
@@ -70,10 +66,16 @@ public class RevisionDAO extends AbstractDAO<Revision> {
         );
     }
 
-    long findLargestRevisionID(String branchName) {
-        return (long) list(namedQuery(Revision.REVISION_QUERY_PREFIX + "findLargestRevisionID")
+    long findRevisionIDMax(String branchName) {
+        List<Object> list = namedQuery(Revision.REVISION_QUERY_PREFIX + "findRevisionIDMax")
                 .setParameter(Dict.BRANCH_NAME, branchName)
-        ).get(0);
+                .list();
+
+        if (list == null || list.size() == 0 || list.get(0) == null) {
+            return 0;
+        }
+
+        return (long)list.get(0);
     }
 
     Revision findByID(String id) {

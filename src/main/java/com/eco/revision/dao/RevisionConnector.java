@@ -87,7 +87,7 @@ public class RevisionConnector implements RevisionDAI {
     }
 
     public long findLargestRevisionID(String branchName) {
-        return revisionDAO.findLargestRevisionID(branchName);
+        return revisionDAO.findRevisionIDMax(branchName);
     }
 
     public List<Revision> findLimitByBranch(String branchName, int begin, int end) {

@@ -27,10 +27,11 @@ import java.util.List;
                 query = "select c from " + Revision.TABLE_NAME + " c where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME),
         @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findLimitByBranch",
                 query = "select c from " + Revision.TABLE_NAME + " c where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
-                        + " order by cast("+ Dict.REVISION_ID + " as long) desc"
+                        + " order by cast(c."+ Dict.REVISION_ID + " as long) desc"
         ),
-        @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findLargestRevisionID",
-                query = "select max( cast(" + Dict.REVISION_ID + " as long) ) from " + Revision.TABLE_NAME + " where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
+        @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findRevisionIDMax",
+                query = "select max(cast(c." + Dict.REVISION_ID + " as long)) from " + Revision.TABLE_NAME + " c"
+                        + " where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
         )
 })
 
@@ -52,7 +53,7 @@ public class Revision {
     @JsonProperty
     @NotEmpty
     @Column(name = Dict.REVISION_ID)
-    private String revisionId;
+    private String revisionID;
 
     @JsonProperty
     @NotNull
@@ -107,11 +108,11 @@ public class Revision {
         }
     }
 
-    public Revision(String id, String branchName, String revisionId, Date time, String author,
+    public Revision(String id, String branchName, String revisionID, Date time, String author,
                     String comment, String editor, Date editTime, RevisionData data) {
         this.id = id;
         this.branchName = branchName;
-        this.revisionId = revisionId;
+        this.revisionID = revisionID;
         this.time = time;
         this.author = author;
         this.comment = comment;
@@ -141,8 +142,8 @@ public class Revision {
         return "";
     }
 
-    public static String generateID(String branchName, String revisionId) {
-        return branchName + revisionId;
+    public static String generateID(String branchName, String revisionID) {
+        return branchName + revisionID;
     }
 
     public String getId() {
@@ -194,11 +195,11 @@ public class Revision {
     }
 
     public String getRevisionId() {
-        return revisionId;
+        return revisionID;
     }
 
-    public void setRevisionId(String revisionId) {
-        this.revisionId = revisionId;
+    public void setRevisionId(String revisionID) {
+        this.revisionID = revisionID;
     }
 
     public Date getEditTime() {
