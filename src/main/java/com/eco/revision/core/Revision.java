@@ -1,10 +1,15 @@
 package com.eco.revision.core;
 
+import com.eco.utils.misc.Dict;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -15,38 +20,54 @@ import java.util.List;
 /**
  * Created by neo on 8/12/18.
  */
+
+@Entity
+@Table(name = Revision.TABLE_NAME)
+
 public class Revision {
+    public static final String TABLE_NAME = "Revision";
+
     @JsonProperty
     @NotEmpty
+    @Column(name = Dict.ID)
+    @Id
     private String id;
 
     @JsonProperty
     @NotEmpty
+    @Column(name = Dict.BRANCH_NAME)
     private String branchName;
 
     @JsonProperty
     @NotEmpty
+    @Column(name = Dict.REVISION_ID)
     private String revisionId;
 
     @JsonProperty
     @NotNull
+    @Column(name = Dict.TIME)
     private Date time;
 
     @JsonProperty
     @NotEmpty
+    @Column(name = Dict.AUTHOR)
     private String author;
 
     @JsonProperty
+    @Column
     private String comment;
 
     @JsonProperty
+    @Column
     private Date editTime;
 
     @JsonProperty
+    @Column
     private String editor;
 
     @JsonProperty
     @Valid
+    @Column
     private RevisionData data;
 
 
