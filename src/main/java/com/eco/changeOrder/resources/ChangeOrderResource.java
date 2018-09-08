@@ -93,7 +93,7 @@ public class ChangeOrderResource {
                     int i;
                     for (i = 0; i < commitStatuses.size(); i++) {
                         CommitStatus commitStatus = commitStatuses.get(i);
-                        if (commitStatus.getBranchName().equals(bug.getBranchName())) {
+                        if (commitStatus.getBranchName().equals(changeOrder.getBranchName())) {
                             commitStatus.setStatus(Revision.STATUS.COMMITTED.getValue());
                             commitStatus.setCommitID(changeOrder.getId());
                             commitStatus.setComment(bug.getComment());
@@ -139,7 +139,45 @@ public class ChangeOrderResource {
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Response delete(@PathParam(Dict.ID) @NotEmpty String id) {
+    public Response delete(@PathParam(Dict.ID) @NotEmpty String id) throws IOException {
+        ChangeOrder changeOrder = changeOrderDAO.findByID(id);
+
+        if (changeOrder == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        ChangeOrderData changeOrderData = changeOrder.getData();
+
+        if (changeOrderData != null) {
+            List<Bug> bugList = changeOrderData.getBugs();
+
+            if (bugList != null) {
+                for (Bug bug : bugList) {
+                    Revision revision = revisionDAI.findByID(bug.getBranchName(), bug.getRevisionID());
+
+                    if (revision == null || revision.getData() == null || revision.getData().getCommitStatuses() == null) {
+                        continue;
+                    }
+
+                    List<CommitStatus> commitStatuses = revision.getData().getCommitStatuses();
+
+                    int i;
+                    for (i = 0; i < commitStatuses.size(); i++) {
+                        CommitStatus commitStatus = commitStatuses.get(i);
+                        if (commitStatus.getBranchName().equals(changeOrder.getBranchName())) {
+                            commitStatus.setStatus(Revision.STATUS.DELETED.getValue());
+                            break;
+                        }
+                    }
+
+                    if (i < commitStatuses.size()) {
+                        revisionDAI.update(revision.getBranchName(), revision.getRevisionId(), changeOrder.getAuthor()
+                                , new Date(), revision.getData());
+                    }
+                }
+            }
+        }
+
         changeOrderDAO.delete(id);
 
         return Response.ok().build();
