@@ -99,7 +99,7 @@
                     <th style="width:5%">Author</th>
                     <th style="width:10%">Last Change</th>
                     <th style="width:5%">Edit By</th>
-                    <th style="width:25%">Bug Numbers</th>
+                    <th style="width:25%">Bugs</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -123,7 +123,13 @@
                             @for (Bug bug : changeOrder.getData().getBugs()) {
                             <li id="bug@bug.getId()">
                                 <span>
+                                    @if (bug.getBranchName() != null && bug.getBranchName().length() > 0 && bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
+                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a> fixed in: @bug.getBranchName()@@@bug.getRevisionID()
+                                    } else if (bug.getBranchName() != null && bug.getBranchName().length() > 0) {
+                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a> fixed in: @bug.getBranchName()
+                                    } else {
                                     <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a>
+                                    }
                                 </span>
                                 <button type="button" class="close BtnDelete" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
