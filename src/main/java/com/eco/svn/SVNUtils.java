@@ -2,6 +2,7 @@ package com.eco.svn;
 
 import com.eco.revision.core.*;
 import com.eco.revision.dao.RevisionConnector;
+import com.eco.revision.dao.RevisionDAI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNException;
@@ -24,7 +25,7 @@ public class SVNUtils {
     public static final Logger _logger = LoggerFactory.getLogger(SVNUtils.class);
 
     /**
-     * @param revisionConnector
+     * @param revisionDAI
      * @param repo
      * @param branchName
      * @param user
@@ -36,9 +37,9 @@ public class SVNUtils {
      * @throws SVNException
      * @throws IOException
      */
-    public static void updateLog(RevisionConnector revisionConnector, String repo, String branchName,
-                                       String user,String password, long startRevision, long endRevision,
-                                       boolean doPrint) throws SVNException, IOException {
+    public static void updateLog(RevisionDAI revisionDAI, String repo, String branchName,
+                                 String user, String password, long startRevision, long endRevision,
+                                 boolean doPrint) throws SVNException, IOException {
         DAVRepositoryFactory.setup();
 
         Collection logEntries = null;
@@ -96,8 +97,8 @@ public class SVNUtils {
             }
         }
 
-        if (revisionConnector != null) {
-            revisionConnector.insertBatch(revisions);
+        if (revisionDAI != null) {
+            revisionDAI.insertBatch(revisions);
             _logger.info("SVN log saved.");
         }
     }

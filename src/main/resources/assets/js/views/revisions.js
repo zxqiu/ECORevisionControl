@@ -40,6 +40,7 @@ $(document).on("click", ".BtnAdd", function(e) {
     var revisionID = $(data).find(".revisionID")[0].value;
     var userName = $(data).find(".userName")[0].value;
     request["editor"] = userName;
+    request["bugID"] = $(data).find(".addingBugID")[0].value;
     request["commitStatuses"] = [];
     request["commitStatuses"][0] = {};
     request["commitStatuses"][0]["branchName"] = $(data).find(".addingBranchName")[0].value;

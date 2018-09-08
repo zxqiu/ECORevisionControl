@@ -9,7 +9,6 @@ public class Bug implements Serializable {
     static final long serialVersionUID = -2741279213192159L;
 
     @JsonProperty
-    @NotEmpty
     private String id;
 
     @JsonProperty

@@ -17,19 +17,24 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.eco.changeOrder.core.Bug;
+import com.eco.changeOrder.core.ChangeOrder;
+import com.eco.changeOrder.dao.ChangeOrderDAO;
 import com.eco.revision.core.*;
-import com.eco.svn.core.SVNBranch;
+import com.eco.revision.dao.RevisionDAI;
 import com.eco.svn.SVNUtils;
+import com.eco.utils.exception.GeneralException;
+import com.eco.utils.misc.JsonErrorMsg;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.PATCH;
+import org.hibernate.TransactionException;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eco.revision.dao.RevisionConnector;
-import com.eco.revision.dao.RevisionDAO;
 import com.eco.utils.misc.Dict;
 import org.tmatesoft.svn.core.SVNException;
 
@@ -49,13 +54,14 @@ public class RevisionResource {
     public static final String PATH_DELETE          = "/{" + Dict.BRANCH_NAME + "}/{" + Dict.REVISION_ID + "}";
 
     public static final Logger _logger = LoggerFactory.getLogger(RevisionResource.class);
-    public static RevisionConnector revisionConnector;
+    public static RevisionDAI revisionDAI;
+    public static ChangeOrderDAO changeOrderDAO;
 
     private static final long REVISION_UPDATE_INTERVAL = 30 * 1000; // ms
 
-    public RevisionResource(RevisionDAO revisionDAO) throws Exception {
-        RevisionConnector.init(revisionDAO);
-        revisionConnector = RevisionConnector.getInstance();
+    public RevisionResource(RevisionDAI revisionDAI, ChangeOrderDAO changeOrderDAO) throws Exception {
+        RevisionResource.revisionDAI = revisionDAI;
+        RevisionResource.changeOrderDAO = changeOrderDAO;
     }
 
     @GET
@@ -64,8 +70,8 @@ public class RevisionResource {
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public List<Revision> getAll() throws IOException, SVNException {
-        _syncRevisions(null);
-        return revisionConnector.findAll();
+        syncRevisions(null);
+        return revisionDAI.findAll();
     }
 
     @GET
@@ -79,14 +85,14 @@ public class RevisionResource {
 
     @UnitOfWork
     public static List<Revision> utilGetByBranch(String branchName) throws IOException, SVNException {
-        _syncRevisions(branchName);
-        return revisionConnector.findByBranch(branchName);
+        syncRevisions(branchName);
+        return revisionDAI.findByBranch(branchName);
     }
 
     @UnitOfWork
     public static List<Revision> utilGetLimitByBranch(String branchName, int begin, int end) throws IOException {
-        _syncRevisions(branchName);
-        return revisionConnector.findLimitByBranch(branchName, begin, end);
+        syncRevisions(branchName);
+        return revisionDAI.findLimitByBranch(branchName, begin, end);
     }
 
     @GET
@@ -96,8 +102,8 @@ public class RevisionResource {
     @UnitOfWork
     public Revision getByID(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName,
                               @PathParam(Dict.REVISION_ID) @NotNull String revisionID) throws IOException, SVNException {
-        _syncRevisions(branchName);
-        return revisionConnector.findByID(branchName, revisionID);
+        syncRevisions(branchName);
+        return revisionDAI.findByID(branchName, revisionID);
     }
 
     @PATCH
@@ -109,8 +115,8 @@ public class RevisionResource {
     public Response update(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
                            @PathParam(Dict.REVISION_ID) @NotEmpty String revisionID,
                            @Valid UpdateParamWrapper paramWrapper
-                           ) throws IOException {
-        Revision revision = revisionConnector.findByID(branchName, revisionID);
+                           ) throws Exception, GeneralException {
+        Revision revision = revisionDAI.findByID(branchName, revisionID);
 
         if (revision == null) {
             _logger.error("Requested branch name and revision ID combination not found: branch "
@@ -147,9 +153,53 @@ public class RevisionResource {
                 // new commit status
                 commitStatuses.add(commitStatus);
             }
+
+            // update change orders
+            ChangeOrder changeOrder = changeOrderDAO.findByID(commitStatus.getCommitID());
+            if (changeOrder == null) {
+                // change order must be exists to add the new commit status
+                throw new GeneralException(Response.Status.NOT_ACCEPTABLE
+                        , "change order not found with given Commit ID: " + commitStatus.getCommitID());
+            }
+
+            if (changeOrder.getData() != null) {
+                if (changeOrder.getData().getBugs() == null) {
+                    changeOrder.getData().setBugs(new ArrayList<>());
+                }
+
+                List<Bug> bugs = changeOrder.getData().getBugs();
+                int j;
+                for (j = 0; j < bugs.size(); j++) {
+                    Bug bug = bugs.get(j);
+
+                    if (bug.getBranchName().equals(revision.getBranchName())
+                            && bug.getRevisionID().equals(revision.getRevisionId())) {
+                        break;
+                    }
+                }
+
+                if (j == bugs.size() && commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
+                    // Add if not exists in bug list of change order and commit status is COMMITTED
+                    bugs.add(new Bug(paramWrapper.getBugID(), branchName
+                            , revisionID, commitStatus.getComment()));
+
+                    changeOrder.setEditor(paramWrapper.getEditor());
+                    changeOrder.setEditTime(new Date());
+                    changeOrderDAO.update(changeOrder);
+                } else if (j < bugs.size()
+                        && (commitStatus.getStatus() == Revision.STATUS.DELETED.getValue()
+                        || commitStatus.getStatus() == Revision.STATUS.SKIPPED.getValue())) {
+                    // Delete if exists in bug list of change order and commit status is DELETED or SKIPPED
+                    bugs.remove(j);
+
+                    changeOrder.setEditor(paramWrapper.getEditor());
+                    changeOrder.setEditTime(new Date());
+                    changeOrderDAO.update(changeOrder);
+                }
+            }
         }
 
-        revisionConnector.update(branchName, revisionID,
+        revisionDAI.update(branchName, revisionID,
                 paramWrapper.getEditor(), new Date(), revisionData);
 
         return Response.ok().build();
@@ -182,7 +232,7 @@ public class RevisionResource {
                                          editTimeParsed,
                                          new RevisionData());
         try {
-            revisionConnector.insert(revision);
+            revisionDAI.insert(revision);
         } catch (IOException e) {
             _logger.error("Error : failed to insert new revision : " + e.getMessage());
             e.printStackTrace();
@@ -200,7 +250,7 @@ public class RevisionResource {
     @UnitOfWork
     public Response insertRevisionObject(@NotNull @Valid Revision revision) throws IOException {
         try {
-            revisionConnector.insert(revision);
+            revisionDAI.insert(revision);
         } catch (Exception e) {
             _logger.error("Error : failed to insert new revision : " + e.getMessage());
             e.printStackTrace();
@@ -218,7 +268,7 @@ public class RevisionResource {
     public Response deleteRevision(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName,
                                    @PathParam(Dict.REVISION_ID) @NotEmpty String revisionID) {
         try {
-            revisionConnector.delete(Revision.generateID(branchName, revisionID));
+            revisionDAI.delete(Revision.generateID(branchName, revisionID));
         } catch (Exception e) {
             _logger.error("Error : failed to delete revision "
                     + Revision.generateID(branchName, revisionID) + " : " + e.getMessage());
@@ -231,7 +281,7 @@ public class RevisionResource {
 
     private static final Lock revisionUpdateLock = new ReentrantLock();
     @UnitOfWork
-    private static void _syncRevisions(String branchName) throws IOException {
+    public static void syncRevisions(String branchName) throws IOException {
         BranchConf branchConf = BranchConfFactory.getBranchConf();
 
         if (revisionUpdateLock.tryLock()) {
@@ -243,18 +293,18 @@ public class RevisionResource {
                         continue;
                     }
 
-                    Long latestRevisionID = revisionConnector.findLargestRevisionID(branch.getBranchName());
+                    Long latestRevisionID = revisionDAI.findLargestRevisionID(branch.getBranchName());
                     String user = (branch.getUser() != null && branch.getUser().length() > 0) ?
                                     branch.getUser() : branchConf.getUserDefault();
                     String password = (branch.getPassword() != null && branch.getPassword().length() > 0) ?
                                     branch.getPassword() : branchConf.getPasswordDefault();
 
                     if (latestRevisionID != null) {
-                        SVNUtils.updateLog(revisionConnector, branch.getRepo(),
+                        SVNUtils.updateLog(revisionDAI, branch.getRepo(),
                                 branch.getBranchName(), user, password,
                                 latestRevisionID, -1, false);
                     } else {
-                        SVNUtils.updateLog(revisionConnector, branch.getRepo(),
+                        SVNUtils.updateLog(revisionDAI, branch.getRepo(),
                                 branch.getBranchName(), user, password,
                                 0, -1, false);
                     }
@@ -283,6 +333,9 @@ class UpdateParamWrapper {
     @Valid
     private List<CommitStatus> commitStatuses;
 
+    @JsonProperty
+    private String bugID;
+
     public String getEditor() {
         return editor;
     }
@@ -297,6 +350,14 @@ class UpdateParamWrapper {
 
     public void setCommitStatuses(List<CommitStatus> commitStatuses) {
         this.commitStatuses = commitStatuses;
+    }
+
+    public String getBugID() {
+        return bugID;
+    }
+
+    public void setBugID(String bugID) {
+        this.bugID = bugID;
     }
 }
 

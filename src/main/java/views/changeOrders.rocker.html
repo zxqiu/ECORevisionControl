@@ -95,6 +95,7 @@
                 <thead>
                 <tr>
                     <th style="width:5%">ID</th>
+                    <th style="width:15%">Branch Name</th>
                     <th style="width:10%">Submit Time</th>
                     <th style="width:5%">Author</th>
                     <th style="width:10%">Last Change</th>
@@ -108,6 +109,7 @@
                 <tr id="@changeOrder.getId()">
                     <input type="hidden" class="ChangeOrderID" value="@changeOrder.getId()">
                     <th scope="row">@changeOrder.getId()</th>
+                    <td>@changeOrder.getBranchName()</td>
                     <td>@changeOrder.getTime().toString()</td>
                     <td>@changeOrder.getAuthor()</td>
                     @if (changeOrder.getEditor() == null || changeOrder.getEditor().length() == 0) {
@@ -123,10 +125,14 @@
                             @for (Bug bug : changeOrder.getData().getBugs()) {
                             <li id="bug@bug.getId()">
                                 <span>
-                                    @if (bug.getBranchName() != null && bug.getBranchName().length() > 0 && bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
-                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a> fixed in: @bug.getBranchName()@@@bug.getRevisionID()
+                                    @if (bug.getId() != null && bug.getId().length() > 0 && bug.getBranchName() != null && bug.getBranchName().length() > 0 && bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
+                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a> : @bug.getBranchName()@@@bug.getRevisionID()
+                                    } else if (bug.getId() != null && bug.getId().length() > 0 && bug.getBranchName() != null && bug.getBranchName().length() > 0) {
+                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a> : @bug.getBranchName()
+                                    } else if (bug.getBranchName() != null && bug.getBranchName().length() > 0 && bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
+                                    @bug.getBranchName()@@@bug.getRevisionID()
                                     } else if (bug.getBranchName() != null && bug.getBranchName().length() > 0) {
-                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a> fixed in: @bug.getBranchName()
+                                    @bug.getBranchName()
                                     } else {
                                     <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a>
                                     }

@@ -41,7 +41,7 @@ var APIs = {
                         _api.patchRevisionError(textStatus);
                     }
 
-                    showErrorSnackBar(textStatus, errorThrown);
+                    showErrorSnackBar(jqXHR, textStatus, errorThrown);
                 }
             });
         };
@@ -60,11 +60,14 @@ function showSuccessSnackBar() {
     }
 }
 
-function showErrorSnackBar(textStatus, errorThrown) {
+function showErrorSnackBar(jqXHR, textStatus, errorThrown) {
     var snackbar = $("#errorSnackBar");
     if (snackbar.length > 0) {
 
-        if (textStatus.length > 0) {
+        if (jqXHR.responseText.length > 0) {
+            snackbar.html(textStatus + ": " + jqXHR.responseText);
+            console.log(jqXHR.responseText);
+        } else if (textStatus.length > 0) {
             snackbar.html(textStatus + ": " + errorThrown);
         }
 

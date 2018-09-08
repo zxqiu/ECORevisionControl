@@ -5,10 +5,10 @@ import com.eco.changeOrder.core.Bug;
 import com.eco.changeOrder.core.ChangeOrder;
 import com.eco.changeOrder.core.ChangeOrderData;
 import com.eco.changeOrder.dao.ChangeOrderDAO;
-import com.eco.revision.core.CommitStatus;
-import com.eco.revision.core.Revision;
-import com.eco.revision.core.RevisionData;
+import com.eco.revision.core.*;
 import com.eco.revision.dao.RevisionDAI;
+import com.eco.revision.resources.RevisionResource;
+import com.eco.svn.SVNConf;
 import com.eco.utils.misc.Dict;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.PATCH;
@@ -69,15 +69,29 @@ public class ChangeOrderResource {
     public Response insert(@PathParam(Dict.ID) String id
                         , @Valid ChangeOrder changeOrder) throws IOException {
         changeOrderDAO.create(changeOrder);
+        BranchConf branchConf = BranchConfFactory.getBranchConf();
+        Set<Branch> branchSet = new HashSet<>(branchConf.getBranches());
+        Set<String> branchNames = new HashSet<>();
+
+        for (Branch branch : branchSet) {
+            branchNames.add(branch.getBranchName());
+        }
 
         if (changeOrder.getData() != null && changeOrder.getData().getBugs() != null) {
             for (Bug bug : changeOrder.getData().getBugs()) {
-                if (bug.getBranchName() != null && bug.getBranchName().length() > 0
+                if (branchNames.contains(bug.getBranchName())
+                        && bug.getBranchName() != null && bug.getBranchName().length() > 0
                         && bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
                     Revision revision = revisionDAI.findByID(bug.getBranchName(), bug.getRevisionID());
 
                     if (revision == null) {
-                        continue;
+                        // not found. Sync revisions and try again.
+                        RevisionResource.syncRevisions(bug.getBranchName());
+                        revision = revisionDAI.findByID(bug.getBranchName(), bug.getRevisionID());
+
+                        if (revision == null) {
+                            continue;
+                        }
                     }
 
                     if (revision.getData() == null) {
