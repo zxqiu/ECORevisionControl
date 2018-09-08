@@ -6,13 +6,10 @@ import com.eco.revision.core.Branch;
 import com.eco.revision.core.BranchConf;
 import com.eco.revision.core.BranchConfFactory;
 import com.eco.revision.dao.RevisionConnector;
-import com.eco.revision.dao.RevisionDAO;
+import com.eco.revision.dao.RevisionDAI;
 import com.eco.revision.resources.RevisionResource;
-import com.eco.svn.core.SVNBranch;
-import com.eco.svn.SVNConf;
 import com.eco.utils.misc.Dict;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.jersey.PATCH;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,12 +38,11 @@ public class GUI {
 
     public static final Logger _logger = LoggerFactory.getLogger(GUI.class);
 
-    public static RevisionConnector revisionConnector = null;
+    public static RevisionDAI revisionDAI = null;
     public static ChangeOrderDAO changeOrderDAO = null;
 
-    public GUI(RevisionDAO revisionDAO, ChangeOrderDAO changeOrderDAO) throws Exception {
-        RevisionConnector.init(revisionDAO);
-        GUI.revisionConnector = RevisionConnector.getInstance();
+    public GUI(RevisionDAI revisionDAI, ChangeOrderDAO changeOrderDAO) throws Exception {
+        GUI.revisionDAI = revisionDAI;
         GUI.changeOrderDAO = changeOrderDAO;
     }
 
@@ -89,7 +85,7 @@ public class GUI {
         int prevEnd = begin - 1;
         int nextBegin = end + 1;
         int nextEnd = end + 100;
-        long latestRevision = revisionConnector.findLargestRevisionID(branchName);
+        long latestRevision = revisionDAI.findLargestRevisionID(branchName);
 
         _logger.info("calculate display range for " + branchName + " : prev begin : " + prevBegin + " prev end : " + prevEnd + " next begin : " + nextBegin + " next end : " + nextEnd + " latest revision : " + latestRevision);
 

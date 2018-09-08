@@ -1,6 +1,7 @@
 var hostURL = window.location.protocol + "//" + window.location.host;
 var API_V1 = "/api/v1";
 var API_REVISION = "/revisions";
+var API_CHANGE_ORDER = "/changeOrder";
 
 var APIs = {
     createNew: function () {
@@ -39,6 +40,46 @@ var APIs = {
                 error: function(jqXHR, textStatus, errorThrown) {
                     if (_api.patchRevisionError && typeof(_api.patchRevisionError) == "function") {
                         _api.patchRevisionError(textStatus);
+                    }
+
+                    showErrorSnackBar(jqXHR, textStatus, errorThrown);
+                }
+            });
+        };
+
+        _api.postChangeOrderSuccess = null;
+        _api.postChangeOrderError = null;
+
+        _api.setPostChangeOrderSuccess = function(callback) {
+            _api.postChangeOrderSuccess = callback;
+        }
+
+        _api.setPostChangeOrderError = function(callback) {
+            _api.postChangeOrderError = callback;
+        }
+
+        _api.postChangeOrder = function(commitID, jsonObj) {
+            var patchURL = hostURL + API_V1 + API_CHANGE_ORDER + "/" + commitID;
+            console.log(patchURL);
+            console.log(jsonObj);
+            JSONString = JSON.stringify(jsonObj);
+
+            $.ajax({
+                type: "POST",
+                url: patchURL,
+                data: JSONString,
+                //dataType: 'json',
+                contentType: 'application/json',
+                success: function(data, textStatus, jqXHR) {
+                    if (_api.postChangeOrderSuccess && typeof(_api.postChangeOrderSuccess) == "function") {
+                        _api.postChangeOrderSuccess(data);
+                    }
+
+                    showSuccessSnackBar();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    if (_api.postChangeOrderError && typeof(_api.postChangeOrderError) == "function") {
+                        _api.postChangeOrderError(textStatus);
                     }
 
                     showErrorSnackBar(jqXHR, textStatus, errorThrown);

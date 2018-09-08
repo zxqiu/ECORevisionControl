@@ -56,9 +56,6 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
     @Override
     public void run(ECOConfiguration configuration,
                     Environment environment) throws Exception {
-		final DBIFactory factory = new DBIFactory();
-	    final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "sqlite");
-
 	    final RevisionDAO revisionDAO = new RevisionDAO(hibernate.getSessionFactory());
 	    final ChangeOrderDAO changeOrderDAO = new ChangeOrderDAO(hibernate.getSessionFactory());
 
@@ -68,7 +65,7 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
         /* register resources */
         environment.jersey().register(new RevisionResource(RevisionConnector.getInstance(), changeOrderDAO));
         environment.jersey().register(new BranchResource());
-        environment.jersey().register(new GUI(revisionDAO, changeOrderDAO));
+        environment.jersey().register(new GUI(RevisionConnector.getInstance(), changeOrderDAO));
         environment.jersey().register(new ChangeOrderResource(RevisionConnector.getInstance(), changeOrderDAO));
 
         environment.jersey().register(new GeneralExceptionMapper());

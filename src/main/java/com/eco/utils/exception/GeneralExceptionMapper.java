@@ -1,7 +1,5 @@
 package com.eco.utils.exception;
 
-import org.hibernate.engine.spi.SessionImplementor;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
