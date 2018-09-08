@@ -77,7 +77,7 @@ public class ChangeOrderTest {
     public void update() throws IOException {
         ChangeOrderData changeOrderDataCopy = objectMapper.readValue(objectMapper.writeValueAsString(testChangeOrderData), ChangeOrderData.class);
         changeOrderDataCopy.setComment("modified comment");
-        changeOrderDataCopy.getBugs().add(new Bug("testBug", "testBugBranch", "testBugRevision"));
+        changeOrderDataCopy.getBugs().add(new Bug("testBug", "testBugBranch", "testBugRevision", "testComment"));
 
         Response response = client
                 .target("http://localhost:8080" + Dict.API_V1_PATH)

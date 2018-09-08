@@ -137,7 +137,7 @@ public class ChangeOrder {
     public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
         ChangeOrderData changeOrderData = new ChangeOrderData("test comment", new ArrayList<Bug>());
-        changeOrderData.getBugs().add(new Bug("testBug", "testBugBranch", "testBugRevision"));
+        changeOrderData.getBugs().add(new Bug("testBug", "testBugBranch", "testBugRevision", "testComment"));
         ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), "", null, changeOrderData);
 
         try {

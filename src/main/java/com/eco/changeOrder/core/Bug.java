@@ -18,10 +18,14 @@ public class Bug implements Serializable {
     @JsonProperty
     private String revisionID; // the revision of the fix
 
-    public Bug(String id, String branchName, String revisionID) {
+    @JsonProperty
+    private String comment;
+
+    public Bug(String id, String branchName, String revisionID, String comment) {
         this.id = id;
         this.branchName = branchName;
         this.revisionID = revisionID;
+        this.comment = comment;
     }
 
     public Bug() {
@@ -49,5 +53,13 @@ public class Bug implements Serializable {
 
     public void setRevisionID(String revisionID) {
         this.revisionID = revisionID;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

@@ -1,9 +1,14 @@
 package com.eco.changeOrder.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.eco.changeOrder.core.Bug;
 import com.eco.changeOrder.core.ChangeOrder;
 import com.eco.changeOrder.core.ChangeOrderData;
 import com.eco.changeOrder.dao.ChangeOrderDAO;
+import com.eco.revision.core.CommitStatus;
+import com.eco.revision.core.Revision;
+import com.eco.revision.core.RevisionData;
+import com.eco.revision.dao.RevisionDAI;
 import com.eco.utils.misc.Dict;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.PATCH;
@@ -13,7 +18,8 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by neo on 9/1/18.
@@ -29,8 +35,10 @@ public class ChangeOrderResource {
     public static final String PATH_DELETE = "{" + Dict.ID + "}";
 
     private ChangeOrderDAO changeOrderDAO;
+    private RevisionDAI revisionDAI;
 
-    public ChangeOrderResource(ChangeOrderDAO changeOrderDAO) {
+    public ChangeOrderResource(RevisionDAI revisionDAI, ChangeOrderDAO changeOrderDAO) {
+        this.revisionDAI = revisionDAI;
         this.changeOrderDAO = changeOrderDAO;
     }
 
@@ -59,9 +67,55 @@ public class ChangeOrderResource {
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Response insert(@PathParam(Dict.ID) String id
-                        , @Valid ChangeOrder changeOrder) {
-
+                        , @Valid ChangeOrder changeOrder) throws IOException {
         changeOrderDAO.create(changeOrder);
+
+        if (changeOrder.getData() != null && changeOrder.getData().getBugs() != null) {
+            for (Bug bug : changeOrder.getData().getBugs()) {
+                if (bug.getBranchName() != null && bug.getBranchName().length() > 0
+                        && bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
+                    Revision revision = revisionDAI.findByID(bug.getBranchName(), bug.getRevisionID());
+
+                    if (revision == null) {
+                        continue;
+                    }
+
+                    if (revision.getData() == null) {
+                        revision.setData(new RevisionData());
+                    }
+
+                    if (revision.getData().getCommitStatuses() == null) {
+                        revision.getData().setCommitStatuses(new ArrayList<>());
+                    }
+
+                    List<CommitStatus> commitStatuses = revision.getData().getCommitStatuses();
+
+                    int i;
+                    for (i = 0; i < commitStatuses.size(); i++) {
+                        CommitStatus commitStatus = commitStatuses.get(i);
+                        if (commitStatus.getBranchName().equals(bug.getBranchName())) {
+                            commitStatus.setStatus(Revision.STATUS.COMMITTED.getValue());
+                            commitStatus.setCommitID(changeOrder.getId());
+                            commitStatus.setComment(bug.getComment());
+
+                            break;
+                        }
+                    }
+
+                    if (i == commitStatuses.size()) {
+                        commitStatuses.add(new CommitStatus(changeOrder.getBranchName()
+                                , Revision.STATUS.COMMITTED.getValue()
+                                , changeOrder.getId()
+                                , bug.getComment())
+                        );
+                    }
+
+                    revisionDAI.update(bug.getBranchName(), bug.getRevisionID()
+                            , changeOrder.getAuthor(), new Date(), revision.getData());
+                }
+            }
+        }
+
         return Response.ok().build();
     }
 

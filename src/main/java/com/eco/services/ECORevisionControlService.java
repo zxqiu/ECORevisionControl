@@ -6,6 +6,7 @@ import com.eco.changeOrder.dao.ChangeOrderDAO;
 import com.eco.changeOrder.resources.ChangeOrderResource;
 import com.eco.filter.GeneralRequestFilter;
 import com.eco.revision.core.BranchConfFactory;
+import com.eco.revision.dao.RevisionConnector;
 import com.eco.views.resources.GUI;
 import com.fizzed.rocker.runtime.RockerRuntime;
 import com.google.common.cache.CacheBuilderSpec;
@@ -60,12 +61,14 @@ public class ECORevisionControlService extends Application<ECOConfiguration> {
 	    final RevisionDAO revisionDAO = new RevisionDAO(hibernate.getSessionFactory());
 	    final ChangeOrderDAO changeOrderDAO = new ChangeOrderDAO(hibernate.getSessionFactory());
 
+        RevisionConnector.init(revisionDAO);
+
         _logger.info("Register all resources");
         /* register resources */
         environment.jersey().register(new RevisionResource(revisionDAO));
         environment.jersey().register(new BranchResource());
         environment.jersey().register(new GUI(revisionDAO, changeOrderDAO));
-        environment.jersey().register(new ChangeOrderResource(changeOrderDAO));
+        environment.jersey().register(new ChangeOrderResource(RevisionConnector.getInstance(), changeOrderDAO));
 
         environment.jersey().register(new JsonProcessingExceptionMapper(true));
         environment.jersey().register(new RockerMessageBodyWriter());
