@@ -58,6 +58,18 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         this.commitStatuses = CommitStatus.toList(commitStatusesJSON);
     }
 
+    public CommitStatus getCommitStatusByCommitID(String commitID) {
+        if (this.commitStatuses != null) {
+            for (CommitStatus commitStatus : this.commitStatuses) {
+                if (commitStatus.getCommitID().equals(commitID)) {
+                    return commitStatus;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);

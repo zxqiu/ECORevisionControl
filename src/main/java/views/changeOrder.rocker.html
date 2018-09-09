@@ -7,7 +7,8 @@
 @import java.util.List;
 @import org.apache.commons.text.StringEscapeUtils;
 
-@args(String branchName, String userName, List<String> branches, ChangeOrder changeOrder, int entriesPerPage)
+@args(String branchName, String userName, List<String> branches, ChangeOrder changeOrder, int entriesPerPage
+    , String changeOrderTime)
 
 <html lang="en">
 
@@ -80,12 +81,18 @@
             <form>
                 <div class="form-group">
                     <label for="changeOrderID">ID</label>
+                    @if (changeOrder != null && changeOrder.getId() != null) {
+                    <input disabled type="text" class="form-control required" id="changeOrderID" placeholder="Required" value="@changeOrder.getId()">
+                    } else {
                     <input type="text" class="form-control required" id="changeOrderID" placeholder="Required">
+                    }
                 </div>
 
                 <div class="form-group">
                     <label for="branchName">Branch Name</label>
-                    @if (branchName != null && branchName.length() > 0) {
+                    @if (changeOrder != null && changeOrder.getBranchName() != null) {
+                    <input disabled type="text" class="form-control required" id="branchName" placeholder="Required" value="@changeOrder.getBranchName()">
+                    } else if (branchName != null && branchName.length() > 0) {
                     <input type="text" class="form-control required" id="branchName" placeholder="Required" value="@branchName">
                     } else {
                     <input type="text" class="form-control required" id="branchName" placeholder="Required">
@@ -94,26 +101,66 @@
 
                 <div class="form-group">
                     <label for="author">Author</label>
+                    @if (changeOrder != null && changeOrder.getAuthor() != null) {
+                    <input type="text" class="form-control required" id="author" placeholder="Required" value="@changeOrder.getAuthor()">
+                    } else {
                     <input type="text" class="form-control required" id="author" placeholder="Required">
+                    }
                 </div>
 
                 <div class="form-group">
                     <label for="time">Date</label>
+                    @if (changeOrder != null && changeOrderTime != null) {
+                    <input type="date" class="form-control required" id="time" placeholder="Required" value="@changeOrderTime">
+                    } else {
                     <input type="date" class="form-control required" id="time" placeholder="Required">
+                    }
                 </div>
 
                 <div class="form-group">
                     <label for="comment">Comment</label>
+                    @if (changeOrder != null && changeOrder.getData() != null && changeOrder.getData().getComment() != null) {
+                    <input type="text" class="form-control" id="comment" placeholder="Optional" value="@changeOrder.getData().getComment()">
+                    } else {
                     <input type="text" class="form-control" id="comment" placeholder="Optional">
+                    }
                 </div>
 
                 <div>
                     <label class="control-label" for="bugs">Bug ID</label>
                     <div id="bugs">
+                    @if (changeOrder != null && changeOrder.getData() != null && changeOrder.getData().getBugs() != null && changeOrder.getData().getBugs().size() > 0) {
+                    @for (Bug bug : changeOrder.getData().getBugs()) {
                         <div class='form-inline input-group bug'>
-                            <input type='text' class='form-control requiredGroup0' id='bugID' placeholder='Bug ID'/>
-                            <input type='text' class='form-control requiredGroup1' id='fixBranchName' placeholder='Fix Branch Name'/>
-                            <input type='text' class='form-control requiredGroup1' id='fixRevisionID' placeholder='Fix Revision ID'/>
+                            @if (bug.getId() != null) {
+                            <input type='text' class='form-control' id='bugID' placeholder='Bug ID' value="@bug.getId()"/>
+                            } else {
+                            <input type='text' class='form-control' id='bugID' placeholder='Bug ID'/>
+                            }
+                            @if (bug.getBranchName() != null) {
+                            <input type='text' class='form-control requiredGroup' id='fixBranchName' placeholder='Fix Branch Name' value="@bug.getBranchName()"/>
+                            } else {
+                            <input type='text' class='form-control requiredGroup' id='fixBranchName' placeholder='Fix Branch Name'/>
+                            }
+                            @if (bug.getRevisionID() != null) {
+                            <input type='text' class='form-control requiredGroup' id='fixRevisionID' placeholder='Fix Revision ID' value="@bug.getRevisionID()"/>
+                            } else {
+                            <input type='text' class='form-control requiredGroup' id='fixRevisionID' placeholder='Fix Revision ID'/>
+                            }
+                            @if (bug.getComment() != null) {
+                            <input type='text' class='form-control' id='bugComment' placeholder='Comment' value="@bug.getComment()"/>
+                            } else {
+                            <input type='text' class='form-control' id='bugComment' placeholder='Comment'/>
+                            }
+
+                            <button class='input-group-addon lessBug btn btn-outline-danger' style='width: 40px;'>-</button>
+                        </div>
+                    }
+                    }
+                        <div class='form-inline input-group bug'>
+                            <input type='text' class='form-control' id='bugID' placeholder='Bug ID'/>
+                            <input type='text' class='form-control requiredGroup' id='fixBranchName' placeholder='Fix Branch Name'/>
+                            <input type='text' class='form-control requiredGroup' id='fixRevisionID' placeholder='Fix Revision ID'/>
                             <input type='text' class='form-control' id='bugComment' placeholder='Comment'/>
 
                             <button class='input-group-addon moreBug btn btn-success' style='width: 40px;'>+</button>

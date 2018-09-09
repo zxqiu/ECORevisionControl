@@ -4,7 +4,9 @@ import com.eco.utils.misc.Serializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by neo on 9/1/18.
@@ -29,6 +31,26 @@ public class ChangeOrderData implements Serializable, Serializer<ChangeOrderData
         ChangeOrderData changeOrderData = deserialize(ois);
 
         this.comment = changeOrderData.getComment();
+    }
+
+    public boolean checkBugs() {
+        for (Bug bug : bugs) {
+            if ((bug.getId() == null || bug.getId().length() == 0)
+                    && (bug.getBranchName() == null || bug.getBranchName().length() == 0)
+                    && (bug.getRevisionID() == null || bug.getRevisionID().length() == 0)
+                    && (bug.getComment() == null || bug.getComment().length() == 0)
+                    ) {
+                return false;
+            } else if ((bug.getBranchName() != null && bug.getBranchName().length() > 0)
+                    && (bug.getRevisionID() == null || bug.getRevisionID().length() == 0)) {
+                return false;
+            } else if ((bug.getBranchName() == null || bug.getBranchName().length() == 0)
+                    && (bug.getRevisionID() != null && bug.getRevisionID().length() > 0)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public byte[] toByteArray() throws IOException {

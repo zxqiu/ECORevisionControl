@@ -9,6 +9,7 @@ import com.eco.revision.core.*;
 import com.eco.revision.dao.RevisionDAI;
 import com.eco.revision.resources.RevisionResource;
 import com.eco.svn.SVNConf;
+import com.eco.utils.exception.GeneralException;
 import com.eco.utils.misc.Dict;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.PATCH;
@@ -67,7 +68,44 @@ public class ChangeOrderResource {
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public Response insert(@PathParam(Dict.ID) String id
-                        , @Valid ChangeOrder changeOrder) throws IOException {
+                        , @Valid ChangeOrder changeOrderNew) throws IOException, GeneralException {
+        ChangeOrder changeOrder = changeOrderDAO.findByID(id);
+
+        if (changeOrderNew.getData() != null && changeOrderNew.getData().checkBugs() == false) {
+            throw new GeneralException(Response.Status.BAD_REQUEST, "Errors exists in bug list");
+        }
+
+        if (changeOrder != null) {
+            // need to clear all the revisions before insert
+            if (changeOrder.getData() != null && changeOrder.getData().getBugs() != null) {
+                for (Bug bug : changeOrder.getData().getBugs()) {
+                    Revision revision = revisionDAI.findByID(bug.getBranchName(), bug.getRevisionID());
+
+                    if (revision == null || revision.getData() == null) {
+                        continue;
+                    }
+
+                    CommitStatus commitStatus = revision.getData().getCommitStatusByCommitID(changeOrder.getId());
+
+                    if (commitStatus == null) {
+                        continue;
+                    }
+
+                    revision.getData().getCommitStatuses().remove(commitStatus);
+                    revisionDAI.update(revision.getBranchName(), revision.getRevisionId(), revision.getEditor()
+                                    , revision.getEditTime(), revision.getData());
+                }
+            }
+
+            changeOrder.setAuthor(changeOrderNew.getAuthor());
+            changeOrder.setTime(changeOrderNew.getTime());
+            changeOrder.setEditor(changeOrderNew.getEditor());
+            changeOrder.setEditTime(new Date());
+            changeOrder.setData(changeOrderNew.getData());
+        } else {
+            changeOrder = changeOrderNew;
+        }
+
         changeOrderDAO.create(changeOrder);
         BranchConf branchConf = BranchConfFactory.getBranchConf();
         Set<Branch> branchSet = new HashSet<>(branchConf.getBranches());
@@ -77,6 +115,7 @@ public class ChangeOrderResource {
             branchNames.add(branch.getBranchName());
         }
 
+        // update revisions
         if (changeOrder.getData() != null && changeOrder.getData().getBugs() != null) {
             for (Bug bug : changeOrder.getData().getBugs()) {
                 if (branchNames.contains(bug.getBranchName())

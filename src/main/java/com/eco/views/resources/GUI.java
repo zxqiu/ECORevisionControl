@@ -1,6 +1,7 @@
 package com.eco.views.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.eco.changeOrder.core.ChangeOrder;
 import com.eco.changeOrder.dao.ChangeOrderDAO;
 import com.eco.revision.core.Branch;
 import com.eco.revision.core.BranchConf;
@@ -19,6 +20,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -187,12 +189,21 @@ public class GUI {
     @UnitOfWork
     public Response getChangeOrderByID(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName
                                 , @PathParam(Dict.ID) @NotEmpty String id) {
+        ChangeOrder changeOrder = changeOrderDAO.findByID(id);
+        String time = null;
+
+        if (changeOrder != null && changeOrder.getTime() != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            time = simpleDateFormat.format(changeOrder.getTime());
+        }
+
         return Response.ok().entity(
                 views.changeOrder.template(branchName
                         , "user1000"
                         , changeOrderDAO.findUniqueBranches()
-                        , changeOrderDAO.findByID(id)
+                        , changeOrder
                         , entriesPerPage
+                        , time
                 )
         ).build();
     }

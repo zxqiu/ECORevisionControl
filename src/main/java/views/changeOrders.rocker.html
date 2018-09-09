@@ -108,7 +108,7 @@
                 @for (changeOrder : changeOrders) {
                 <tr id="@changeOrder.getId()">
                     <input type="hidden" class="ChangeOrderID" value="@changeOrder.getId()">
-                    <th scope="row">@changeOrder.getId()</th>
+                    <th scope="row"><a href="@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS/@changeOrder.getBranchName()/@changeOrder.getId()">@changeOrder.getId()</a></th>
                     <td>@changeOrder.getBranchName()</td>
                     <td>@changeOrder.getTime().toString()</td>
                     <td>@changeOrder.getAuthor()</td>
@@ -123,23 +123,21 @@
                         <ul class="Bugs">
                             @if (changeOrder.getData() != null && changeOrder.getData().getBugs() != null) {
                             @for (Bug bug : changeOrder.getData().getBugs()) {
-                            <li id="bug@bug.getId()">
+                            <li>
                                 <span>
-                                    @if (bug.getId() != null && bug.getId().length() > 0 && bug.getBranchName() != null && bug.getBranchName().length() > 0 && bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
-                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a> : @bug.getBranchName()@@@bug.getRevisionID()
-                                    } else if (bug.getId() != null && bug.getId().length() > 0 && bug.getBranchName() != null && bug.getBranchName().length() > 0) {
-                                    <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a> : @bug.getBranchName()
-                                    } else if (bug.getBranchName() != null && bug.getBranchName().length() > 0 && bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
-                                    @bug.getBranchName()@@@bug.getRevisionID()
-                                    } else if (bug.getBranchName() != null && bug.getBranchName().length() > 0) {
-                                    @bug.getBranchName()
-                                    } else {
+                                    @if (bug.getId() != null && bug.getId().length() > 0) {
                                     <a class="operationBugID" href="https://mantis.fortinet.com/bug_view_page.php?bug_id=@bug.getId()">@bug.getId()</a>
+                                    @if (bug.getBranchName() != null && bug.getBranchName().length() > 0) {
+                                    :
+                                    }
+                                    }
+                                    @if (bug.getBranchName() != null && bug.getBranchName().length() > 0) {
+                                    @bug.getBranchName()
+                                    }
+                                    @if (bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
+                                    @@@bug.getRevisionID()
                                     }
                                 </span>
-                                <button type="button" class="close BtnDelete" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
                             </li>
                             }
                             }
@@ -151,33 +149,6 @@
                     @if (changeOrder.getData() != null && changeOrder.getData().getComment() != null) {
                     <td colspan="6"><p style="white-space:pre-wrap; width:60em">@StringEscapeUtils.escapeHtml4(changeOrder.getData().getComment())</p></td>
                     }
-                </tr>
-                <tr>
-                    <td></td>
-                    <td colspan="6">
-                        <div class="input-group input-group-sm mb-3">
-                            <input type="hidden" class="ChangeOrderID" value="@changeOrder.getId()">
-
-                            <div class="input-group-prepend">
-                                <button class="btn btn-outline-success BtnAdd" type="button">Add</button>
-                            </div>
-
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Bug ID</span>
-                            </div>
-                            <input class="form-control col-lg-1 addingBugID required" placeholder="Required">
-
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Fix Branch</span>
-                            </div>
-                            <input class="form-control col-lg-1 addingFixBranchName optional" placeholder="Optional">
-
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Fix Revision</span>
-                            </div>
-                            <input class="form-control col-lg-1 addingFixRevisionID optional" placeholder="Optional">
-                        </div>
-                    </td>
                 </tr>
                 }
                 }
