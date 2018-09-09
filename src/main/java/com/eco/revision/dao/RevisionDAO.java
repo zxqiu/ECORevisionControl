@@ -78,6 +78,18 @@ public class RevisionDAO extends AbstractDAO<Revision> {
         return (long)list.get(0);
     }
 
+    long findRevisionCount(String branchName) {
+        List<Object> list = namedQuery(Revision.REVISION_QUERY_PREFIX + "findRevisionCount")
+                .setParameter(Dict.BRANCH_NAME, branchName)
+                .list();
+
+        if (list == null || list.size() == 0 || list.get(0) == null) {
+            return 0;
+        }
+
+        return (long) list.get(0);
+    }
+
     Revision findByID(String id) {
         return get(id);
     }

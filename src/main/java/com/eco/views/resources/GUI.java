@@ -36,6 +36,7 @@ public class GUI {
     public static final String PATH_CHANGE_ORDERS_BY_BRANCH = "changeOrders/{" + Dict.BRANCH_NAME + "}";
     public static final String PATH_CHANGE_ORDER_BY_ID = "changeOrders/{" + Dict.BRANCH_NAME + "}/{" + Dict.ID + "}";
 
+    private static int entriesPerPage = 10;
     public static final Logger _logger = LoggerFactory.getLogger(GUI.class);
 
     public static RevisionDAI revisionDAI = null;
@@ -69,7 +70,9 @@ public class GUI {
                                         , null
                                         , "#"
                                         , "#"
-                                        , "#")
+                                        , "#"
+                                        , entriesPerPage
+                )
         ).build();
     }
 
@@ -80,19 +83,11 @@ public class GUI {
     @UnitOfWork
     public Response revisions(@PathParam(Dict.BRANCH_NAME) @NotNull String branchName
                               , @QueryParam(Dict.BEGIN) @NotNull Integer begin
-                              , @QueryParam(Dict.END) @NotNull Integer end) throws IOException {
-        int prevBegin = (begin - 100 < 0) ? 0 : begin - 100;
-        int prevEnd = begin - 1;
-        int nextBegin = end + 1;
-        int nextEnd = end + 100;
-        long latestRevision = revisionDAI.findLargestRevisionID(branchName);
-
-        _logger.info("calculate display range for " + branchName + " : prev begin : " + prevBegin + " prev end : " + prevEnd + " next begin : " + nextBegin + " next end : " + nextEnd + " latest revision : " + latestRevision);
-
-        String urlPrev = (prevEnd <= 0) ? "#" :
-                String.format(PATH_ROOT + "/" + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", prevBegin, prevEnd);
-        String urlNext = (nextBegin > latestRevision) ? "#" :
-                String.format(PATH_ROOT + "/" + branchName + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", nextBegin, nextEnd);
+                              , @QueryParam(Dict.END) @NotNull Integer end
+    ) throws IOException {
+        long max = revisionDAI.findRevisionCount(branchName);
+        String urlPrev = getPrevUrl(begin, max, PATH_ROOT + "/" + branchName);
+        String urlNext = getNextUrl(end, max, PATH_ROOT + "/" + branchName);
         String urlBranches = PATH_ROOT + "/" + PATH_BRANCHES;
 
         BranchConf branchConf = BranchConfFactory.getBranchConf();
@@ -104,7 +99,9 @@ public class GUI {
                                         , RevisionResource.utilGetLimitByBranch(branchName, begin, end)
                                         , urlNext
                                         , urlPrev
-                                        , urlBranches)
+                                        , urlBranches
+                                        , entriesPerPage
+                )
         ).build();
     }
 
@@ -113,16 +110,74 @@ public class GUI {
     @Path("/" + PATH_CHANGE_ORDERS)
     @Produces(MediaType.TEXT_HTML)
     @UnitOfWork
-    public Response getChangeOrders() {
+    public Response getChangeOrders(
+            @QueryParam(Dict.BEGIN) @NotNull Integer begin
+            , @QueryParam(Dict.END) @NotNull Integer end
+    ) {
+        _logger.info("0");
+        long max = changeOrderDAO.findChangeOrderCount(null);
+        _logger.info("1");
+        String urlPrev = getPrevUrl(begin, max, PATH_ROOT + "/");
+        String urlNext = getNextUrl(end, max, PATH_ROOT + "/");
+
         return Response.ok().entity(
                 views.changeOrders.template("All"
                                             , "user1000"
                                             , changeOrderDAO.findUniqueBranches()
                                             , changeOrderDAO.findAll()
-                                            , "#"
-                                            , "#"
+                                            , urlNext
+                                            , urlPrev
                 )
         ).build();
+    }
+
+    @GET
+    @Timed
+    @Path("/" + PATH_CHANGE_ORDERS_BY_BRANCH)
+    @Produces(MediaType.TEXT_HTML)
+    @UnitOfWork
+    public Response getChangeOrderByBranch(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName
+            , @QueryParam(Dict.BEGIN) @NotNull Integer begin
+            , @QueryParam(Dict.END) @NotNull Integer end
+    ) {
+        long max = changeOrderDAO.findChangeOrderCount(null);
+        String urlPrev = getPrevUrl(begin, max, PATH_ROOT + "/" + branchName);
+        String urlNext = getNextUrl(end, max, PATH_ROOT + "/" + branchName);
+
+        return Response.ok().entity(
+                views.changeOrders.template(
+                        branchName
+                        , "user1000"
+                        , changeOrderDAO.findUniqueBranches()
+                        , changeOrderDAO.findByBranch(branchName)
+                        , urlNext
+                        , urlPrev
+                )
+        ).build();
+    }
+
+    private String getPrevUrl(int begin, long max, String path) {
+        int prevBegin = (begin - entriesPerPage < 0) ? 0 : begin - entriesPerPage;
+        int prevEnd = begin - 1;
+
+        _logger.info("calculate change order display range : prev begin : " + prevBegin + " prev end : " + prevEnd + " latest revision : " + max);
+
+        String urlPrev = (prevEnd <= 0) ? "#" :
+                String.format(path + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", prevBegin, prevEnd);
+
+        return urlPrev;
+    }
+
+    private String getNextUrl(int end, long max, String path) {
+        int nextBegin = end + 1;
+        int nextEnd = end + entriesPerPage;
+
+        _logger.info("calculate change order display range : next begin : " + nextBegin + " next end : " + nextEnd + " latest revision : " + max);
+
+        String urlNext = (nextBegin > max) ? "#" :
+                String.format(path + "?" + Dict.BEGIN + "=%d&" + Dict.END + "=%d", nextBegin, nextEnd);
+
+        return urlNext;
     }
 
     @GET
@@ -130,13 +185,14 @@ public class GUI {
     @Path("/" + PATH_CHANGE_ORDER_BY_ID)
     @Produces(MediaType.TEXT_HTML)
     @UnitOfWork
-    public Response getChangeOrder(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName
+    public Response getChangeOrderByID(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName
                                 , @PathParam(Dict.ID) @NotEmpty String id) {
         return Response.ok().entity(
                 views.changeOrder.template(branchName
                         , "user1000"
                         , changeOrderDAO.findUniqueBranches()
                         , changeOrderDAO.findByID(id)
+                        , entriesPerPage
                 )
         ).build();
     }

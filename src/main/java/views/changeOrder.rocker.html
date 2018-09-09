@@ -7,7 +7,7 @@
 @import java.util.List;
 @import org.apache.commons.text.StringEscapeUtils;
 
-@args(String branchName, String userName, List<String> branches, ChangeOrder changeOrder)
+@args(String branchName, String userName, List<String> branches, ChangeOrder changeOrder, int entriesPerPage)
 
 <html lang="en">
 
@@ -31,8 +31,7 @@
 
     <body>
 
-    <div class="snackbar" id="successSnackBar">Success</div>
-    <div class="snackbar" id="errorSnackBar">Error</div>
+    <div class="snackbar" id="snackBar">Error</div>
 
     <div class="row">
         <div class="col-md-1"></div>
@@ -76,44 +75,64 @@
 
 
     <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
             <form>
                 <div class="form-group">
                     <label for="changeOrderID">ID</label>
-                    <input type="text" class="form-control" id="changeOrderID" placeholder="Required">
+                    <input type="text" class="form-control required" id="changeOrderID" placeholder="Required">
                 </div>
 
                 <div class="form-group">
                     <label for="branchName">Branch Name</label>
-                    <input type="text" class="form-control" id="branchName" placeholder="Required">
+                    @if (branchName != null && branchName.length() > 0) {
+                    <input type="text" class="form-control required" id="branchName" placeholder="Required" value="@branchName">
+                    } else {
+                    <input type="text" class="form-control required" id="branchName" placeholder="Required">
+                    }
                 </div>
 
                 <div class="form-group">
                     <label for="author">Author</label>
-                    <input type="text" class="form-control" id="author" placeholder="Required">
+                    <input type="text" class="form-control required" id="author" placeholder="Required">
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Date</label>
+                    <input type="date" class="form-control required" id="time" placeholder="Required">
                 </div>
 
                 <div class="form-group">
                     <label for="comment">Comment</label>
-                    <input type="text" class="form-control" id="comment" placeholder="Required">
+                    <input type="text" class="form-control" id="comment" placeholder="Optional">
                 </div>
 
                 <div>
-                    <label class="control-label" for="bugIDs">Bug ID</label>
-                    <div id="bugIDs">
-                        <div class='form-inline input-group'>
-                            <input type='text' class='form-control' id='bugID' placeholder='Bug ID'/>
-                            <input type='text' class='form-control' id='fixBranchName' placeholder='Fix Branch Name'/>
-                            <input type='text' class='form-control' id='fixRevisionID' placeholder='Fix Revision ID'/>
+                    <label class="control-label" for="bugs">Bug ID</label>
+                    <div id="bugs">
+                        <div class='form-inline input-group bug'>
+                            <input type='text' class='form-control requiredGroup0' id='bugID' placeholder='Bug ID'/>
+                            <input type='text' class='form-control requiredGroup1' id='fixBranchName' placeholder='Fix Branch Name'/>
+                            <input type='text' class='form-control requiredGroup1' id='fixRevisionID' placeholder='Fix Revision ID'/>
+                            <input type='text' class='form-control' id='bugComment' placeholder='Comment'/>
 
                             <button class='input-group-addon moreBug btn btn-success' style='width: 40px;'>+</button>
                         </div>
                     </div>
                 </div>
+
+                <br \>
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-danger" onclick="goBack(event)">Cancel</button>
+                    </div>
+                    <div class="col" style="text-align: right">
+                        <button type="submit" class="btn btn-primary submit">Submit</button>
+                    </div>
+                </div>
             </form>
         </div>
-        <div class="col-md-1"></div>
+        <div class="col-md-3"></div>
     </div>
 
 
@@ -123,6 +142,15 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
+
+        function goBack(e) {
+            e.preventDefault();
+            @if (branchName != null && branchName.length() > 0) {
+                window.location.href = "@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS/@branchName?begin=0&end=@entriesPerPage";
+            } else {
+                window.location.href = "@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS?begin=0&end=@entriesPerPage";
+            }
+        }
     </script>
 
     </body>

@@ -8,7 +8,8 @@
 @import java.util.List;
 @import org.apache.commons.text.StringEscapeUtils;
 
-@args(String branchName, String userName, List<Branch> branches, List<Revision> revisions, String urlNext, String urlPrev, String urlBranches)
+@args(String branchName, String userName, List<Branch> branches, List<Revision> revisions, String urlNext, String urlPrev
+    , String urlBranches, int entriesPerPage)
 
 <html lang="en">
 
@@ -64,7 +65,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS">Show Change Orders</a>
+                        <a class="nav-link" href="@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS?begin=0&end=@entriesPerPage">Show Change Orders</a>
                     </li>
                 </ul>
             </div>
@@ -102,7 +103,7 @@
                     <th style="width:5%">Revision</th>
                     <th style="width:10%">Submit Time</th>
                     <th style="width:5%">Author</th>
-                    <th style="width:10%">Last Change</th>
+                    <th style="width:10%">Last Modification</th>
                     <th style="width:5%">Edit By</th>
                     <th style="width:25%">Committed</th>
                     <th style="width:25%">Skipped</th>

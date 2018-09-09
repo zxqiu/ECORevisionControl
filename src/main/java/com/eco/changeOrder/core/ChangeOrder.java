@@ -24,12 +24,23 @@ import java.util.Date;
 @Entity
 @Table(name = ChangeOrder.TABLE_NAME)
 @NamedQueries({
-        @NamedQuery(name = "com.eco.changeOrder.core.ChangeOrder.findAll", query = "select c from " + ChangeOrder.TABLE_NAME + " c"),
-        @NamedQuery(name = "com.eco.changeOrder.core.ChangeOrder.findBranches", query = "select distinct " + Dict.BRANCH_NAME + " from " + ChangeOrder.TABLE_NAME)
+        @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findAll", query = "select c from " + ChangeOrder.TABLE_NAME + " c"),
+        @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findBranches", query = "select distinct " + Dict.BRANCH_NAME + " from " + ChangeOrder.TABLE_NAME),
+        @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findByBranch", query = "select c from " + ChangeOrder.TABLE_NAME + " c "
+                + "where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
+        ),
+        @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findChangeOrderCount",
+                query = "select count(c) from " + ChangeOrder.TABLE_NAME + " c "
+        ),
+        @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findChangeOrderCountByBranch",
+                query = "select count(c) from " + ChangeOrder.TABLE_NAME + " c "
+                + "where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
+        )
 })
 
 public class ChangeOrder {
     public static final String TABLE_NAME = "ChangeOrder";
+    public static final String CHANGE_ORDER_QUERY_PREFIX = "com.eco.changeOrder.core.ChangeOrder.";
     private static final Logger _logger = LoggerFactory.getLogger(ChangeOrder.class);
 
     @JsonProperty

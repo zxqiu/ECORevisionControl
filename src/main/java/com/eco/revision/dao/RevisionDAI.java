@@ -18,6 +18,7 @@ public interface RevisionDAI {
     public abstract Revision findByID(String branchName, String revisionID);
     public abstract List<Revision> findByBranch(String branchName);
     public abstract long findLargestRevisionID(String branchName);
+    public abstract long findRevisionCount(String branchName);
     public abstract List<Revision> findLimitByBranch(String branchName, int begin, int end);
     public abstract void delete(String id);
     public abstract void update(String branchName, String revisionID,

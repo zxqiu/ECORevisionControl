@@ -32,6 +32,10 @@ import java.util.List;
         @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findRevisionIDMax",
                 query = "select max(cast(c." + Dict.REVISION_ID + " as long)) from " + Revision.TABLE_NAME + " c"
                         + " where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
+        ),
+        @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findRevisionCount",
+                query = "select count(c) from " + Revision.TABLE_NAME + " c "
+                        + "where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
         )
 })
 
