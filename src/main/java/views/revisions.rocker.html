@@ -58,7 +58,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if (branches != null) {
                                 @for (Branch branch : branches) {
-                                <a class="dropdown-item" href="@branch.getURL()">@branch.getBranchName()</a>
+                                <a class="dropdown-item" href="@GUI.PATH_ROOT/@branch.getBranchName()?begin=0&end=@entriesPerPage">@branch.getBranchName()</a>
                                 }
                             }
                         </div>

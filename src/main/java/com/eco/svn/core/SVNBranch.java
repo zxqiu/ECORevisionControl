@@ -28,10 +28,6 @@ public class SVNBranch implements Branch {
 
     public SVNBranch() {}
 
-    public String getURL() {
-        return "/" + branchName + "?begin=0&end=100";
-    }
-
     public String getBranchName() {
         return branchName;
     }

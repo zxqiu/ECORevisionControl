@@ -27,7 +27,7 @@ import java.util.List;
                 query = "select c from " + Revision.TABLE_NAME + " c where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME),
         @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findLimitByBranch",
                 query = "select c from " + Revision.TABLE_NAME + " c where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
-                        + " order by cast(c."+ Dict.REVISION_ID + " as long) desc"
+                        + " order by c."+ Dict.TIME + " desc"
         ),
         @NamedQuery(name = Revision.REVISION_QUERY_PREFIX + "findRevisionIDMax",
                 query = "select max(cast(c." + Dict.REVISION_ID + " as long)) from " + Revision.TABLE_NAME + " c"

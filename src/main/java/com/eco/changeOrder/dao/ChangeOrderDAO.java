@@ -24,13 +24,18 @@ public class ChangeOrderDAO extends AbstractDAO<ChangeOrder> {
         return persist(changeOrder).getId();
     }
 
-    public List<ChangeOrder> findAll() {
-        return list(namedQuery(ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findAll"));
+    public List<ChangeOrder> findAll(int begin, int end) {
+        return list(namedQuery(ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findAll")
+                .setFirstResult(begin)
+                .setMaxResults(end - begin + 1)
+        );
     }
 
-    public List<ChangeOrder> findByBranch(String branchName) {
+    public List<ChangeOrder> findByBranch(String branchName, int begin, int end) {
         return list(namedQuery(ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findByBranch")
                 .setParameter(Dict.BRANCH_NAME, branchName)
+                .setFirstResult(begin)
+                .setMaxResults(end - begin + 1)
         );
     }
 

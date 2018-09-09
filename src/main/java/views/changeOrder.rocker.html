@@ -56,14 +56,14 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @if (branches != null) {
                                 @for (branch : branches) {
-                                <a class="dropdown-item" href="@GUI.PATH_CHANGE_ORDERS/@branch?begin=0&end=@entriesPerPage">@branch</a>
+                                <a class="dropdown-item" href="@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS/@branch?begin=0&end=@entriesPerPage">@branch</a>
                                 }
                                 }
                             </div>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="@GUI.PATH_ROOT/">Show Revisions</a>
+                            <a class="nav-link" href="/@GUI.PATH_ROOT/">Show Revisions</a>
                         </li>
                     </ul>
                 </div>

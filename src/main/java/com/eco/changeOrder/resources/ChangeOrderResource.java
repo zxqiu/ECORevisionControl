@@ -49,7 +49,7 @@ public class ChangeOrderResource {
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
     public List<ChangeOrder> getAll() {
-        return changeOrderDAO.findAll();
+        return changeOrderDAO.findAll(0, Integer.MAX_VALUE);
     }
 
     @GET

@@ -119,14 +119,14 @@ public class GUI {
         _logger.info("0");
         long max = changeOrderDAO.findChangeOrderCount(null);
         _logger.info("1");
-        String urlPrev = getPrevUrl(begin, max, PATH_ROOT + "/");
-        String urlNext = getNextUrl(end, max, PATH_ROOT + "/");
+        String urlPrev = getPrevUrl(begin, max, PATH_ROOT + "/" + PATH_CHANGE_ORDERS+ "/");
+        String urlNext = getNextUrl(end, max, PATH_ROOT + "/" + PATH_CHANGE_ORDERS+ "/");
 
         return Response.ok().entity(
                 views.changeOrders.template("All"
                                             , "user1000"
                                             , changeOrderDAO.findUniqueBranches()
-                                            , changeOrderDAO.findAll()
+                                            , changeOrderDAO.findAll(begin, end)
                                             , urlNext
                                             , urlPrev
                                             , entriesPerPage
@@ -144,15 +144,15 @@ public class GUI {
             , @QueryParam(Dict.END) @NotNull Integer end
     ) {
         long max = changeOrderDAO.findChangeOrderCount(null);
-        String urlPrev = getPrevUrl(begin, max, PATH_ROOT + "/" + branchName);
-        String urlNext = getNextUrl(end, max, PATH_ROOT + "/" + branchName);
+        String urlPrev = getPrevUrl(begin, max, PATH_ROOT + "/" + PATH_CHANGE_ORDERS + "/" + branchName);
+        String urlNext = getNextUrl(end, max, PATH_ROOT + "/" + PATH_CHANGE_ORDERS+ "/" + branchName);
 
         return Response.ok().entity(
                 views.changeOrders.template(
                         branchName
                         , "user1000"
                         , changeOrderDAO.findUniqueBranches()
-                        , changeOrderDAO.findByBranch(branchName)
+                        , changeOrderDAO.findByBranch(branchName, begin, end)
                         , urlNext
                         , urlPrev
                         , entriesPerPage
