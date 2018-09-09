@@ -137,6 +137,12 @@
                                     @if (bug.getRevisionID() != null && bug.getRevisionID().length() > 0) {
                                     @@@bug.getRevisionID()
                                     }
+
+                                    @if ((bug.getId() == null || bug.getId().length() == 0)
+                                        && (bug.getBranchName() == null || bug.getBranchName().length() == 0)
+                                        && (bug.getRevisionID() == null || bug.getRevisionID().length() == 0)) {
+                                    @bug.getComment()
+                                    }
                                 </span>
                             </li>
                             }

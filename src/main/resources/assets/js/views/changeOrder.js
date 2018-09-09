@@ -78,7 +78,7 @@ function bugHasError(bug) {
         }
     }
 
-    if (emptyCnt < $(bug).find(".requiredGroup").length) {
+    if (emptyCnt > 0 && emptyCnt < $(bug).find(".requiredGroup").length) {
         showSnackBar("Both [Fix Branch Name] and [Fix Revision ID] must be filled");
         return true;
     }
