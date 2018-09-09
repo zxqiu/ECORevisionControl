@@ -7,7 +7,8 @@
 @import java.util.List;
 @import org.apache.commons.text.StringEscapeUtils;
 
-@args(String branchName, String userName, List<String> branches, List<ChangeOrder> changeOrders, String urlNext, String urlPrev)
+@args(String branchName, String userName, List<String> branches, List<ChangeOrder> changeOrders
+    , String urlNext, String urlPrev, int entriesPerPage)
 
 <html lang="en">
 
@@ -56,7 +57,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @if (branches != null) {
                                 @for (branch : branches) {
-                                <a class="dropdown-item" href="/changeOrder/@branch">@branch</a>
+                                <a class="dropdown-item" href="@GUI.PATH_CHANGE_ORDERS/@branch?begin=0&end=@entriesPerPage">@branch</a>
                                 }
                                 }
                             </div>

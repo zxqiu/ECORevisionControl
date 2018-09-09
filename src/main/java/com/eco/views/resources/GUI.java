@@ -129,6 +129,7 @@ public class GUI {
                                             , changeOrderDAO.findAll()
                                             , urlNext
                                             , urlPrev
+                                            , entriesPerPage
                 )
         ).build();
     }
@@ -154,6 +155,7 @@ public class GUI {
                         , changeOrderDAO.findByBranch(branchName)
                         , urlNext
                         , urlPrev
+                        , entriesPerPage
                 )
         ).build();
     }

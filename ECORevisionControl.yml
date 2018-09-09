@@ -52,7 +52,9 @@ database:
     hibernate.generate_statistics: true
     hibernate.show_sql: true
     hibernate.format_sql: true
-    hibernate.hbm2ddl.auto: create
+    #hibernate.hbm2ddl.auto: create
+    hibernate.hbm2ddl.auto: update
+    hibernate.jdbc.batch_size: 200
 
 logging:
   level: INFO

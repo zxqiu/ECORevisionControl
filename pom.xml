@@ -20,7 +20,6 @@
         <mockito-all.version>1.9.5</mockito-all.version>
         <svnkit.version>1.9.3</svnkit.version>
         <rocker.version>1.0.0</rocker.version>
-        <sqlite-dialect.version>1.0</sqlite-dialect.version>
     </properties>
 
     <build>
@@ -105,6 +104,12 @@
         </resources>
     </build>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -190,11 +195,11 @@
             <version>${dropwizard.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.zsoltfabok/sqlite-dialect -->
+        <!-- https://mvnrepository.com/artifact/org.hibernate.dialect/sqlite-dialect -->
         <dependency>
-            <groupId>com.zsoltfabok</groupId>
+            <groupId>com.github.gwenn</groupId>
             <artifactId>sqlite-dialect</artifactId>
-            <version>${sqlite-dialect.version}</version>
+            <version>master</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
