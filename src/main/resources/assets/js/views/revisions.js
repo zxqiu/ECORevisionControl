@@ -1,7 +1,7 @@
 var api = APIs.createNew();
 
 $(document).on("click", ".BtnDelete", function(e) {
-    var btn = $(e.target).parent();
+    var btn = $(e.target).parent().parent();
     var parent = btn.parent();
     var grandparent = parent.parent();
     var grandgrandparent = grandparent.parent();
@@ -87,18 +87,20 @@ $(document).on("click", ".BtnAdd", function(e) {
 
         if (request["commitStatuses"][0]["status"] == 0) {
             var list = display.find(".committedList");
-            var li = list.find("#committed" + request["commitStatuses"][0]["branchName"]);
+            var li = list.find("#committed" + request["commitStatuses"][0]["commitID"]);
 
             if (li.length == 0) {
-                list.append("<li id=\"committed" + request["commitStatuses"][0]["branchName"] + "\">"
-                          + "<span  class=\"commentTooltip\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\">"
-                          + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a> : <a class=\"commitID\">" + request["commitStatuses"][0]["commitID"] + "</a>"
-                          + "</span>"
-                          + "<button type=\"button\" class=\"close BtnDelete\" aria-label=\"Close\">"
-                          + "<span aria-hidden=\"true\">&times;</span>"
-                          + "</button>"
-                          + "</li>"
-                           );
+                var div = $("<div class='row'>");
+                var li = $("<li id='committed" + request["commitStatuses"][0]["branchName"] + "'></li>");
+                var span = $("<span class='commentTooltip' data-toggle='tooltip' data-placement='bottom' title='" + request["commitStatuses"][0]["comment"] + "'></span>");
+                var a = $("<a class='operationBranchName'>" + request["commitStatuses"][0]["branchName"] + "</a> : <a class='commitID'>" + request["commitStatuses"][0]["commitID"] + "</a>");
+                var button = $("<button type='button' class='close BtnDelete' aria-label='Close'><span aria-hidden='true'>&times;</span></button>");
+
+                span.append(a);
+                li.append(span);
+                li.append(button);
+                div.append($(li));
+                list.append(div);
             } else {
                 li.find(".commentTooltip").attr("title", request["commitStatuses"][0]["comment"]);
                 li.find(".commentTooltip").attr("data-original-title", "");
@@ -111,9 +113,24 @@ $(document).on("click", ".BtnAdd", function(e) {
             }
         } else if (request["commitStatuses"][0]["status"] == 1) {
             var list = display.find(".skippedList");
-            var li = list.find("#skipped" + request["commitStatuses"][0]["branchName"]);
+            var li = list.find("#skipped" + request["commitStatuses"][0]["commitID"]);
 
             if (li.length == 0) {
+                var div = $("<div class='row'>");
+                var li = $("<li id='skipped" + request["commitStatuses"][0]["branchName"] + "'></li>");
+                var span = $("<span class='commentTooltip' data-toggle='tooltip' data-placement='bottom' title='" + request["commitStatuses"][0]["comment"] + "'></span>");
+                var a0 = $("<a class='operationBranchName'>" + request["commitStatuses"][0]["branchName"] + "</a>");
+                var a1 = $("<a class='commitID' style='display: none'>" + request["commitStatuses"][0]["commitID"] + "</a>");
+                var button = $("<button type='button' class='close BtnDelete' aria-label='Close'><span aria-hidden='true'>&times;</span></button>");
+
+                span.append(a0);
+                span.append(a1);
+                li.append(span);
+                li.append(button);
+                div.append($(li));
+                list.append(div);
+
+                /*
                 list.append("<li id=\"skipped" + request["commitStatuses"][0]["branchName"] + "\">"
                           + "<span class=\"commentTooltip\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"" + request["commitStatuses"][0]["comment"] + "\">"
                           + "<a class=\"operationBranchName\">" + request["commitStatuses"][0]["branchName"] + "</a>"
@@ -124,6 +141,7 @@ $(document).on("click", ".BtnAdd", function(e) {
                           + "</button>"
                           + "</li>"
                            );
+                           */
             } else {
                 li.find(".commentTooltip").attr("title", request["commitStatuses"][0]["comment"]);
                 li.find(".commentTooltip").attr("data-original-title", "");

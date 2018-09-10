@@ -81,16 +81,16 @@
             <form>
                 <div class="form-group">
                     <label for="changeOrderID">ID</label>
-                    @if (changeOrder != null && changeOrder.getId() != null) {
-                    <input disabled type="text" class="form-control required" id="changeOrderID" placeholder="Required" value="@changeOrder.getId()">
+                    @if (changeOrder != null && changeOrder.getId() != null && changeOrder.getId() != 0) {
+                    <input disabled type="number" class="form-control required" id="changeOrderID" placeholder="Required" value="@changeOrder.getId()">
                     } else {
-                    <input type="text" class="form-control required" id="changeOrderID" placeholder="Required">
+                    <input type="number" class="form-control required" id="changeOrderID" placeholder="Required">
                     }
                 </div>
 
                 <div class="form-group">
                     <label for="branchName">Branch Name</label>
-                    @if (changeOrder != null && changeOrder.getBranchName() != null) {
+                    @if (changeOrder != null && changeOrder.getId() != null && changeOrder.getId() != 0 && changeOrder.getBranchName() != null) {
                     <input disabled type="text" class="form-control required" id="branchName" placeholder="Required" value="@changeOrder.getBranchName()">
                     } else if (branchName != null && branchName.length() > 0) {
                     <input type="text" class="form-control required" id="branchName" placeholder="Required" value="@branchName">

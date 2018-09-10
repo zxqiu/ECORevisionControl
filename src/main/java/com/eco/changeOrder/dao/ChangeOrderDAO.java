@@ -16,11 +16,11 @@ public class ChangeOrderDAO extends AbstractDAO<ChangeOrder> {
         super(sessionFactory);
     }
 
-    public ChangeOrder findByID(String id) {
+    public ChangeOrder findByID(Long id) {
         return get(id);
     }
 
-    public String create(ChangeOrder changeOrder) {
+    public Long create(ChangeOrder changeOrder) {
         return persist(changeOrder).getId();
     }
 
@@ -66,7 +66,7 @@ public class ChangeOrderDAO extends AbstractDAO<ChangeOrder> {
         persist(changeOrder);
     }
 
-    public void delete(String id) {
+    public void delete(Long id) {
         ChangeOrder changeOrder = findByID(id);
         currentSession().delete(changeOrder);
     }

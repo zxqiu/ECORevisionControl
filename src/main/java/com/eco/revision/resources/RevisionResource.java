@@ -131,7 +131,7 @@ public class RevisionResource {
         }
 
         if (revision.getData().getCommitStatuses() == null) {
-            revision.getData().setCommitStatuses(new ArrayList<CommitStatus>());
+            revision.getData().setCommitStatuses(new ArrayList<>());
         }
 
         RevisionData revisionData = revision.getData();
@@ -141,7 +141,7 @@ public class RevisionResource {
             int i;
             for (i = 0; i < commitStatuses.size(); i++) {
                 CommitStatus cs = commitStatuses.get(i);
-                if (cs.getBranchName().equals(commitStatus.getBranchName())) {
+                if (cs.getCommitID().equals(commitStatus.getCommitID())) {
                     cs.setStatus(commitStatus.getStatus());
                     cs.setCommitID(commitStatus.getCommitID());
                     cs.setComment(commitStatus.getComment());

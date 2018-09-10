@@ -161,7 +161,7 @@ public class GUI {
     }
 
     private String getPrevUrl(int begin, long max, String path) {
-        int prevBegin = (begin - entriesPerPage < 0) ? 0 : begin - entriesPerPage;
+        int prevBegin = (begin - entriesPerPage - 1 < 0) ? 0 : begin - entriesPerPage - 1;
         int prevEnd = begin - 1;
 
         _logger.info("calculate change order display range : prev begin : " + prevBegin + " prev end : " + prevEnd + " latest revision : " + max);
@@ -174,7 +174,7 @@ public class GUI {
 
     private String getNextUrl(int end, long max, String path) {
         int nextBegin = end + 1;
-        int nextEnd = end + entriesPerPage;
+        int nextEnd = end + entriesPerPage + 1;
 
         _logger.info("calculate change order display range : next begin : " + nextBegin + " next end : " + nextEnd + " latest revision : " + max);
 
@@ -190,7 +190,7 @@ public class GUI {
     @Produces(MediaType.TEXT_HTML)
     @UnitOfWork
     public Response getChangeOrderByID(@PathParam(Dict.BRANCH_NAME) @NotEmpty String branchName
-                                , @PathParam(Dict.ID) @NotEmpty String id) {
+                                , @PathParam(Dict.ID) @NotNull Long id) {
         ChangeOrder changeOrder = changeOrderDAO.findByID(id);
         String time = null;
 

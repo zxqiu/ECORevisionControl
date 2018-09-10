@@ -58,7 +58,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
         this.commitStatuses = CommitStatus.toList(commitStatusesJSON);
     }
 
-    public CommitStatus getCommitStatusByCommitID(String commitID) {
+    public CommitStatus getCommitStatusByCommitID(Long commitID) {
         if (this.commitStatuses != null) {
             for (CommitStatus commitStatus : this.commitStatuses) {
                 if (commitStatus.getCommitID().equals(commitID)) {
@@ -100,7 +100,7 @@ public class RevisionData implements Serializable, Serializer<RevisionData> {
 
     public static void main(String[] arg) throws IOException, ClassNotFoundException {
         List<CommitStatus> commitStatuses = new ArrayList<>();
-        commitStatuses.add(new CommitStatus("testBranch1", 0, "commitID1", "testComment1"));
+        commitStatuses.add(new CommitStatus("testBranch1", 0, 1L, "testComment1"));
         RevisionData testRevisionData = new RevisionData(commitStatuses);
         System.out.println(testRevisionData.toString());
 

@@ -16,6 +16,7 @@ import io.dropwizard.jersey.PATCH;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -57,7 +58,7 @@ public class ChangeOrderResource {
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public ChangeOrder get(@PathParam(Dict.ID) @NotEmpty String id) {
+    public ChangeOrder get(@PathParam(Dict.ID) @NotNull Long id) {
         return changeOrderDAO.findByID(id);
     }
 
@@ -67,7 +68,7 @@ public class ChangeOrderResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Response insert(@PathParam(Dict.ID) String id
+    public Response insert(@PathParam(Dict.ID) @NotNull Long id
                         , @Valid ChangeOrder changeOrderNew) throws IOException, GeneralException {
         ChangeOrder changeOrder = changeOrderDAO.findByID(id);
 
@@ -146,7 +147,7 @@ public class ChangeOrderResource {
                     int i;
                     for (i = 0; i < commitStatuses.size(); i++) {
                         CommitStatus commitStatus = commitStatuses.get(i);
-                        if (commitStatus.getBranchName().equals(changeOrder.getBranchName())) {
+                        if (commitStatus.getCommitID().equals(changeOrder.getId())) {
                             commitStatus.setStatus(Revision.STATUS.COMMITTED.getValue());
                             commitStatus.setCommitID(changeOrder.getId());
                             commitStatus.setComment(bug.getComment());
@@ -163,7 +164,7 @@ public class ChangeOrderResource {
                         );
                     }
 
-                    revisionDAI.update(bug.getBranchName(), bug.getRevisionID()
+                    revisionDAI.update(revision.getBranchName(), revision.getRevisionId()
                             , changeOrder.getAuthor(), new Date(), revision.getData());
                 }
             }
@@ -178,7 +179,7 @@ public class ChangeOrderResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Response update(@PathParam(Dict.ID) @NotEmpty String id
+    public Response update(@PathParam(Dict.ID) @NotNull Long id
                         , @Valid ChangeOrderData changeOrderData) {
         ChangeOrder changeOrder = changeOrderDAO.findByID(id);
         changeOrder.setData(changeOrderData);
@@ -192,7 +193,7 @@ public class ChangeOrderResource {
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
     @UnitOfWork
-    public Response delete(@PathParam(Dict.ID) @NotEmpty String id) throws IOException {
+    public Response delete(@PathParam(Dict.ID) @NotNull Long id) throws IOException {
         ChangeOrder changeOrder = changeOrderDAO.findByID(id);
 
         if (changeOrder == null) {
@@ -217,13 +218,13 @@ public class ChangeOrderResource {
                     int i;
                     for (i = 0; i < commitStatuses.size(); i++) {
                         CommitStatus commitStatus = commitStatuses.get(i);
-                        if (commitStatus.getBranchName().equals(changeOrder.getBranchName())) {
-                            commitStatus.setStatus(Revision.STATUS.DELETED.getValue());
+                        if (commitStatus.getCommitID().equals(changeOrder.getId())) {
                             break;
                         }
                     }
 
                     if (i < commitStatuses.size()) {
+                        commitStatuses.remove(i);
                         revisionDAI.update(revision.getBranchName(), revision.getRevisionId(), changeOrder.getAuthor()
                                 , new Date(), revision.getData());
                     }

@@ -131,14 +131,16 @@
                         @if (revision.getData() != null && revision.getData().getCommitStatuses() != null) {
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
                                 @if (commitStatus != null && commitStatus.getStatus() == Revision.STATUS.COMMITTED.getValue()) {
-                            <li id="committed@commitStatus.getBranchName()">
-                                <span class="commentTooltip" data-toggle="tooltip" data-placement="bottom" data-html="true" title="@StringEscapeUtils.escapeHtml4(commitStatus.getComment()).replaceAll("(\r\n|\n)", "<br />")">
-                                    <a class="operationBranchName">@commitStatus.getBranchName()</a> : <a class="commitID">@commitStatus.getCommitID()</a>
-                                </span>
-                                <button type="button" class="close BtnDelete" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
+                            <div class='row'>
+                                <li id="committed@commitStatus.getCommitID()">
+                                    <span class="commentTooltip" data-toggle="tooltip" data-placement="bottom" data-html="true" title="@StringEscapeUtils.escapeHtml4(commitStatus.getComment()).replaceAll("(\r\n|\n)", "<br />")">
+                                        <a class="operationBranchName">@commitStatus.getBranchName()</a> : <a class="commitID">@commitStatus.getCommitID()</a>
+                                    </span>
+                                    <button type="button" class="close BtnDelete" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </li>
+                            </div>
                                 }
                             }
                         }
@@ -149,15 +151,17 @@
                         @if (revision.getData() != null && revision.getData().getCommitStatuses() != null) {
                             @for (commitStatus : revision.getData().getCommitStatuses()) {
                                 @if (commitStatus != null && commitStatus.getStatus() == Revision.STATUS.SKIPPED.getValue()) {
-                            <li id="skipped@commitStatus.getBranchName()">
-                                <span class="commentTooltip" data-toggle="tooltip" data-placement="bottom" data-html="true" title="@StringEscapeUtils.escapeHtml4(commitStatus.getComment()).replaceAll("(\r\n|\n)", "<br />")">
-                                    <a class="operationBranchName">@commitStatus.getBranchName()</a>
-                                    <a class="commitID" style="display: none">@commitStatus.getCommitID()</a>
-                                </span>
-                                <button type="button" class="close BtnDelete" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </li>
+                            <div class='row'>
+                                <li id="skipped@commitStatus.getCommitID()">
+                                    <span class="commentTooltip" data-toggle="tooltip" data-placement="bottom" data-html="true" title="@StringEscapeUtils.escapeHtml4(commitStatus.getComment()).replaceAll("(\r\n|\n)", "<br />")">
+                                        <a class="operationBranchName">@commitStatus.getBranchName()</a>
+                                        <a class="commitID" style="display: none">@commitStatus.getCommitID()</a>
+                                    </span>
+                                    <button type="button" class="close BtnDelete" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </li>
+                            </div>
                                 }
                             }
                         }
@@ -192,7 +196,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Commit ID</span>
                             </div>
-                            <input class="form-control col-lg-1 addingCommitID" placeholder="Required">
+                            <input type="number" class="form-control col-lg-1 addingCommitID" placeholder="Required">
 
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Bug ID</span>

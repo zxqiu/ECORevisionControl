@@ -35,7 +35,7 @@ public class ChangeOrderTest {
     private static final int READ_TIMEOUT = 20 * 1000; // second
 
     private ChangeOrderData testChangeOrderData = new ChangeOrderData("test comment", new ArrayList<Bug>());
-    private ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), "", null, testChangeOrderData);
+    private ChangeOrder testChangeOrder = new ChangeOrder(1L, "testBranch", "testAuthor", new Date(1), "", null, testChangeOrderData);
 
     @ClassRule
     public static final DropwizardAppRule<ECOConfiguration> RULE =
@@ -54,7 +54,7 @@ public class ChangeOrderTest {
         Response response = client
                 .target("http://localhost:8080" + Dict.API_V1_PATH)
                 .path(ChangeOrderResource.PATH_ROOT)
-                .path(testChangeOrder.getId())
+                .path(String.valueOf(testChangeOrder.getId()))
                 .request()
                 .post(Entity.entity(testChangeOrder, MediaType.APPLICATION_JSON_TYPE));
 
@@ -66,7 +66,7 @@ public class ChangeOrderTest {
         Response response = client
                 .target("http://localhost:8080" + Dict.API_V1_PATH)
                 .path(ChangeOrderResource.PATH_ROOT)
-                .path(testChangeOrder.getId())
+                .path(String.valueOf(testChangeOrder.getId()))
                 .request()
                 .delete();
 
@@ -82,7 +82,7 @@ public class ChangeOrderTest {
         Response response = client
                 .target("http://localhost:8080" + Dict.API_V1_PATH)
                 .path(ChangeOrderResource.PATH_ROOT)
-                .path(testChangeOrder.getId())
+                .path(String.valueOf(testChangeOrder.getId()))
                 .request()
                 .method("PATCH", Entity.entity(changeOrderDataCopy, MediaType.APPLICATION_JSON_TYPE));
 
@@ -94,7 +94,7 @@ public class ChangeOrderTest {
         ChangeOrder changeOrder = client
                 .target("http://localhost:8080" + Dict.API_V1_PATH)
                 .path(ChangeOrderResource.PATH_ROOT)
-                .path(testChangeOrder.getId())
+                .path(String.valueOf(testChangeOrder.getId()))
                 .request()
                 .get(ChangeOrder.class);
 

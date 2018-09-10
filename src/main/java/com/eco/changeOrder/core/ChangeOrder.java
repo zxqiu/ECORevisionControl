@@ -26,7 +26,7 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findAll",
                 query = "select c from " + ChangeOrder.TABLE_NAME + " c"
-                        + " order by c." + Dict.TIME + " desc"
+                        + " order by " + Dict.ID + " desc"
         ),
         @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findBranches",
                 query = "select distinct " + Dict.BRANCH_NAME + " from " + ChangeOrder.TABLE_NAME
@@ -34,7 +34,7 @@ import java.util.Date;
         @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findByBranch",
                 query = "select c from " + ChangeOrder.TABLE_NAME + " c"
                 + " where " + Dict.BRANCH_NAME + "=:" + Dict.BRANCH_NAME
-                + " order by c." + Dict.TIME + " desc"
+                + " order by " + Dict.ID + " desc"
         ),
         @NamedQuery(name = ChangeOrder.CHANGE_ORDER_QUERY_PREFIX + "findChangeOrderCount",
                 query = "select count(c) from " + ChangeOrder.TABLE_NAME + " c "
@@ -51,10 +51,10 @@ public class ChangeOrder {
     private static final Logger _logger = LoggerFactory.getLogger(ChangeOrder.class);
 
     @JsonProperty
-    @NotEmpty
+    @NotNull
     @Column(name = Dict.ID, unique = true)
     @Id
-    private String id;
+    private Long id;
 
     @JsonProperty
     @NotEmpty
@@ -86,7 +86,7 @@ public class ChangeOrder {
 
     public ChangeOrder() {}
 
-    public ChangeOrder(String id, String branchName, String author, Date time, String editor, Date editTime, ChangeOrderData data) {
+    public ChangeOrder(Long id, String branchName, String author, Date time, String editor, Date editTime, ChangeOrderData data) {
         this.id = id;
         this.branchName = branchName;
         this.author = author;
@@ -96,11 +96,11 @@ public class ChangeOrder {
         this.data = data;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -156,7 +156,7 @@ public class ChangeOrder {
         ObjectMapper objectMapper = new ObjectMapper();
         ChangeOrderData changeOrderData = new ChangeOrderData("test comment", new ArrayList<Bug>());
         changeOrderData.getBugs().add(new Bug("testBug", "testBugBranch", "testBugRevision", "testComment"));
-        ChangeOrder testChangeOrder = new ChangeOrder("testID", "testBranch", "testAuthor", new Date(1), "", null, changeOrderData);
+        ChangeOrder testChangeOrder = new ChangeOrder(1L, "testBranch", "testAuthor", new Date(1), "", null, changeOrderData);
 
         try {
             String json = objectMapper.writeValueAsString(testChangeOrder);

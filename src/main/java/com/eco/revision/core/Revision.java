@@ -224,7 +224,7 @@ public class Revision {
 
     public static void main(String[] arg) {
         List<CommitStatus> commitStatuses = new ArrayList<>();
-        commitStatuses.add(new CommitStatus("testBranch1", 0, "commitID1", "testComment1"));
+        commitStatuses.add(new CommitStatus("testBranch1", 0, 1L, "testComment1"));
 
         Revision testRevision = new Revision("testBranchtestRevision",
                 "testBranch",

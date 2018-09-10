@@ -123,7 +123,7 @@ $(document).on("click", ".submit", function (e) {
     }
 
     api.setCallbacks(postChangeOrderSuccess, null);
-    api.postChangeOrder(param["changeOrderID"], param);
+    api.postChangeOrder(param["id"], param);
 })
 
 function showSnackBar(message) {

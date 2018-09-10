@@ -27,10 +27,10 @@ public class CommitStatus implements Serializable, Serializer<CommitStatus> {
 
     @JsonProperty
     @NotNull
-    private int status;
+    private Integer status;
 
     @JsonProperty
-    private String commitID;
+    private Long commitID;
 
     @JsonProperty
     private String comment;
@@ -38,7 +38,7 @@ public class CommitStatus implements Serializable, Serializer<CommitStatus> {
     public CommitStatus() {
     }
 
-    public CommitStatus(String branchName, int status, String commitID, String comment) {
+    public CommitStatus(String branchName, int status, Long commitID, String comment) {
         this.branchName = branchName;
         this.status = status;
         this.commitID = commitID;
@@ -128,11 +128,11 @@ public class CommitStatus implements Serializable, Serializer<CommitStatus> {
         this.comment = comment;
     }
 
-    public String getCommitID() {
+    public Long getCommitID() {
         return commitID;
     }
 
-    public void setCommitID(String commitID) {
+    public void setCommitID(Long commitID) {
         this.commitID = commitID;
     }
 }
