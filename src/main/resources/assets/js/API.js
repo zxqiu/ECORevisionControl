@@ -60,7 +60,7 @@ var APIs = {
         _api.postChangeOrderSuccess = null;
         _api.postChangeOrderError = null;
 
-        _api.setCallbacks = function (success, error) {
+        _api.setPostChangeOrderCallbacks = function (success, error) {
             _api.postChangeOrderSuccess = success;
             _api.postChangeOrderError = error;
         }
@@ -75,6 +75,31 @@ var APIs = {
                 , _api.postChangeOrderSuccess, _api.postChangeOrderError);
         };
 
+
+
+        _api.deleteChangeOrderSuccess = null;
+        _api.deleteChangeOrderError = null;
+
+        _api.setDeleteChangeOrderSuccess = function (callback) {
+            _api.deleteChangeOrderSuccess = callback;
+        }
+
+        _api.setDeleteChangeOrderError = function (callback) {
+            _api.deleteChangeOrderError = callback;
+        }
+
+        _api.setDeleteChangeOrderCallbacks = function (success, error) {
+            _api.deleteChangeOrderSuccess = success;
+            _api.deleteChangeOrderError = error;
+        }
+
+        _api.deleteChangeOrder = function(commitID) {
+            var patchURL = _api.hostURL + _api.API_V1 + _api.API_CHANGE_ORDER + "/" + commitID;
+            console.log(patchURL);
+
+            submitQuery("DELETE", patchURL, "", 'application/json'
+                , _api.deleteChangeOrderSuccess, _api.deleteChangeOrderError);
+        };
 
 
         return _api;

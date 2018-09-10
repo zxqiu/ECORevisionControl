@@ -101,13 +101,14 @@
                     <th style="width:5%">Author</th>
                     <th style="width:10%">Last Modification</th>
                     <th style="width:5%">Edit By</th>
-                    <th style="width:25%">Bugs</th>
+                    <th style="width: 25%">Bugs</th>
+                    <th style="width: 5%"></th>
                 </tr>
                 </thead>
                 <tbody>
                 @if (changeOrders != null) {
                 @for (changeOrder : changeOrders) {
-                <tr id="@changeOrder.getId()">
+                <tr class="@changeOrder.getId()">
                     <input type="hidden" class="ChangeOrderID" value="@changeOrder.getId()">
                     <th scope="row"><a href="@GUI.PATH_ROOT/@GUI.PATH_CHANGE_ORDERS/@changeOrder.getBranchName()/@changeOrder.getId()">@changeOrder.getId()</a></th>
                     <td>@changeOrder.getBranchName()</td>
@@ -150,8 +151,13 @@
                             }
                         </ul>
                     </td>
+                    <td>
+                        <button type="button" class="close BtnDelete" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </td>
                 </tr>
-                <tr>
+                <tr class="@changeOrder.getId()">
                     <td></td>
                     @if (changeOrder.getData() != null && changeOrder.getData().getComment() != null) {
                     <td colspan="6"><p style="white-space:pre-wrap; width:60em">@StringEscapeUtils.escapeHtml4(changeOrder.getData().getComment())</p></td>

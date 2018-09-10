@@ -122,7 +122,7 @@ $(document).on("click", ".submit", function (e) {
         cnt++;
     }
 
-    api.setCallbacks(postChangeOrderSuccess, null);
+    api.setPostChangeOrderCallbacks(postChangeOrderSuccess, null);
     api.postChangeOrder(param["id"], param);
 })
 
